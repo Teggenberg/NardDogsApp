@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "890851707023",
+    "project_id": "nard-dogs-inventory",
+    "storage_bucket": "nard-dogs-inventory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890851707023:android:f14bdedd17b23a232648fa",
+        "android_client_info": {
+          "package_name": "com.example.narddogsinventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb21TGg4smp9bzJpT_SJ42_9LMNRPyfqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
