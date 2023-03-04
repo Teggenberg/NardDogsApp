@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com",
+          "client_id": "890851707023-tvjfv027i0416v2gi109m430tkfivf2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "7b9d9dd805c6b3c2ab748e50157ece4989c26346"
+          }
+        },
+        {
+          "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com",
+              "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
