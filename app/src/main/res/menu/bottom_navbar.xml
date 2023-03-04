@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Home"
+        android:id="@+id/home"
+        android:icon="@drawable/nard_home"
+        />
+    <item
+        android:title="Item"
+        android:id="@+id/AddItem"
+        android:icon="@drawable/nard_add"
+        />
+    <item
+        android:title="Item"
+        android:id="@+id/Inventory"
+        android:icon="@drawable/nard_inventory"
+        />
+    <item
+        android:title="Item"
+        android:id="@+id/Sales"
+        android:icon="@drawable/nard_stats"
+        />
+</menu>
