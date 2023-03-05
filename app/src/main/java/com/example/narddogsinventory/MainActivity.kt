@@ -36,12 +36,13 @@ class MainActivity : AppCompatActivity() {
         login = findViewById(R.id.loginButton)
 
         auth =  FirebaseAuth.getInstance()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)  //instance of Google Sign in
 
         register.setOnClickListener {
             val intentR = Intent(this@MainActivity, RegisterActivity::class.java)
@@ -49,11 +50,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        /*login.setOnClickListener{
-            signInGoogle()
-        }*/
+
         findViewById<Button>(R.id.loginButton).setOnClickListener{
-            signInGoogle()
+            signInGoogle()   //when button is clicked, google sign in launches
         }
 
 
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
+        val signInIntent = googleSignInClient.signInIntent  //opens the google sign in client
         launcher.launch(signInIntent)
 
     }
