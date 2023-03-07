@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 private const val TAG = "MainActivity"
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var login : Button
     private lateinit var auth : FirebaseAuth
     private lateinit var googleSignInClient : GoogleSignInClient
+    private lateinit var db : FirebaseFirestore
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +39,19 @@ class MainActivity : AppCompatActivity() {
         register = findViewById(R.id.registerButton)
         login = findViewById(R.id.loginButton)
 
-        auth =  FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+
+
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("890851707023-u4igendqs168g29ift6gnkkb4plkeuur.apps.googleusercontent.com")
+            .requestIdToken("890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)  //instance of Google Sign in
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         register.setOnClickListener {
             val intentR = Intent(this@MainActivity, RegisterActivity::class.java)
@@ -52,7 +61,10 @@ class MainActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.loginButton).setOnClickListener{
-            signInGoogle()   //when button is clicked, google sign in launches
+
+
+
+            signInGoogle()
         }
 
 
@@ -61,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle() {
-        val signInIntent = googleSignInClient.signInIntent  //opens the google sign in client
+        val signInIntent = googleSignInClient.signInIntent
         launcher.launch(signInIntent)
 
     }
@@ -87,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
         else{
             Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -94,27 +107,57 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
+
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener{
 
             if(it.isSuccessful){
+                
+                newUser(account.email)
 
                 val intentL = Intent(this, LoginActivity::class.java)
                 intentL.putExtra("email", account.email)
                 intentL.putExtra("name", account.displayName)
                 startActivity(intentL)
 
-
-
             }
             else{
                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-
             }
         }
 
 
 
     }
+
+    private fun newUser(email: String?) {
+
+
+
+        val emailCheck = db.collection("Users").document("$email")
+
+        emailCheck.get().addOnCompleteListener{
+            task ->
+                if(task.isSuccessful){
+                    val user = task.result
+                    if (user.exists()){
+                        Log.d("TAG", "User found")
+                    }
+                    else{
+                        val intentR = Intent(this@MainActivity, RegisterActivity::class.java)
+                        startActivity(intentR)
+                        finish()
+                    }
+                }
+                else{
+                    Log.d("TAG", "User not found")
+
+
+                }
+
+        }
+
+    }
+
 
 }
