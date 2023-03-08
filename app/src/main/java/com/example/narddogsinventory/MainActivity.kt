@@ -3,12 +3,10 @@ package com.example.narddogsinventory
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -142,9 +140,12 @@ class MainActivity : AppCompatActivity() {
                     val user = task.result
                     if (user.exists()){
                         Log.d("TAG", "User found")
+
                     }
                     else{
-                        val intentR = Intent(this@MainActivity, RegisterActivity::class.java)
+
+                        val intentR = Intent(this@MainActivity, GoogleReg::class.java)
+                        intentR.putExtra("email", email)
                         startActivity(intentR)
                         finish()
                     }
