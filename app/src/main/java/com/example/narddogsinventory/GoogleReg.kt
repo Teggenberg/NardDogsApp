@@ -17,6 +17,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.tasks.await
+
 
 private const val TAG = "GoogleReg"
 
@@ -73,7 +77,7 @@ class GoogleReg : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var register : Button
     private lateinit var email : String
-    private lateinit var uselessList : ArrayList<NewID>
+    //private  var uselessList : ArrayList<NewID> = TODO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +99,7 @@ class GoogleReg : AppCompatActivity() {
             if(fieldsComplete(first, last, password, passwordC)){  //validate that all fields are filled
 
                 if(password == passwordC){   //validate that passwords both match
+                    Toast.makeText(this, "Hello", Toast.LENGTH_SHORT)
                     addUser(email, first, last, password)  //add new user to database
                 }
                 else{
@@ -150,51 +155,79 @@ class GoogleReg : AppCompatActivity() {
 
         val userID = getUserID()
 
-        val newUser : MutableMap <String, Any?> = HashMap()
-        newUser["currentListing"] = 0
-        newUser["firstName"] = fName
-        newUser["lastName"] = lName
-        newUser["password"] = password
-        newUser["userId"] = userID
+//        val newUser : MutableMap <String, Any?> = HashMap()
+//        newUser["currentListing"] = 0
+//        newUser["firstName"] = fName
+//        newUser["lastName"] = lName
+//        newUser["password"] = password
+//        newUser["userId"] = userID
 
 
-        val user = FirebaseFirestore.getInstance()
 
-        user.collection("Users").document(email).set(newUser)
+
+        val db = FirebaseFirestore.getInstance()
+
+        val newUser = EntryUser(0, fName, lName, password, userID)
+
+        db.collection("Users").document(email).set(newUser)
 
         //db.collection("Users").document(email).update(fName, lName, password)
 
 
     }
 
-    private fun getUserID(): Any? {
-
-        class HelpMe(val list : ArrayList<NewID>)
+    private fun getUserID(): Long? {
 
 
 
 
-        //val uselessList : ArrayList<NewID>
 
-        var returnID : Long? = 0
+
+
+
+
+        var returnID : Long? = null
         val global = FirebaseFirestore.getInstance()
-        val id = global.collection("globals")
-            .addSnapshotListener(object : EventListener<QuerySnapshot>{
-                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                    if(error != null){
+        val docRef = global.collection("globals").document("rJd01G5J8l1BTkwyo101")
+
+        docRef.get().addOnSuccessListener { documentsnapshot ->
+
+            val newUser = documentsnapshot.toObject<NewID>()
+            Log.i(TAG, newUser?.userID.toString())
+            returnID = newUser?.userID
+
+        }
+
+
+            /*.addSnapshotListener {
+                snapshot, e ->
+                    if(e != null){
                         Log.d("GoogleReg" , "issue")
-                        return
+                        return@addSnapshotListener
                     }
 
+                    if(snapshot != null) {
+                        val documents = snapshot.documents
+                        documents.forEach {
+                            val identifier = it.toObject(NewID::class.java)
+                            if(identifier != null){
+                                var docID = it.id
+                                uselessList.add(identifier!!)
+                                Log.d(TAG, docID)
+                            }
 
-                    for(dc : DocumentChange in value?.documentChanges!!)
 
-                        if(dc.type == DocumentChange.Type.ADDED){
-                            uselessList.add(dc.document.toObject(NewID::class.java))
+
+
+                            //uselessList.add(identifier!!)
+                            //uselessList[0] = identifier!!
+
+
                         }
+                    }
+                    else{ Log.d("GoogleReg", "Tommy smells bad")}
 
-                }
-            })
+            }*/
 
             /*.document("rJd01G5J8l1BTkwyo101").get().addOnSuccessListener { document ->
                 if (document != null) {
@@ -206,12 +239,9 @@ class GoogleReg : AppCompatActivity() {
 
             }*/
 
-        returnID = uselessList[0].userID
-
-
-
+        //if(uselessList.size > 0){ returnID= uselessList[0].userID }
+        //Log.d(TAG, uselessList.toString())
         return returnID
-
 
 
 
