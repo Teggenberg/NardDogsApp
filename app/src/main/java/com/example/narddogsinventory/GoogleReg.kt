@@ -1,6 +1,5 @@
 package com.example.narddogsinventory
 
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcel
@@ -11,15 +10,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.PropertyName
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ktx.toObject
-import kotlinx.coroutines.tasks.await
 
 
 private const val TAG = "GoogleReg"
@@ -102,7 +94,7 @@ class GoogleReg : AppCompatActivity() {
                     Toast.makeText(this, "Hello", Toast.LENGTH_SHORT)
                     //addUser(email, first, last, password)  //add new user to database
                     getUserID()
-                    updateGlobalUserID()
+                    updateGlobals()
                 }
                 else{
                     Toast.makeText(this, "passwords do not match", Toast.LENGTH_SHORT).show()
@@ -155,14 +147,6 @@ class GoogleReg : AppCompatActivity() {
 
         }
 
-        //val userID = getUserID()
-
-//        val newUser : MutableMap <String, Any?> = HashMap()
-//        newUser["currentListing"] = 0
-//        newUser["firstName"] = fName
-//        newUser["lastName"] = lName
-//        newUser["password"] = password
-//        newUser["userId"] = userID
 
 
 
@@ -201,7 +185,7 @@ class GoogleReg : AppCompatActivity() {
 
     }
 
-    private fun updateGlobalUserID(){
+    private fun updateGlobals(){
 
         val global = FirebaseFirestore.getInstance()
         val docRef = global.collection("globals").document("rJd01G5J8l1BTkwyo101")
@@ -212,6 +196,8 @@ class GoogleReg : AppCompatActivity() {
             Log.i(TAG, updateID?.userID.toString())
 
             updateID?.userID = updateID?.userID?.plus(1)
+            updateID?.userID = updateID?.totalUsers?.plus(1)
+
 
             if (updateID != null) {
                 global.collection("globals").document("rJd01G5J8l1BTkwyo101")
