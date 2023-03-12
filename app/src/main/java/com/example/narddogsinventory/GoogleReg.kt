@@ -17,50 +17,6 @@ import com.google.firebase.firestore.ktx.toObject
 private const val TAG = "GoogleReg"
 
 
-data class GetID(
-
-    var totalItems : Int,
-
-    var totalUsers : Int,
-
-    var userID : Long,
-
-
-
-
-) : Parcelable{
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readLong()
-    ) {
-    }
-
-    constructor() : this (0,0,0
-            )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(totalItems)
-        parcel.writeInt(totalUsers)
-        parcel.writeLong(userID)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<GetID> {
-        override fun createFromParcel(parcel: Parcel): GetID {
-            return GetID(parcel)
-        }
-
-        override fun newArray(size: Int): Array<GetID?> {
-            return arrayOfNulls(size)
-        }
-    }
-
-}
-
 
 
 class GoogleReg : AppCompatActivity() {
@@ -92,27 +48,17 @@ class GoogleReg : AppCompatActivity() {
 
                 if(password == passwordC){   //validate that passwords both match
                     Toast.makeText(this, "Hello", Toast.LENGTH_SHORT)
-                    //addUser(email, first, last, password)  //add new user to database
-                    getUserID()
+                    generateUserID()
                     updateGlobals()
                 }
                 else{
                     Toast.makeText(this, "passwords do not match", Toast.LENGTH_SHORT).show()
                 }
-
             }
             else{
                 Toast.makeText(this, "credential fields incomplete", Toast.LENGTH_SHORT).show()
-
             }
-
-
-
-
-            //addUser(email, first, last, password)
-
         }
-
     }
 
     private fun passwordMatch(password: String, passwordC: String): Boolean {
@@ -121,7 +67,6 @@ class GoogleReg : AppCompatActivity() {
             return true
         }
         return false
-
     }
 
     private fun fieldsComplete(first: String, last: String, password: String, passwordC: String): Boolean {
@@ -129,26 +74,11 @@ class GoogleReg : AppCompatActivity() {
         if(first.isNullOrEmpty() || last.isNullOrEmpty() || password.isNullOrEmpty() || passwordC.isNullOrEmpty()){
             return false
         }
-
         return true
-
     }
 
 
     private fun addUser(email: String, fName: String, lName: String, password: String, userId : Long?) {
-        //val userID = 0
-
-        val global = FirebaseFirestore.getInstance()
-        val id = global.collection("rJd01G5J8l1BTkwyo101").get().addOnCompleteListener() {
-
-
-
-
-
-        }
-
-
-
 
 
         val db = FirebaseFirestore.getInstance()
@@ -157,16 +87,15 @@ class GoogleReg : AppCompatActivity() {
 
         db.collection("Users").document(email).set(newUser)
 
-        //db.collection("Users").document(email).update(fName, lName, password)
 
 
     }
 
-    private fun getUserID(): Long? {
+    private fun generateUserID(){
         val first = findViewById<EditText>(R.id.etFirstName).text.toString()
         val last =  findViewById<EditText>(R.id.etLastName).text.toString()
         val password = findViewById<EditText>(R.id.etPassword).text.toString()
-        val passwordC = findViewById<EditText>(R.id.etConfirmPassword).text.toString()
+
 
         var returnID : Long? = null
         val global = FirebaseFirestore.getInstance()
@@ -181,7 +110,7 @@ class GoogleReg : AppCompatActivity() {
 
         }
 
-        return returnID
+
 
     }
 
@@ -192,14 +121,22 @@ class GoogleReg : AppCompatActivity() {
 
         docRef.get().addOnSuccessListener { documentsnapshot ->
 
-            var updateID = documentsnapshot.toObject<NewID>()
+            val updateID = documentsnapshot.toObject<NewID>()
             Log.i(TAG, updateID?.userID.toString())
 
-            updateID?.userID = updateID?.userID?.plus(1)
-            updateID?.userID = updateID?.totalUsers?.plus(1)
+
 
 
             if (updateID != null) {
+                updateID?.userID = updateID?.userID?.plus(1)
+
+                if(updateID?.totalUsers != null) {
+                    updateID.totalUsers = updateID.totalUsers?.plus(1)
+                }
+
+                else{
+                    updateID?.userID = 1}
+
                 global.collection("globals").document("rJd01G5J8l1BTkwyo101")
                     .set(updateID)
             }

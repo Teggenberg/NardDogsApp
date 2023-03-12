@@ -1,7 +1,7 @@
 package com.example.narddogsinventory
 
-data class NewID(val totalItems : Long? = null,
-                 val totalUsers : Long? = null,
+data class NewID(var totalItems : Long? = null,
+                 var totalUsers : Long? = null,
                  var userID : Long? = null )
 
     //private var _events: ArrayList<Event> = ArrayList<Event>()
