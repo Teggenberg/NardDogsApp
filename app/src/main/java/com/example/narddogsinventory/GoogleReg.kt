@@ -100,7 +100,9 @@ class GoogleReg : AppCompatActivity() {
 
                 if(password == passwordC){   //validate that passwords both match
                     Toast.makeText(this, "Hello", Toast.LENGTH_SHORT)
-                    addUser(email, first, last, password)  //add new user to database
+                    //addUser(email, first, last, password)  //add new user to database
+                    getUserID()
+                    updateGlobalUserID()
                 }
                 else{
                     Toast.makeText(this, "passwords do not match", Toast.LENGTH_SHORT).show()
@@ -141,7 +143,7 @@ class GoogleReg : AppCompatActivity() {
     }
 
 
-    private fun addUser(email: String, fName: String, lName: String, password: String) {
+    private fun addUser(email: String, fName: String, lName: String, password: String, userId : Long?) {
         //val userID = 0
 
         val global = FirebaseFirestore.getInstance()
@@ -153,7 +155,7 @@ class GoogleReg : AppCompatActivity() {
 
         }
 
-        val userID = getUserID()
+        //val userID = getUserID()
 
 //        val newUser : MutableMap <String, Any?> = HashMap()
 //        newUser["currentListing"] = 0
@@ -167,7 +169,7 @@ class GoogleReg : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
-        val newUser = EntryUser(0, fName, lName, password, userID)
+        val newUser = EntryUser(0, fName, lName, password, userId)
 
         db.collection("Users").document(email).set(newUser)
 
@@ -177,14 +179,10 @@ class GoogleReg : AppCompatActivity() {
     }
 
     private fun getUserID(): Long? {
-
-
-
-
-
-
-
-
+        val first = findViewById<EditText>(R.id.etFirstName).text.toString()
+        val last =  findViewById<EditText>(R.id.etLastName).text.toString()
+        val password = findViewById<EditText>(R.id.etPassword).text.toString()
+        val passwordC = findViewById<EditText>(R.id.etConfirmPassword).text.toString()
 
         var returnID : Long? = null
         val global = FirebaseFirestore.getInstance()
@@ -195,57 +193,33 @@ class GoogleReg : AppCompatActivity() {
             val newUser = documentsnapshot.toObject<NewID>()
             Log.i(TAG, newUser?.userID.toString())
             returnID = newUser?.userID
+            addUser(email, first, last, password, returnID)
 
         }
 
-
-            /*.addSnapshotListener {
-                snapshot, e ->
-                    if(e != null){
-                        Log.d("GoogleReg" , "issue")
-                        return@addSnapshotListener
-                    }
-
-                    if(snapshot != null) {
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val identifier = it.toObject(NewID::class.java)
-                            if(identifier != null){
-                                var docID = it.id
-                                uselessList.add(identifier!!)
-                                Log.d(TAG, docID)
-                            }
-
-
-
-
-                            //uselessList.add(identifier!!)
-                            //uselessList[0] = identifier!!
-
-
-                        }
-                    }
-                    else{ Log.d("GoogleReg", "Tommy smells bad")}
-
-            }*/
-
-            /*.document("rJd01G5J8l1BTkwyo101").get().addOnSuccessListener { document ->
-                if (document != null) {
-                    var newID = document.toObject(NewID::class.java)
-                    if (newID != null) {
-                        returnID = newID.userID
-                    }
-                }
-
-            }*/
-
-        //if(uselessList.size > 0){ returnID= uselessList[0].userID }
-        //Log.d(TAG, uselessList.toString())
         return returnID
 
+    }
+
+    private fun updateGlobalUserID(){
+
+        val global = FirebaseFirestore.getInstance()
+        val docRef = global.collection("globals").document("rJd01G5J8l1BTkwyo101")
+
+        docRef.get().addOnSuccessListener { documentsnapshot ->
+
+            var updateID = documentsnapshot.toObject<NewID>()
+            Log.i(TAG, updateID?.userID.toString())
+
+            updateID?.userID = updateID?.userID?.plus(1)
+
+            if (updateID != null) {
+                global.collection("globals").document("rJd01G5J8l1BTkwyo101")
+                    .set(updateID)
+            }
 
 
-
+        }
 
 
     }
