@@ -30,6 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
 
+
+
         findViewById<Button>(R.id.signOutButton).setOnClickListener{
             auth.signOut()
             startActivity(Intent(this, MainActivity::class.java))
