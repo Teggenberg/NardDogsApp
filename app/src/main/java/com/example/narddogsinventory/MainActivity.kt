@@ -41,10 +41,6 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-
-
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com")
             .requestEmail()

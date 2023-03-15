@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:ems="8"
         android:hint="Item Name"
         android:inputType="textPersonName"
@@ -36,13 +36,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:ems="8"
         android:hint="Cost of Product"
         android:inputType="textPersonName"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etItemName" />
+
+    <EditText
+        android:id="@+id/etRetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="20dp"
+        android:ems="8"
+        android:hint="Estimated Retail"
+        android:inputType="textPersonName"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCost" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -73,15 +86,15 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCost">
+        app:layout_constraintTop_toBottomOf="@+id/etRetail">
 
         <AutoCompleteTextView
-            android:id="@+id/etNew"
+            android:id="@+id/etDropDownCon"
             android:layout_width="229dp"
             android:layout_height="54dp"
             android:layout_weight="1"
@@ -95,7 +108,7 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -113,7 +126,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/etCamera"
+        android:id="@+id/opCamera"
         style="@style/Widget.Material3.Button.TextButton.Icon"
         android:layout_width="49dp"
         android:layout_height="49dp"
@@ -128,8 +141,8 @@
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="351dp"
-        android:layout_height="146dp"
-        android:layout_marginStart="29dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:gravity="start|top"
