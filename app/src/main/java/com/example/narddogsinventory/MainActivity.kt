@@ -8,6 +8,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.ButtonBarLayout
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -40,10 +41,6 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-
-
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com")
             .requestEmail()
@@ -64,8 +61,6 @@ class MainActivity : AppCompatActivity() {
 
             signInGoogle()
         }
-
-
 
 
     }
@@ -123,8 +118,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
         }
-
-
 
     }
 

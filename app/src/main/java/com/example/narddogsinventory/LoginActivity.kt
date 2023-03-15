@@ -1,8 +1,12 @@
 package com.example.narddogsinventory
 
+import android.content.ClipData.Item
 import android.content.Intent
+import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.inputmethod.InputBinding
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -10,16 +14,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
-
-
-
-
 import android.view.MenuItem
 
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarMenu
 import com.google.android.material.navigation.NavigationBarView
+import androidx.appcompat.widget.ButtonBarLayout
 
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
+import com.google.android.material.snackbar.BaseTransientBottomBar
+
+import java.nio.BufferUnderflowException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -39,17 +44,23 @@ class LoginActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
 
-        bNav.setOnItemSelectedListener   {
-            when (it.itemId) {
+
+        bNav = findViewById(R.id.bottomNav)
+
+        bNav.setOnItemSelectedListener {
+
+            when(it.itemId) {
+
                 R.id.home -> {
-                    val homeIntent= Intent(this, LoginActivity::class.java)
+                    val homeIntent = Intent(this, LoginActivity::class.java)
                     startActivity(homeIntent)
                     finish()
                     return@setOnItemSelectedListener true
 
+
                 }
                 R.id.AddItem -> {
-                    val mainIntent= Intent(this, MainActivity::class.java)
+                    val mainIntent = Intent(this, MainActivity::class.java)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
 
@@ -59,13 +70,10 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
-                else ->{
+                else -> {
                     return@setOnItemSelectedListener false
                 }
-
             }
-
-
         }
 
 
@@ -82,30 +90,14 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        findViewById<Button>(R.id.signOutButton).setOnClickListener{
-            auth.signOut()
-            startActivity(Intent(this, MainActivity::class.java))
-        }
+
+
+
+
+
     }
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.home -> {
-                val homeIntent= Intent(ActivityA@this, LoginActivity::class.java)
-                startActivity(homeIntent)
 
-            }
-            R.id.AddItem -> {
-                val mainIntent= Intent(ActivityA@this, MainActivity::class.java)
-                startActivity(mainIntent)
 
-            }
-            R.id.Inventory -> {
-                val inventoryIntent = Intent(ActivityA@this, RegisterActivity::class.java)
-                startActivity(inventoryIntent)
-                return true
-            }
 
-        }
-        return false
-    }
+
 }
