@@ -1,4 +1,4 @@
 package com.example.narddogsinventory
 
-class AvtiveListing {
+data class AvtiveListing() {
 }
