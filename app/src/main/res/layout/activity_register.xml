@@ -12,12 +12,12 @@
         android:id="@+id/etRegEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
         android:layout_marginTop="180dp"
         android:ems="10"
-        android:hint="Ussername or Email "
+        android:hint="Username or Email "
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
