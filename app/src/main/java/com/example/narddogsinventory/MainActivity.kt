@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
             signInGoogle()
         }
 
+        findViewById<Button>(R.id.credentialsButton).setOnClickListener{
+            val credLogin = Intent(this, ValidateCredentials::class.java)
+            startActivity(credLogin)
+            finish()
+        }
+
 
     }
 
