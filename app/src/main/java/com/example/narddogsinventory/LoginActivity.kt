@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
                 }
                 R.id.Inventory -> {
-                    val inventoryIntent = Intent(this, RegisterActivity::class.java)
+                    val inventoryIntent = Intent(this, ViewInventory::class.java)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
