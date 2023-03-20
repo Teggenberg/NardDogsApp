@@ -10,12 +10,11 @@
         android:id="@+id/inventoryList"
         android:layout_width="409dp"
         android:layout_height="729dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginStart="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/inventory_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
