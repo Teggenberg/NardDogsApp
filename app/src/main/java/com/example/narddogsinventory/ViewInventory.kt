@@ -18,10 +18,14 @@ class ViewInventory : AppCompatActivity() {
     private lateinit var inventoryRecyclerView: RecyclerView
     private lateinit var itemAdapter : ItemAdapter
     private lateinit var itemList : ArrayList<ActiveListing>
+    private  var userID : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
+
+        userID = intent.getLongExtra("userID", 0)
+        Log.d("ViewInventory", userID.toString())
 
         inventoryRecyclerView = findViewById(R.id.inventoryList)
         inventoryRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -37,8 +41,11 @@ class ViewInventory : AppCompatActivity() {
     }
 
     private fun eventChangeListener() {
+
+        //whereEqualTo("user", 1000000000).
+
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").whereEqualTo("user", 1000000004).
+        db.collection("itemListings").
             addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(
                     value: QuerySnapshot?,
