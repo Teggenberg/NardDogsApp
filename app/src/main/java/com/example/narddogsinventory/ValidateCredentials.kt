@@ -55,8 +55,6 @@ class ValidateCredentials : AppCompatActivity() {
                     if(existingUser?.password == password) {
 
                         val successfulLog = Intent(this, LoginActivity::class.java)
-                        successfulLog.putExtra("email", existingUser.firstName)
-                        successfulLog.putExtra("name", existingUser.lastName)
                         startActivity(successfulLog)
                         finish()
                     }
