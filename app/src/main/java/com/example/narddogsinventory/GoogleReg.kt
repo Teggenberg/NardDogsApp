@@ -1,5 +1,6 @@
 package com.example.narddogsinventory
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcel
@@ -51,6 +52,9 @@ class GoogleReg : AppCompatActivity() {
 
                     generateUserID()  //create new account, user ID assigned from globals collection
                     updateGlobals()   //totalUsers and UserID index updated in globals collection
+                    val homeScreen = Intent(this, LoginActivity::class.java)
+                    startActivity(homeScreen)
+                    finish()
                 }
                 else{
                     //password fields do not match
