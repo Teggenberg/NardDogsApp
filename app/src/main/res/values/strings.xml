@@ -2,4 +2,21 @@
     <string name="app_name">Nard Dogs Inventory</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="conditions">
+        <item>Excellent</item>
+        <item>Great</item>
+        <item>Good</item>
+        <item>Fair</item>
+        <item>Roughed Up</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item>Electronics</item>
+        <item>Apparel</item>
+        <item>Media</item>
+        <item>Furniture/Appliances</item>
+        <item>Collectibles</item>
+        <item>Other</item>
+    </string-array>
 </resources>
