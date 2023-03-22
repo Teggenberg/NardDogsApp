@@ -107,6 +107,7 @@
             android:layout_height="54dp"
             android:layout_weight="1"
             android:height="48dp"
+            android:inputType="none"
             android:fontFamily="@font/latobold"
             android:hint="Condition" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -130,6 +131,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:height="48dp"
+            android:inputType="none"
             android:fontFamily="@font/latobold"
             android:hint="Select a Category" />
 
