@@ -2,23 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Dashboard"
         android:id="@+id/home"
-        android:icon="@drawable/nard_home"
-        />
+        android:icon="@drawable/dash"
+        android:title="Dashboard" />
     <item
-        android:title="Add Item"
         android:id="@+id/AddItem"
-        android:icon="@drawable/nard_add"
-        />
+        android:icon="@drawable/addinv"
+        android:title="Add Item" />
     <item
-        android:title="Inventory"
         android:id="@+id/Inventory"
-        android:icon="@drawable/nard_inventory"
-        />
+        android:icon="@drawable/inv"
+        android:title="Inventory" />
     <item
-        android:title="Sales"
         android:id="@+id/Sales"
-        android:icon="@drawable/nard_stats"
-        />
+        android:icon="@drawable/sales"
+        android:title="Sales" />
 </menu>
