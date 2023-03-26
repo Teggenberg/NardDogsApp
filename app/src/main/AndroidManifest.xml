@@ -12,6 +12,9 @@
         android:theme="@style/Theme.NardDogsInventory"
         tools:targetApi="31">
         <activity
+            android:name=".Recycler_View"
+            android:exported="false" />
+        <activity
             android:name=".ValidateCredentials"
             android:exported="false" />
         <activity
