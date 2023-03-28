@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.provider.MediaStore
 import android.view.inputmethod.InputBinding
+
+import android.util.Log
+
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -41,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
 
         val email = intent.getStringExtra("email")
         val displayName = intent.getStringExtra("name")
+        val userID = intent.getLongExtra("userNum", 0)
+
+        Log.d("LoginActivity", userID.toString())
 
         findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
 
@@ -66,7 +73,8 @@ class LoginActivity : AppCompatActivity() {
 
                 }
                 R.id.Inventory -> {
-                    val inventoryIntent = Intent(this, RegisterActivity::class.java)
+                    val inventoryIntent = Intent(this, ViewInventory::class.java)
+                    inventoryIntent.putExtra("userID", userID)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }

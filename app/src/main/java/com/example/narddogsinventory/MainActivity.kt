@@ -142,9 +142,12 @@ class MainActivity : AppCompatActivity() {
 
                     }
                     else{
+                        val getUserID = task.result.toObject(EntryUser::class.java)
+                        Log.d(TAG, getUserID.toString())
 
                         val intentR = Intent(this@MainActivity, GoogleReg::class.java)
                         intentR.putExtra("email", email)
+                        intentR.putExtra("userNum", getUserID?.userID)
                         startActivity(intentR)
                         finish()
                     }
