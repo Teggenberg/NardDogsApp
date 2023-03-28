@@ -12,7 +12,10 @@ import android.widget.Button
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
 
+
 class ItemList : AppCompatActivity() {
+
+    private lateinit var bNav : NavigationBarView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +52,37 @@ class ItemList : AppCompatActivity() {
 
             var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivity(intent)
+        }
+
+        bNav = findViewById(R.id.bottomNav)
+
+        bNav.selectedItemId = R.id.AddItem
+
+        bNav.setOnItemSelectedListener {
+
+            when(it.itemId) {
+
+                R.id.home -> {
+                    val homeIntent = Intent(this, LoginActivity::class.java)
+                    startActivity(homeIntent)
+                    finish()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.AddItem -> {
+                    val mainIntent = Intent(this, ItemList::class.java)
+                    startActivity(mainIntent)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.Inventory -> {
+                    val inventoryIntent = Intent(this, ViewInventory::class.java)
+                    //inventoryIntent.putExtra("userID", userID)
+                    startActivity(inventoryIntent)
+                    return@setOnItemSelectedListener true
+                }
+                else -> {
+                    return@setOnItemSelectedListener false
+                }
+            }
         }
 
     }

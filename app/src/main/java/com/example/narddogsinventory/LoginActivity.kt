@@ -54,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
 
         bNav = findViewById(R.id.bottomNav)
 
+        bNav.selectedItemId = R.id.home
+
         bNav.setOnItemSelectedListener {
 
             when(it.itemId) {
@@ -63,14 +65,11 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(homeIntent)
                     finish()
                     return@setOnItemSelectedListener true
-
-
                 }
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
-
                 }
                 R.id.Inventory -> {
                     val inventoryIntent = Intent(this, ViewInventory::class.java)

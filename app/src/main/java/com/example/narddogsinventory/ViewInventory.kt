@@ -1,10 +1,12 @@
 package com.example.narddogsinventory
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +21,8 @@ class ViewInventory : AppCompatActivity() {
     private lateinit var itemAdapter : ItemAdapter
     private lateinit var itemList : ArrayList<ActiveListing>
     private  var userID : Long = 0
+
+    private lateinit var bNav : NavigationBarView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,42 @@ class ViewInventory : AppCompatActivity() {
         inventoryRecyclerView.adapter = itemAdapter
 
         eventChangeListener()
+
+        bNav = findViewById(R.id.bottomNav)
+
+        bNav.selectedItemId = R.id.Inventory
+
+        bNav.setOnItemSelectedListener {
+
+            when(it.itemId) {
+
+                R.id.home -> {
+                    val homeIntent = Intent(this, LoginActivity::class.java)
+                    startActivity(homeIntent)
+                    finish()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.AddItem -> {
+                    val mainIntent = Intent(this, ItemList::class.java)
+                    startActivity(mainIntent)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.Inventory -> {
+                    val inventoryIntent = Intent(this, ViewInventory::class.java)
+                    //inventoryIntent.putExtra("userID", userID)
+                    startActivity(inventoryIntent)
+                    return@setOnItemSelectedListener true
+                }
+                else -> {
+                    return@setOnItemSelectedListener false
+                }
+            }
+        }
+
     }
+
+
+
 
     private fun eventChangeListener() {
 
