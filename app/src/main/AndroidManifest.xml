@@ -12,21 +12,24 @@
         android:theme="@style/Theme.NardDogsInventory"
         tools:targetApi="31">
         <activity
-<<<<<<< HEAD
+
+            android:name=".Recycler_View"
+            android:exported="false" />
+        <activity
+
             android:name=".ValidateCredentials"
-=======
+            android:exported="false" />
+        <activity
             android:name=".ViewInventory"
             android:exported="false" />
         <activity
             android:name=".GoogleReg"
->>>>>>> RecyclerView
+
             android:exported="false" />
         <activity
             android:name=".ItemList"
             android:exported="false" />
-        <activity
-            android:name=".GoogleReg"
-            android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
