@@ -45,7 +45,7 @@ class ViewInventory : AppCompatActivity() {
         //whereEqualTo("user", 1000000000).
 
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").
+        db.collection("itemListings").whereEqualTo("user", 1000000000).
             addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(
                     value: QuerySnapshot?,
