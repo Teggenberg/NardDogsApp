@@ -114,10 +114,10 @@ class MainActivity : AppCompatActivity() {
                 
                 newUser(account.email)
 
-                val intentL = Intent(this, LoginActivity::class.java)
+                /*val intentL = Intent(this, LoginActivity::class.java)
                 intentL.putExtra("email", account.email)
                 intentL.putExtra("name", account.displayName)
-                startActivity(intentL)
+                startActivity(intentL)*/
 
             }
             else{
@@ -139,17 +139,20 @@ class MainActivity : AppCompatActivity() {
                     val user = task.result
                     if (user.exists()){
                         Log.d("TAG", "User found")
-
-                    }
-                    else{
                         val getUserID = task.result.toObject(EntryUser::class.java)
-                        Log.d(TAG, getUserID.toString())
-
-                        val intentR = Intent(this@MainActivity, GoogleReg::class.java)
+                        val intentR = Intent(this@MainActivity, LoginActivity::class.java)
                         intentR.putExtra("email", email)
+                        intentR.putExtra("name", getUserID?.firstName)
                         intentR.putExtra("userNum", getUserID?.userID)
                         startActivity(intentR)
                         finish()
+
+                    }
+                    else{
+
+                        //Log.d(TAG, getUserID.toString())
+
+
                     }
                 }
                 else{

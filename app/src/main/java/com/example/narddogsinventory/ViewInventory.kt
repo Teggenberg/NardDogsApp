@@ -64,7 +64,7 @@ class ViewInventory : AppCompatActivity() {
                 }
                 R.id.Inventory -> {
                     val inventoryIntent = Intent(this, ViewInventory::class.java)
-                    //inventoryIntent.putExtra("userID", userID)
+                    inventoryIntent.putExtra("userID", userID)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
@@ -84,7 +84,7 @@ class ViewInventory : AppCompatActivity() {
         //whereEqualTo("user", 1000000000).
 
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").whereEqualTo("user", 1000000000).
+        db.collection("itemListings").whereEqualTo("user", userID).
             addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(
                     value: QuerySnapshot?,
