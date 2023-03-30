@@ -14,6 +14,8 @@ import com.google.firebase.firestore.ktx.toObject
 private lateinit var user : String
 private lateinit var password : String
 
+
+//this is the activity for existing users to log in to the app
 class ValidateCredentials : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,7 @@ class ValidateCredentials : AppCompatActivity() {
         //login button reference
         val logger = findViewById<Button>(R.id.LoginButton)
 
+        //action when log in button is clicked
         logger.setOnClickListener{
 
             //assign variables with user's input from editTexts
@@ -38,7 +41,8 @@ class ValidateCredentials : AppCompatActivity() {
             }
             else{
                 //toast that appears if either editText is left empty
-                Toast.makeText(this, "credentials incomplete", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "credentials incomplete"
+                    , Toast.LENGTH_LONG).show()
             }
         }
     }

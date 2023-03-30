@@ -30,48 +30,62 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 
 import java.nio.BufferUnderflowException
 
+//this activity is poorly named, it is the landing page upon logging in (retrospect is 20/20)
 class LoginActivity : AppCompatActivity() {
 
+    //db reference
     private lateinit var auth : FirebaseAuth
+
+    //navigation bar reference
     private lateinit var bNav: NavigationBarView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
+        //access to db
         auth = FirebaseAuth.getInstance()
-        bNav = findViewById(R.id.bottomNav)
 
+
+        //capture user data passed from previous activity for reference
         val email = intent.getStringExtra("email")
         val displayName = intent.getStringExtra("name")
         val userID = intent.getLongExtra("userNum", 0)
 
-        Log.d("LoginActivity", userID.toString())
 
+        //write out user data to text views
         findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
 
-
+        //link reference to nav menu
         bNav = findViewById(R.id.bottomNav)
 
+        //ensure that the selected item in the navbar matches current activity
         bNav.selectedItemId = R.id.home
 
+        //switch between activities when different items in navbar are clicked
         bNav.setOnItemSelectedListener {
 
             when(it.itemId) {
 
+                //home/dashboard
                 R.id.home -> {
                     val homeIntent = Intent(this, LoginActivity::class.java)
                     startActivity(homeIntent)
                     finish()
                     return@setOnItemSelectedListener true
                 }
+
+                //activity to add new items into inventory
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
                 }
+
+                //activity to view current/sold inventory
                 R.id.Inventory -> {
+
+                    //pass user ID so item list can be filtered  for specific user
                     val inventoryIntent = Intent(this, ViewInventory::class.java)
                     inventoryIntent.putExtra("userID", userID)
                     startActivity(inventoryIntent)
