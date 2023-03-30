@@ -9,10 +9,12 @@ import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
 
-
+private lateinit var itemNum : TextView
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
@@ -21,6 +23,7 @@ class ItemList : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
+
 
 
 //      CONDITIONS
@@ -53,6 +56,13 @@ class ItemList : AppCompatActivity() {
             var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivity(intent)
         }
+
+        var itemid = intent.getLongExtra("itemNum", 0)
+        itemNum = findViewById(R.id.etItemID)
+
+        itemNum.setText("$itemid")
+
+
 
         bNav = findViewById(R.id.bottomNav)
 

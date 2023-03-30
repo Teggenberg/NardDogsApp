@@ -51,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
         val email = intent.getStringExtra("email")
         val displayName = intent.getStringExtra("name")
         val userID = intent.getLongExtra("userNum", 0)
+        val itemID = intent.getLongExtra("itemNum", 0)
 
 
         //write out user data to text views
@@ -78,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
                 //activity to add new items into inventory
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
+                    mainIntent.putExtra("itemNum", itemID)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
                 }
