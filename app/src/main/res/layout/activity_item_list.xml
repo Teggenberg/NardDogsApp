@@ -44,7 +44,7 @@
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Cost of Product"
-        android:inputType="textPersonName"
+        android:inputType="numberDecimal"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etItemName" />
@@ -58,7 +58,7 @@
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Estimated Retail"
-        android:inputType="textPersonName"
+        android:inputType="numberDecimal"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCost" />
