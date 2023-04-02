@@ -1,9 +1,11 @@
 package com.example.narddogsinventory
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
@@ -21,14 +23,17 @@ class ViewInventory : AppCompatActivity() {
     private lateinit var itemAdapter : ItemAdapter
     private lateinit var itemList : ArrayList<ActiveListing>
     private  var userID : Long = 0
+    private var currentUser : EntryUser? = null
 
     private lateinit var bNav : NavigationBarView
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
 
-        userID = intent.getLongExtra("userID", 0)
+        //userID = intent.getLongExtra("userID", 0)
+        currentUser = intent.getParcelableExtra("currentUser",EntryUser::class.java )
         Log.d("ViewInventory", userID.toString())
 
         inventoryRecyclerView = findViewById(R.id.inventoryList)
@@ -53,18 +58,21 @@ class ViewInventory : AppCompatActivity() {
 
                 R.id.home -> {
                     val homeIntent = Intent(this, LoginActivity::class.java)
+                    homeIntent.putExtra("currentUser", currentUser)
                     startActivity(homeIntent)
                     finish()
                     return@setOnItemSelectedListener true
                 }
                 R.id.AddItem -> {
-                    val mainIntent = Intent(this, ItemList::class.java)
-                    startActivity(mainIntent)
+                    val addIntent = Intent(this, ItemList::class.java)
+                    addIntent.putExtra("currentUser", currentUser)
+                    startActivity(addIntent)
                     return@setOnItemSelectedListener true
                 }
                 R.id.Inventory -> {
                     val inventoryIntent = Intent(this, ViewInventory::class.java)
                     inventoryIntent.putExtra("userID", userID)
+                    inventoryIntent.putExtra("currentUser", currentUser)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
@@ -84,7 +92,7 @@ class ViewInventory : AppCompatActivity() {
         //whereEqualTo("user", 1000000000).
 
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").whereEqualTo("user", userID).
+        db.collection("itemListings").whereEqualTo("user", currentUser?.userID).
             addSnapshotListener(object : EventListener<QuerySnapshot>{
                 override fun onEvent(
                     value: QuerySnapshot?,

@@ -3,6 +3,7 @@ package com.example.narddogsinventory
 import android.content.ClipData.Item
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -19,6 +20,7 @@ import com.google.android.material.navigation.NavigationView.OnNavigationItemSel
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 
 import com.google.android.material.navigation.NavigationBarMenu
 import com.google.android.material.navigation.NavigationBarView
@@ -38,7 +40,9 @@ class LoginActivity : AppCompatActivity() {
 
     //navigation bar reference
     private lateinit var bNav: NavigationBarView
+    private var currentUser : EntryUser? = null
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -52,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
         val displayName = intent.getStringExtra("name")
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
+        currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
 
         //write out user data to text views
@@ -79,8 +84,9 @@ class LoginActivity : AppCompatActivity() {
                 //activity to add new items into inventory
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
-                    mainIntent.putExtra("itemNum", itemID)
-                    mainIntent.putExtra("userID", userID)
+//                    mainIntent.putExtra("itemNum", itemID)
+//                    mainIntent.putExtra("userID", userID)
+                    mainIntent.putExtra("currentUser", currentUser)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
                 }
@@ -90,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
 
                     //pass user ID so item list can be filtered  for specific user
                     val inventoryIntent = Intent(this, ViewInventory::class.java)
-                    inventoryIntent.putExtra("userID", userID)
+                    inventoryIntent.putExtra("currentUser", currentUser)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }

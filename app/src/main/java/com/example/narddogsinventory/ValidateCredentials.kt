@@ -82,6 +82,7 @@ class ValidateCredentials : AppCompatActivity() {
                         successfulLog.putExtra("name", existingUser.lastName)
                         successfulLog.putExtra("userNum", existingUser?.userID)
                         successfulLog.putExtra("itemNum", existingUser?.currentListing)
+                        successfulLog.putExtra("currentUser", existingUser)
                         startActivity(successfulLog)
                         finish()
                     }

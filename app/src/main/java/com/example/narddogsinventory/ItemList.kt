@@ -2,18 +2,22 @@ package com.example.narddogsinventory
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.DropBoxManager
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
 private lateinit var itemNum : TextView
 private lateinit var itemCost : EditText
@@ -23,10 +27,13 @@ private lateinit var itemRetail : EditText
 private lateinit var itemCond : AutoCompleteTextView
 private lateinit var itemCat : AutoCompleteTextView
 private lateinit var itemNotes : EditText
+private var currentUser : EntryUser? = null
+
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +72,13 @@ class ItemList : AppCompatActivity() {
             startActivity(intent)
         }
 
-        var itemid = intent.getLongExtra("itemNum", 0)
+        //var itemid = intent.getLongExtra("itemNum", 0)
         itemNum = findViewById(R.id.etItemID)
 
         val userID = intent.getLongExtra("userID", 0)
+        currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+
+        var itemid = currentUser?.currentListing
 
         itemNum.setText("$itemid")
 
@@ -92,6 +102,12 @@ class ItemList : AppCompatActivity() {
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
             addItemToDb()
+            updateCurrentTotalListing()
+
+            val refresh = Intent(this, ItemList::class.java)
+            refresh.putExtra("currentUser", currentUser)
+            startActivity(refresh)
+            finish()
 
         }
 
@@ -101,18 +117,21 @@ class ItemList : AppCompatActivity() {
 
                 R.id.home -> {
                     val homeIntent = Intent(this, LoginActivity::class.java)
+                    homeIntent.putExtra("currentUser", currentUser)
                     startActivity(homeIntent)
                     finish()
                     return@setOnItemSelectedListener true
                 }
                 R.id.AddItem -> {
-                    val mainIntent = Intent(this, ItemList::class.java)
-                    startActivity(mainIntent)
+                    val addIntent = Intent(this, ItemList::class.java)
+                    addIntent.putExtra("currentUser", currentUser)
+                    startActivity(addIntent)
                     return@setOnItemSelectedListener true
                 }
                 R.id.Inventory -> {
                     val inventoryIntent = Intent(this, ViewInventory::class.java)
                     //inventoryIntent.putExtra("userID", userID)
+                    inventoryIntent.putExtra("currentUser", currentUser)
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
@@ -124,7 +143,38 @@ class ItemList : AppCompatActivity() {
 
     }
 
+    private fun updateCurrentTotalListing() {
+
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("Users").document(currentUser?.email.toString())
+
+        docRef.get().addOnSuccessListener { documentsnapshot ->
+
+            //assign document to object for data access
+            var updateCurrentListing = documentsnapshot.toObject<EntryUser>()
+            //Log.i(TAG, updateID?.userID.toString())
+
+            //check to make sure document is not null
+            if (updateCurrentListing != null) {
+
+                //increment global userID for next assignment
+                updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
+                plus(1)
+
+                db.collection("Users").document(currentUser?.email.toString()).
+                set(updateCurrentListing)
+
+
+
+            }
+
+        }
+
+        currentUser?.currentListing = currentUser?.currentListing?.plus(1)
+    }
+
     private fun addItemToDb() {
+
 
         val age = 0
         val brand = itemBrand.text.toString()
@@ -133,16 +183,16 @@ class ItemList : AppCompatActivity() {
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "coming soon"
         val itemDesc = itemDesc.text.toString()
-        val itemID = intent.getLongExtra("itemNum", 0)
+        val itemId = currentUser?.currentListing
         val notes = itemNotes.text.toString()
-        val user = intent.getLongExtra("userID", 0)
+        val user = currentUser?.userID
 
 
         val db = FirebaseFirestore.getInstance()
 
 
         val newItem = ActiveListing(age, brand, category, cost, estRetail, imageURL, itemDesc,
-             itemID, notes, user)
+             itemId, notes, user)
 
         db.collection("itemListings").document().set(newItem)
 

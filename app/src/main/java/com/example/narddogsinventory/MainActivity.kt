@@ -144,13 +144,16 @@ class MainActivity : AppCompatActivity() {
                         intentR.putExtra("email", email)
                         intentR.putExtra("name", getUserID?.firstName)
                         intentR.putExtra("userNum", getUserID?.userID)
+                        intentR.putExtra("currentUser", getUserID)
                         startActivity(intentR)
                         finish()
 
                     }
                     else{
 
-                        //Log.d(TAG, getUserID.toString())
+                        val intent = Intent(this, GoogleReg::class.java)
+                        startActivity(intent)
+                        finish()
 
 
                     }

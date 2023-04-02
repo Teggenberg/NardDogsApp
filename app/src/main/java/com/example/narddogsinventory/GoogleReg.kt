@@ -86,16 +86,19 @@ class GoogleReg : AppCompatActivity() {
     }
 
 
-    private fun addUser(email: String, fName: String, lName: String, password: String, userId : Long?) {
+    private fun addUser(email: String, fName: String, lName: String,
+                        password: String, userId : Long?) : EntryUser {
 
         //instantiate firestore access
         val db = FirebaseFirestore.getInstance()
 
         //custom object to hold data being written to db
-        val newUser = EntryUser(0, fName, lName, password, userId)
+        val newUser = EntryUser(0, email, fName, lName, password, userId)
 
         //pass object into collection to create new doc in user collection
         db.collection("Users").document(email).set(newUser)
+
+        return newUser
 
     }
 
@@ -112,7 +115,8 @@ class GoogleReg : AppCompatActivity() {
 
         //instantiate db access, and target specific document
         val global = FirebaseFirestore.getInstance()
-        val docRef = global.collection("globals").document("rJd01G5J8l1BTkwyo101")
+        val docRef = global.collection("globals")
+            .document("rJd01G5J8l1BTkwyo101")
 
 
         //document retrieved from globals to access user ID for new user
