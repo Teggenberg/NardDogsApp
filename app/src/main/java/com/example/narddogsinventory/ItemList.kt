@@ -24,6 +24,7 @@ private lateinit var itemNum : TextView
 private lateinit var itemCost : EditText
 private lateinit var itemDesc : EditText
 private lateinit var itemBrand : EditText
+
 private lateinit var itemRetail : EditText
 private lateinit var itemCond : AutoCompleteTextView
 private lateinit var itemCat : AutoCompleteTextView

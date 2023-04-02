@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
 
 private const val TAG = "MainActivity"
@@ -139,11 +140,12 @@ class MainActivity : AppCompatActivity() {
                     val user = task.result
                     if (user.exists()){
                         Log.d("TAG", "User found")
-                        val getUserID = task.result.toObject(EntryUser::class.java)
+                        //val getUserID = task.result.toObject(EntryUser::class.java)
+                        val getUserID = user.toObject<EntryUser>()
                         val intentR = Intent(this@MainActivity, LoginActivity::class.java)
                         intentR.putExtra("email", email)
                         intentR.putExtra("name", getUserID?.firstName)
-                        intentR.putExtra("userNum", getUserID?.userID)
+
                         intentR.putExtra("currentUser", getUserID)
                         startActivity(intentR)
                         finish()
