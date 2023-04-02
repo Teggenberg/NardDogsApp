@@ -51,19 +51,21 @@ class GoogleReg : AppCompatActivity() {
                 if(password == passwordC){   //validate that passwords both match
 
                     generateUserID()  //create new account, user ID assigned from globals collection
-                    updateGlobals()   //totalUsers and UserID index updated in globals collection
-                    val homeScreen = Intent(this, LoginActivity::class.java)
-                    startActivity(homeScreen)
-                    finish()
+                    //updateGlobals()   //totalUsers and UserID index updated in globals collection
+//                    val homeScreen = Intent(this, LoginActivity::class.java)
+//                    startActivity(homeScreen)
+//                    finish()
                 }
                 else{
                     //password fields do not match
-                    Toast.makeText(this, "passwords do not match", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "passwords do not match",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
             else{
                 //empty fields remain
-                Toast.makeText(this, "credential fields incomplete", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "credential fields incomplete",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -93,7 +95,7 @@ class GoogleReg : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //custom object to hold data being written to db
-        val newUser = EntryUser(0, email, fName, lName, password, userId)
+        val newUser = EntryUser(1000000, email, fName, lName, password, userId)
 
         //pass object into collection to create new doc in user collection
         db.collection("Users").document(email).set(newUser)
@@ -127,7 +129,15 @@ class GoogleReg : AppCompatActivity() {
             returnID = newUser?.userID //assign userID to variable
 
             //call addUser with all data passed for new account
-            addUser(email, first, last, password, returnID)
+            val currentUser = addUser(email, first, last, password, returnID)
+
+            updateGlobals()
+
+            val homeScreen = Intent(this, LoginActivity::class.java)
+            homeScreen.putExtra("currentUser", currentUser)
+            startActivity(homeScreen)
+            finish()
+
         }
 
     }

@@ -50,13 +50,15 @@ class LoginActivity : AppCompatActivity() {
         //access to db
         auth = FirebaseAuth.getInstance()
 
+        currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+
 
         //capture user data passed from previous activity for reference
-        val email = intent.getStringExtra("email")
-        val displayName = intent.getStringExtra("name")
+        val email = currentUser?.firstName
+        val displayName = currentUser?.lastName
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
-        currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+
 
 
         //write out user data to text views

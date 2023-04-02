@@ -29,30 +29,33 @@ class RegisterActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.createAccountButton).setOnClickListener{
 
+            //capture values in widgets for user account data
             val first = findViewById<EditText>(R.id.etRegFirstN).text.toString()
             val last =  findViewById<EditText>(R.id.etRegLastN).text.toString()
             val password = findViewById<EditText>(R.id.etRegPassword).text.toString()
             val passwordC = findViewById<EditText>(R.id.etRegPasswordC).text.toString()
             val email = findViewById<EditText>(R.id.etRegEmail).text.toString()
 
+            //check to make sure all fields are filled in
             if(fieldsComplete(first, last, password, passwordC, email)){
 
                 if(passwordMatch(password, passwordC)){
 
+                    //if fields are complete, and passwords match, create usr account
                     newUser(first, last, password,  email)
-
                 }
                 else{
+
+                    //toast for mismatch passwords
                     Toast.makeText(this, "Passwords do not match",Toast.LENGTH_LONG).show()
                 }
 
-
             }
             else{
+
+                //toast for incomplete  fields
                 Toast.makeText(this, "Credentials Not Complete",Toast.LENGTH_LONG).show()
             }
-
-
 
         }
 
@@ -63,38 +66,38 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun newUser(first : String, last : String, password : String, email: String) {
 
+        //database access, pass in username entered to check against existing accounts
         val db = FirebaseFirestore.getInstance()
-
         val emailCheck = db.collection("Users").document("$email")
+
 
         emailCheck.get().addOnCompleteListener{
                 task ->
+            //access to db successful
             if(task.isSuccessful){
+
+                //store result in variable for reference
                 val user = task.result
+
+                //check variable to see if it already exists in db
                 if (user.exists()){
+
+                    //toast to let user know username is taken
                     Log.d("TAG", "User found")
                     Toast.makeText(this, "Username Unavailable", Toast.LENGTH_LONG).show()
 
                 }
                 else{
+
+                    //create new user account
                     generateUserID()
-                    updateGlobals()
-
-                    val intentR = Intent(this, LoginActivity::class.java)
-                    intentR.putExtra("email", email)
-
-                    startActivity(intentR)
-                    finish()
                 }
             }
             else{
+                //no access to db
                 Log.d("TAG", "User not found")
-
-
             }
-
         }
-
     }
 
     private fun updateGlobals() {
@@ -131,7 +134,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun addUser(first: String, last: String, password: String, email: String, userId : Long?) {
+    private fun addUser(first: String, last: String, password: String, email: String, userId : Long?) : EntryUser {
         //instantiate firestore access
         val db = FirebaseFirestore.getInstance()
 
@@ -140,6 +143,8 @@ class RegisterActivity : AppCompatActivity() {
 
         //pass object into collection to create new doc in user collection
         db.collection("Users").document(email).set(newUser)
+
+        return newUser
 
     }
 
@@ -168,7 +173,18 @@ class RegisterActivity : AppCompatActivity() {
             returnID = newUser?.userID //assign userID to variable
 
             //call addUser with all data passed for new account
-            addUser( first, last, password, email, returnID)
+            val currentUser = addUser( first, last, password, email, returnID)
+
+            //update global db with current user count, and new user ID for assignment of next account
+            updateGlobals()
+
+            //move new user to homepage, pass the user data for local access to data
+            val intentR = Intent(this, LoginActivity::class.java)
+            intentR.putExtra("currentUser", currentUser)
+            startActivity(intentR)
+            finish()
+
+
         }
 
     }
