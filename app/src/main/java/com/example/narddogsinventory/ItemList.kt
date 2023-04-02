@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 
+//not sure why these are angry...
 private lateinit var itemNum : TextView
 private lateinit var itemCost : EditText
 private lateinit var itemDesc : EditText
@@ -72,16 +73,19 @@ class ItemList : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //var itemid = intent.getLongExtra("itemNum", 0)
+        //assign variable to textview to capture current item ID index
         itemNum = findViewById(R.id.etItemID)
 
-        val userID = intent.getLongExtra("userID", 0)
+        //capture user data passed from previous activity for db access and updating
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
+        //store currentListing (item ID) into variable to assign to textview
         var itemid = currentUser?.currentListing
 
+        //set textview to display the current item ID to be assigned to new listing
         itemNum.setText("$itemid")
 
+        //assign values from widgets into variables for data collection of new item
         itemBrand = findViewById(R.id.etBrand)
         itemDesc = findViewById<EditText>(R.id.etItemName)
         itemCat = findViewById(R.id.etDropDownBox)
@@ -90,15 +94,15 @@ class ItemList : AppCompatActivity() {
         itemRetail = findViewById(R.id.etRetail)
         itemNotes = findViewById(R.id.etItemNotes)
 
-
-
-
-
-
+        //assign bottom navigation bar to variable
         bNav = findViewById(R.id.bottomNav)
 
+        //ensure the current activity is selected on navigation bar
         bNav.selectedItemId = R.id.AddItem
 
+        //add new item into db when button is clicked
+        //then increment user's current listing field in db, and local user's item ID
+        //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
             addItemToDb()
@@ -111,6 +115,8 @@ class ItemList : AppCompatActivity() {
 
         }
 
+        //bottom navigation bar listener
+        //pass user object to next activity have local access to data
         bNav.setOnItemSelectedListener {
 
             when(it.itemId) {
@@ -145,55 +151,57 @@ class ItemList : AppCompatActivity() {
 
     private fun updateCurrentTotalListing() {
 
+        //access to users database, reference document assigned to current user
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("Users").document(currentUser?.email.toString())
 
+        //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
 
             //assign document to object for data access
             var updateCurrentListing = documentsnapshot.toObject<EntryUser>()
-            //Log.i(TAG, updateID?.userID.toString())
 
             //check to make sure document is not null
             if (updateCurrentListing != null) {
 
-                //increment global userID for next assignment
+                //increment currentListing for next item addition
                 updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
                 plus(1)
 
+                //overwrite the fields in the database with updated values
                 db.collection("Users").document(currentUser?.email.toString()).
                 set(updateCurrentListing)
-
-
 
             }
 
         }
 
+        //update currentListing for locally accessible user data to match database
         currentUser?.currentListing = currentUser?.currentListing?.plus(1)
     }
 
     private fun addItemToDb() {
 
-
-        val age = 0
+        //capture all values from widgets to update data members for ActiveListing object
+        val age = 0 //need to implement operation for age
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
-        val imageURL = "coming soon"
+        val imageURL = "coming soon" //this will include the url for the photo when complete
         val itemDesc = itemDesc.text.toString()
         val itemId = currentUser?.currentListing
         val notes = itemNotes.text.toString()
         val user = currentUser?.userID
 
-
+        //access to database
         val db = FirebaseFirestore.getInstance()
 
-
+        //store all values into custom class object
         val newItem = ActiveListing(age, brand, category, cost, estRetail, imageURL, itemDesc,
              itemId, notes, user)
 
+        //add document into itemListings collection using custom class object
         db.collection("itemListings").document().set(newItem)
 
     }
