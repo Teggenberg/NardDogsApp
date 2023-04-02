@@ -11,7 +11,7 @@
         android:id="@+id/etItemID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/latoheavy"
         android:text="Item ID"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Item Name"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Cost of Product"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Estimated Retail"
@@ -94,7 +94,7 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -107,9 +107,9 @@
             android:layout_height="54dp"
             android:layout_weight="1"
             android:height="48dp"
-            android:inputType="none"
             android:fontFamily="@font/latobold"
-            android:hint="Condition" />
+            android:hint="Condition"
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -118,7 +118,7 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -131,9 +131,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:height="48dp"
-            android:inputType="none"
             android:fontFamily="@font/latobold"
-            android:hint="Select a Category" />
+            android:hint="Select a Category"
+            android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,11 +151,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/etItemNotes"
         android:layout_width="351dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:fontFamily="@font/latomedium"
         android:gravity="start|top"
@@ -163,5 +163,15 @@
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etItemNotes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

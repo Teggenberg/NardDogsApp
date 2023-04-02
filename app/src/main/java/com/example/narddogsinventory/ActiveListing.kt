@@ -1,7 +1,7 @@
 package com.example.narddogsinventory
 
 data class ActiveListing(
-    val age: Int? = 0,
+    val age: Int? = null,
     val brand : String? = null,
     val category : String? = null,
     val cost : Float? = null,
@@ -10,5 +10,4 @@ data class ActiveListing(
     val itemDesc : String? = null,
     val itemID : Long? = null,
     val notes : String? = null,
-    val user : Long? = null) {
-}
+    val user : Long? = null)

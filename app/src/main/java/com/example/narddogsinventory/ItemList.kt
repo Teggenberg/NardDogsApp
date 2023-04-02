@@ -13,8 +13,16 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.firestore.FirebaseFirestore
 
 private lateinit var itemNum : TextView
+private lateinit var itemCost : EditText
+private lateinit var itemDesc : EditText
+private lateinit var itemBrand : EditText
+private lateinit var itemRetail : EditText
+private lateinit var itemCond : AutoCompleteTextView
+private lateinit var itemCat : AutoCompleteTextView
+private lateinit var itemNotes : EditText
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
@@ -60,13 +68,32 @@ class ItemList : AppCompatActivity() {
         var itemid = intent.getLongExtra("itemNum", 0)
         itemNum = findViewById(R.id.etItemID)
 
+        val userID = intent.getLongExtra("userID", 0)
+
         itemNum.setText("$itemid")
+
+        itemBrand = findViewById(R.id.etBrand)
+        itemDesc = findViewById<EditText>(R.id.etItemName)
+        itemCat = findViewById(R.id.etDropDownBox)
+        itemCond = findViewById(R.id.etDropDownCon)
+        itemCost = findViewById<EditText>(R.id.etCost)
+        itemRetail = findViewById(R.id.etRetail)
+        itemNotes = findViewById(R.id.etItemNotes)
+
+
+
 
 
 
         bNav = findViewById(R.id.bottomNav)
 
         bNav.selectedItemId = R.id.AddItem
+
+        findViewById<Button>(R.id.addButton).setOnClickListener{
+
+            addItemToDb()
+
+        }
 
         bNav.setOnItemSelectedListener {
 
@@ -94,6 +121,30 @@ class ItemList : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    private fun addItemToDb() {
+
+        val age = 0
+        val brand = itemBrand.text.toString()
+        val category = itemCat.text.toString()
+        val cost  = itemCost.text.toString().toFloatOrNull()
+        val estRetail = itemRetail.text.toString().toFloatOrNull()
+        val imageURL = "coming soon"
+        val itemDesc = itemDesc.text.toString()
+        val itemID = intent.getLongExtra("itemNum", 0)
+        val notes = itemNotes.text.toString()
+        val user = intent.getLongExtra("userID", 0)
+
+
+        val db = FirebaseFirestore.getInstance()
+
+
+        val newItem = ActiveListing(age, brand, category, cost, estRetail, imageURL, itemDesc,
+             itemID, notes, user)
+
+        db.collection("itemListings").document().set(newItem)
 
     }
 

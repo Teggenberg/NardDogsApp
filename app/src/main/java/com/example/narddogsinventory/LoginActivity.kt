@@ -80,6 +80,7 @@ class LoginActivity : AppCompatActivity() {
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
                     mainIntent.putExtra("itemNum", itemID)
+                    mainIntent.putExtra("userID", userID)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
                 }
