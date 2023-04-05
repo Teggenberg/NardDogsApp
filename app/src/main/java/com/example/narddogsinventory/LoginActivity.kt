@@ -102,6 +102,13 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
+                R.id.Sales -> {
+                    val salesIntent = Intent(this, Sales::class.java)
+                    salesIntent.putExtra("currentUser", currentUser)
+                    startActivity(salesIntent)
+                    return@setOnItemSelectedListener true
+
+                }
                 else -> {
                     return@setOnItemSelectedListener false
                 }
