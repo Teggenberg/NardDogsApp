@@ -18,6 +18,8 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import java.time.Duration
+import java.time.LocalDateTime
 
 //not sure why these are angry...
 private lateinit var itemNum : TextView
@@ -181,10 +183,11 @@ class ItemList : AppCompatActivity() {
         currentUser?.currentListing = currentUser?.currentListing?.plus(1)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addItemToDb() {
 
         //capture all values from widgets to update data members for ActiveListing object
-        val age = 0 //need to implement operation for age
+        val age = calculateAge()
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
         val cost  = itemCost.text.toString().toFloatOrNull()
@@ -204,6 +207,20 @@ class ItemList : AppCompatActivity() {
 
         //add document into itemListings collection using custom class object
         db.collection("itemListings").document().set(newItem)
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calculateAge(): Int? {
+
+
+
+        val origin = LocalDateTime.parse("2023-01-01T20:00:00.0000")
+        val current = LocalDateTime.now()
+
+        return Duration.between(origin,current).toDays().toInt()
+
+
 
     }
 
