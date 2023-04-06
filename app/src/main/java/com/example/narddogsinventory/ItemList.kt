@@ -8,11 +8,7 @@ import android.os.Bundle
 import android.os.DropBoxManager
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
@@ -204,6 +200,9 @@ class ItemList : AppCompatActivity() {
 
         //add document into itemListings collection using custom class object
         db.collection("itemListings").document().set(newItem)
+
+        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
+            .show()
 
     }
 
