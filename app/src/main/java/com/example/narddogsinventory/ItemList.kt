@@ -235,14 +235,14 @@ class ItemList : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun calculateAge(): Int? {
 
-
-
+        //use 01-01-23 as constant origin point
         val origin = LocalDateTime.parse("2023-01-01T20:00:00.0000")
+
+        //current date captured when item is added
         val current = LocalDateTime.now()
 
+        //return the number of days between origin and current date
         return Duration.between(origin,current).toDays().toInt()
-
-
 
     }
 
