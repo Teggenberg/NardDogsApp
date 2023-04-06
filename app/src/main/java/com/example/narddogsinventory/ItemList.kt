@@ -1,23 +1,44 @@
 package com.example.narddogsinventory
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.DropBoxManager
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.inputmethod.InputBinding
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.FileProvider
+import com.example.narddogsinventory.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.lang.ref.Reference
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 //not sure why these are angry...
 private lateinit var itemNum : TextView
@@ -29,18 +50,34 @@ private lateinit var itemRetail : EditText
 private lateinit var itemCond : AutoCompleteTextView
 private lateinit var itemCat : AutoCompleteTextView
 private lateinit var itemNotes : EditText
+
+var imageReference = Firebase.storage.reference
+
 private var currentUser : EntryUser? = null
 
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
+    private lateinit var oButton: Button
+    private  lateinit var binding: ActivityMainBinding
+    private var currentFile: Uri? = null
+    val REQUEST_TAKE_PHOTO = 1
+    lateinit var photoPath: String
+    private lateinit var captureButton: Button
+    private lateinit var imageView: ImageView
+    val REQUEST_CODE = 200
+    private val REQUEST_CAMERA_PERMISSION = 1
+    private val REQUEST_IMAGE_CAPTURE = 2
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
-
+        val btIndent = findViewById<EditText>(R.id.etCost)
 
 
 //      CONDITIONS
@@ -68,11 +105,21 @@ class ItemList : AppCompatActivity() {
 
 //      Open CAMERA
 
-        findViewById<Button>(R.id.opCamera).setOnClickListener{
 
-            var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivity(intent)
+        captureButton = findViewById(R.id.opCamera)
+//        imageView = findViewById(R.id.imageView)
+
+        captureButton.setOnClickListener {
+//
+            takePicture()
+//
         }
+
+        //findViewById<Button>(R.id.opCamera).setOnClickListener{
+
+//            var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//            startActivity(intent)
+       // }
 
         //assign variable to textview to capture current item ID index
         itemNum = findViewById(R.id.etItemID)
@@ -148,6 +195,18 @@ class ItemList : AppCompatActivity() {
             }
         }
 
+        //Upload Image code
+
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//        binding.imageView.setOnClickListener{
+//            Intent(Intent.ACTION_GET_CONTENT).also {
+//                it.type="image/*"
+//                imageLauncher.launch(it)
+//            }
+//        }
+
+
     }
 
     private fun updateCurrentTotalListing() {
@@ -207,5 +266,89 @@ class ItemList : AppCompatActivity() {
 
     }
 
+    private fun takePicture() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            saveImageToFile(imageBitmap)
+        }
+    }
+
+
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName,  /* prefix */
+            ".jpg",         /* suffix */
+            storageDir      /* directory */
+        )
+
+        // Log the file path
+        Log.d("createImageFile", "Created image file at: ${image.absolutePath}")
+
+        // Return the file
+        return image
+    }
+
+
+    private fun saveImageToFile(bitmap: Bitmap) {
+        val file = createImageFile()
+        val outputStream: OutputStream? = FileOutputStream(file)
+
+        Log.d("saveImageToFile", "Saving image to file: ${file.absolutePath}")
+
+        outputStream?.let {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            it.flush()
+            it.close()
+
+            // Add the image to the device's gallery
+            val values = ContentValues()
+            values.put(MediaStore.Images.Media.TITLE, file.name)
+            values.put(MediaStore.Images.Media.DESCRIPTION, "Image captured by camera")
+            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name.toLowerCase())
+
+        }
+    }
+
+
+
+    private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result->
+        if (result.resultCode== RESULT_OK){
+            result?.data?.data?.let{
+                currentFile = it
+                binding.imageView.setImageURI(it)
+            }
+        }
+        else{
+            Toast.makeText(this,"Canceled",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun uploadImage(filename:String){
+        try {
+            currentFile?.let {
+                imageReference.child("").putFile(it).addOnSuccessListener {
+                    Toast.makeText(this,"Uploaded Successfully", Toast.LENGTH_SHORT)
+                }.addOnFailureListener{
+                    Toast.makeText(this,"Failed to upload", Toast.LENGTH_SHORT)
+                }
+            }
+        }catch (e:java.lang.Exception){
+            Toast.makeText(this,e.toString(),Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
 }
