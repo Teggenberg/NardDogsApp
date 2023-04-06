@@ -190,6 +190,7 @@ class ItemList : AppCompatActivity() {
         val age = calculateAge()
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
+        val condition = conditionRating()
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "coming soon" //this will include the url for the photo when complete
@@ -202,11 +203,32 @@ class ItemList : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //store all values into custom class object
-        val newItem = ActiveListing(age, brand, category, cost, estRetail, imageURL, itemDesc,
+        val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
              itemId, notes, user)
 
         //add document into itemListings collection using custom class object
         db.collection("itemListings").document().set(newItem)
+
+    }
+
+    private fun conditionRating(): Int? {
+
+        //variable for switch to assign value
+        val condition : Int?
+        //reads text in the 'condition' drop down
+        val rating = itemCond.text.toString()
+
+        //switch to convert string to Int
+        when(rating){
+            "Excellent" -> condition = 5
+            "Great" -> condition = 4
+            "Fair" -> condition = 2
+            "Roughed Up" -> condition = 1
+            else -> condition = 3
+        }
+
+        //return Int for db assignment
+        return condition
 
     }
 

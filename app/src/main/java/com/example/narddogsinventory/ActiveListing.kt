@@ -4,6 +4,7 @@ data class ActiveListing(
     val age: Int? = null,
     val brand : String? = null,
     val category : String? = null,
+    val condition : Int? = null,
     val cost : Float? = null,
     val estRetail : Float? = null,
     val imageURL : String? = null,
