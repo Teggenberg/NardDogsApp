@@ -61,7 +61,9 @@ class ViewInventory : AppCompatActivity() {
         searchitem = findViewById(R.id.etItemNumber)
 
         findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
-            searchItem(searchitem.text.toString().toLong())
+            if(!searchitem.text.isNullOrEmpty()){
+                searchItem(searchitem.text.toString().toLong())
+            }
         }
 
         bNav.setOnItemSelectedListener {
