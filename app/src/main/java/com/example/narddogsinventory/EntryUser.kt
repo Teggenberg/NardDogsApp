@@ -9,9 +9,9 @@ data class EntryUser(
     val firstName : String? = null,
     val lastName : String? = null,
     val password : String? = null,
-    val totInvested : Float? = null,
-    val totListings : Int? = null,
-    val totSales : Float? = null,
+    var totInvested : Float? = null,
+    var totListings : Int? = null,
+    var totSales : Float? = null,
     val userID : Long? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

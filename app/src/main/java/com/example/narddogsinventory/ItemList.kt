@@ -109,7 +109,7 @@ class ItemList : AppCompatActivity() {
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
             addItemToDb()
-            updateCurrentTotalListing()
+            updateUserData(itemCost.text.toString().toFloat())
 
             val refresh = Intent(this, ItemList::class.java)
             refresh.putExtra("currentUser", currentUser)
@@ -152,7 +152,7 @@ class ItemList : AppCompatActivity() {
 
     }
 
-    private fun updateCurrentTotalListing() {
+    private fun updateUserData(cost: Float) {
 
         //access to users database, reference document assigned to current user
         val db = FirebaseFirestore.getInstance()
@@ -171,6 +171,13 @@ class ItemList : AppCompatActivity() {
                 updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
                 plus(1)
 
+                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
+                plus(1)
+
+                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+                plus(cost)
+
+
                 //overwrite the fields in the database with updated values
                 db.collection("Users").document(currentUser?.email.toString()).
                 set(updateCurrentListing)
@@ -181,6 +188,8 @@ class ItemList : AppCompatActivity() {
 
         //update currentListing for locally accessible user data to match database
         currentUser?.currentListing = currentUser?.currentListing?.plus(1)
+        currentUser?.totListings = currentUser?.totListings?.plus(1)
+        currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

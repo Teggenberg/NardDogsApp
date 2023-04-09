@@ -88,9 +88,9 @@ class LoginActivity : AppCompatActivity() {
 
                 //home/dashboard
                 R.id.home -> {
-                    val homeIntent = Intent(this, LoginActivity::class.java)
+                    /*val homeIntent = Intent(this, LoginActivity::class.java)
                     startActivity(homeIntent)
-                    finish()
+                    finish()*/
                     return@setOnItemSelectedListener true
                 }
 

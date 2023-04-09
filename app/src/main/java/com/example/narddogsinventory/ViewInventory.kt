@@ -112,7 +112,13 @@ class ViewInventory : AppCompatActivity() {
 
                     if(userItem.exists()){
 
-                        val viewItem = userItem.toObject<EntryUser>()
+                        val viewItem = userItem.toObject<ActiveListing>()
+
+                        val intent = Intent(this, ViewItem::class.java)
+                        intent.putExtra("currentItem", viewItem)
+                        intent.putExtra("currentUser", currentUser)
+                        startActivity(intent)
+
 
                     }
 
