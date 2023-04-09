@@ -5,6 +5,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +17,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.toObject
 
 
 class ViewInventory : AppCompatActivity() {
@@ -24,6 +28,8 @@ class ViewInventory : AppCompatActivity() {
     private lateinit var itemList : ArrayList<ActiveListing>
     private  var userID : Long = 0
     private var currentUser : EntryUser? = null
+    private lateinit var searchitem : EditText
+
 
     private lateinit var bNav : NavigationBarView
 
@@ -51,6 +57,12 @@ class ViewInventory : AppCompatActivity() {
         bNav = findViewById(R.id.bottomNav)
 
         bNav.selectedItemId = R.id.Inventory
+
+        searchitem = findViewById(R.id.etItemNumber)
+
+        findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
+            searchItem(searchitem.text.toString().toLong())
+        }
 
         bNav.setOnItemSelectedListener {
 
@@ -84,7 +96,37 @@ class ViewInventory : AppCompatActivity() {
 
     }
 
+    private fun searchItem(itemID : Long) {
 
+        val docID = currentUser?.email + itemID.toString()
+
+        val db = FirebaseFirestore.getInstance()
+        //val docRef = db.collection("itemListings").document(docID)
+
+        db.collection("itemListings").document(docID).get().addOnCompleteListener(){
+                task ->
+
+                if(task.isSuccessful){
+
+                    val userItem = task.result
+
+                    if(userItem.exists()){
+
+                        val viewItem = userItem.toObject<EntryUser>()
+
+                    }
+
+                }
+                else{
+
+                    Toast.makeText(this, "Unable to contact server", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+            }
+
+    }
 
 
     private fun eventChangeListener() {

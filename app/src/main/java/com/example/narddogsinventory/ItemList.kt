@@ -206,8 +206,10 @@ class ItemList : AppCompatActivity() {
         val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
              itemId, notes, user)
 
+        val docId = currentUser?.email + currentUser?.currentListing.toString()
+
         //add document into itemListings collection using custom class object
-        db.collection("itemListings").document().set(newItem)
+        db.collection("itemListings").document(docId).set(newItem)
 
     }
 
