@@ -10,7 +10,7 @@ data class EntryUser(
     val lastName : String? = null,
     val password : String? = null,
     val totInvested : Float? = null,
-    val totListings : Int?,
+    val totListings : Int? = null,
     val totSales : Float? = null,
     val userID : Long? = null
 ) : Parcelable {
