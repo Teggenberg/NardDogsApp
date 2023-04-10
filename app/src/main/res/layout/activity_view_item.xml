@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Button"
+        android:text="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +31,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="100dp"
         android:text="Brand:"
         app:layout_constraintBottom_toBottomOf="@+id/tvItemBrand"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,26 +63,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Cost:"
-        app:layout_constraintEnd_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintEnd_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <TextView
-        android:id="@+id/tvItemCost"
+        android:id="@+id/tvItemNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="itemCost"
-        app:layout_constraintStart_toStartOf="@+id/tvItemDesc"
-        app:layout_constraintTop_toBottomOf="@+id/tvItemDesc" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Age:"
-        app:layout_constraintEnd_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        android:text="itemNotes"
+        app:layout_constraintStart_toStartOf="@+id/tvItemCondition"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemCondition" />
 
     <TextView
         android:id="@+id/tvAge"
@@ -94,6 +85,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tvItemCost" />
 
     <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Age:"
+        app:layout_constraintEnd_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,12 +103,58 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/tvItemCondition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="itemCondition"
         app:layout_constraintStart_toStartOf="@+id/tvAge"
         app:layout_constraintTop_toBottomOf="@+id/tvAge" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Notes:"
+        app:layout_constraintEnd_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/tvItemCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="itemCost"
+        app:layout_constraintStart_toStartOf="@+id/tvItemCat"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemCat" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Category:"
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/tvItemCat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvItemDesc"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemDesc" />
+
+    <TextView
+        android:id="@+id/tvItemID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/tvItemBrand"
+        app:layout_constraintStart_toEndOf="@+id/textView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
