@@ -7,10 +7,10 @@
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#4CACDC</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondaryVariant">#4CACDC</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">#4CACDC</item>
         <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">#015FC6</item>
     </style>
