@@ -157,4 +157,26 @@
         app:layout_constraintEnd_toStartOf="@+id/tvItemBrand"
         app:layout_constraintStart_toEndOf="@+id/textView4" />
 
+    <EditText
+        android:id="@+id/etSoldAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="25dp"
+        android:ems="10"
+        android:hint="final selling price"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/bottonSold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="$old"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etSoldAmount" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
