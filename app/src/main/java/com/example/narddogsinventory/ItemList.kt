@@ -14,6 +14,8 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import java.time.Duration
+import java.time.LocalDateTime
 
 //not sure why these are angry...
 private lateinit var itemNum : TextView
@@ -103,7 +105,7 @@ class ItemList : AppCompatActivity() {
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
             addItemToDb()
-            updateCurrentTotalListing()
+            updateUserData(itemCost.text.toString().toFloat())
 
             val refresh = Intent(this, ItemList::class.java)
             refresh.putExtra("currentUser", currentUser)
@@ -146,7 +148,7 @@ class ItemList : AppCompatActivity() {
 
     }
 
-    private fun updateCurrentTotalListing() {
+    private fun updateUserData(cost: Float) {
 
         //access to users database, reference document assigned to current user
         val db = FirebaseFirestore.getInstance()
@@ -165,6 +167,13 @@ class ItemList : AppCompatActivity() {
                 updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
                 plus(1)
 
+                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
+                plus(1)
+
+                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+                plus(cost)
+
+
                 //overwrite the fields in the database with updated values
                 db.collection("Users").document(currentUser?.email.toString()).
                 set(updateCurrentListing)
@@ -175,14 +184,18 @@ class ItemList : AppCompatActivity() {
 
         //update currentListing for locally accessible user data to match database
         currentUser?.currentListing = currentUser?.currentListing?.plus(1)
+        currentUser?.totListings = currentUser?.totListings?.plus(1)
+        currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addItemToDb() {
 
         //capture all values from widgets to update data members for ActiveListing object
-        val age = 0 //need to implement operation for age
+        val age = calculateAge()
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
+        val condition = conditionRating()
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "coming soon" //this will include the url for the photo when complete
@@ -195,11 +208,48 @@ class ItemList : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //store all values into custom class object
-        val newItem = ActiveListing(age, brand, category, cost, estRetail, imageURL, itemDesc,
+        val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
              itemId, notes, user)
 
+        val docId = currentUser?.email + currentUser?.currentListing.toString()
+
         //add document into itemListings collection using custom class object
-        db.collection("itemListings").document().set(newItem)
+        db.collection("itemListings").document(docId).set(newItem)
+
+    }
+
+    private fun conditionRating(): Int? {
+
+        //variable for switch to assign value
+        val condition : Int?
+        //reads text in the 'condition' drop down
+        val rating = itemCond.text.toString()
+
+        //switch to convert string to Int
+        when(rating){
+            "Excellent" -> condition = 5
+            "Great" -> condition = 4
+            "Fair" -> condition = 2
+            "Roughed Up" -> condition = 1
+            else -> condition = 3
+        }
+
+        //return Int for db assignment
+        return condition
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calculateAge(): Int? {
+
+        //use 01-01-23 as constant origin point
+        val origin = LocalDateTime.parse("2023-01-01T20:00:00.0000")
+
+        //current date captured when item is added
+        val current = LocalDateTime.now()
+
+        //return the number of days between origin and current date
+        return Duration.between(origin,current).toDays().toInt()
 
         Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
             .show()

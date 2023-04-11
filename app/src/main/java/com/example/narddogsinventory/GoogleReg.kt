@@ -95,7 +95,7 @@ class GoogleReg : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //custom object to hold data being written to db
-        val newUser = EntryUser(1000000, email, fName, lName, password, userId)
+        val newUser = EntryUser(1000000, email, fName, lName, password, 0F, 0, 0F, userId)
 
         //pass object into collection to create new doc in user collection
         db.collection("Users").document(email).set(newUser)

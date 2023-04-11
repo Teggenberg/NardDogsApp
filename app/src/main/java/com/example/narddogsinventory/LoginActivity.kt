@@ -41,6 +41,9 @@ class LoginActivity : AppCompatActivity() {
     //navigation bar reference
     private lateinit var bNav: NavigationBarView
     private var currentUser : EntryUser? = null
+    private lateinit var sales : TextView
+    private lateinit var listings : TextView
+    private lateinit var invested : TextView
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +61,14 @@ class LoginActivity : AppCompatActivity() {
         val displayName = currentUser?.lastName
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
+
+//        sales = findViewById(R.id.tvSales)
+//        listings = findViewById(R.id.tvInvnetory)
+//        invested = findViewById(R.id.tvInvested)
+
+//        listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"
+//        sales.text = "Total Sales : $" + currentUser?.totSales.toString()
+//        invested.text = "Current Investment : $" + currentUser?.totInvested.toString()
 
 
 
@@ -77,9 +88,9 @@ class LoginActivity : AppCompatActivity() {
 
                 //home/dashboard
                 R.id.home -> {
-                    val homeIntent = Intent(this, LoginActivity::class.java)
+                    /*val homeIntent = Intent(this, LoginActivity::class.java)
                     startActivity(homeIntent)
-                    finish()
+                    finish()*/
                     return@setOnItemSelectedListener true
                 }
 
@@ -102,10 +113,22 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(inventoryIntent)
                     return@setOnItemSelectedListener true
                 }
+                R.id.Sales -> {
+                    val salesIntent = Intent(this, Sales::class.java)
+                    salesIntent.putExtra("currentUser", currentUser)
+                    startActivity(salesIntent)
+                    return@setOnItemSelectedListener true
+
+                }
                 else -> {
                     return@setOnItemSelectedListener false
                 }
             }
+        }
+
+        findViewById<Button>(R.id.signOutButton).setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
 
