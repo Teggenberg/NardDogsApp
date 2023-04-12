@@ -5,8 +5,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -24,6 +27,8 @@ class ViewItem : AppCompatActivity() {
     private  var currentItem : ActiveListing? = null
     private var currentUser : EntryUser? = null
     private lateinit var back : Button
+    private lateinit var sold : Button
+    private lateinit var price : EditText
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +39,12 @@ class ViewItem : AppCompatActivity() {
         currentItem = intent.getParcelableExtra("currentItem", ActiveListing::class.java)
 
         back = findViewById(R.id.buttonReturn)
+        sold = findViewById(R.id.buttonSold)
+        price = findViewById(R.id.etSoldAmount)
+
+
+
+
         itemBrand = findViewById(R.id.tvItemBrand)
         itemDesc = findViewById(R.id.tvItemDesc)
         itemCategory = findViewById(R.id.tvItemCat)
@@ -59,6 +70,82 @@ class ViewItem : AppCompatActivity() {
             intent.putExtra("currentUser", currentUser)
             startActivity(intent)
         }
+        sold.setOnClickListener{
+
+            convertListing()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertListing() {
+        val db = FirebaseFirestore.getInstance()
+
+        val soldDoc = db.collection("soldListings")
+
+        val removeItem = db.collection("itemListings")
+
+        val date = LocalDateTime.now().toString()
+
+        val amount = price.text.toString().toFloatOrNull()
+
+        val soldItem = SoldListing(currentItem, date, amount)
+
+        val docID = currentUser?.email + currentItem?.itemID
+
+        soldDoc.document(docID).set(soldItem)
+
+        removeItem.document(docID).delete()
+
+        updateUser()
+
+        val intent = Intent(this, ViewInventory::class.java)
+        intent.putExtra("currentUser", currentUser)
+        startActivity(intent)
+    }
+
+    private fun updateUser() {
+
+        //access to users database, reference document assigned to current user
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("Users").document(currentUser?.email.toString())
+
+        val amount = price.text.toString().toFloatOrNull()
+
+        //access the document for the current user in database
+        docRef.get().addOnSuccessListener { documentsnapshot ->
+
+            //assign document to object for data access
+            var updateCurrentListing = documentsnapshot.toObject<EntryUser>()
+
+            //check to make sure document is not null
+            if (updateCurrentListing != null) {
+
+
+
+
+                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
+                plus(-1)
+
+                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+                minus(currentItem?.cost!!)
+
+                updateCurrentListing?.totSales = updateCurrentListing?.totListings?.
+                plus(amount!!)
+
+
+                //overwrite the fields in the database with updated values
+                db.collection("Users").document(currentUser?.email.toString()).
+                set(updateCurrentListing)
+
+            }
+
+        }
+
+        //update currentListing for locally accessible user data to match database
+
+        currentUser?.totListings = currentUser?.totListings?.plus(-1)
+        currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.cost!!)
+        currentUser?.totSales = currentUser?.totSales?.plus(amount!!)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
