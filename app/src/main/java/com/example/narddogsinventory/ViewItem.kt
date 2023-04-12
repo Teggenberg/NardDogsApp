@@ -129,7 +129,7 @@ class ViewItem : AppCompatActivity() {
                 updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
                 minus(currentItem?.cost!!)
 
-                updateCurrentListing?.totSales = updateCurrentListing?.totListings?.
+                updateCurrentListing?.totSales = updateCurrentListing?.totSales?.
                 plus(amount!!)
 
 
@@ -160,7 +160,8 @@ class ViewItem : AppCompatActivity() {
         //return the number of days between origin and current date
         val compare = Duration.between(origin,current).toDays().toInt()
 
-        return (compare - age!!).toString()
+        if(compare - age!! != 1) return (compare - age!!).toString() + " days"
+        else return (compare - age!!).toString() + " day"
 
     }
 
