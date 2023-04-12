@@ -31,6 +31,8 @@ class Sales : AppCompatActivity() {
         invested = findViewById(R.id.tvInvested)
         bNav = findViewById(R.id.bottomNav)
 
+        bNav.selectedItemId = R.id.Sales
+
 
 
 
@@ -53,10 +55,12 @@ class Sales : AppCompatActivity() {
 
                 //home/dashboard
                 R.id.home -> {
-                    /*val homeIntent = Intent(this, LoginActivity::class.java)
+                    val homeIntent = Intent(this, LoginActivity::class.java)
+                    homeIntent.putExtra("currentUser", currentUser)
                     startActivity(homeIntent)
-                    finish()*/
+                    finish()
                     return@setOnItemSelectedListener true
+
                 }
 
                 //activity to add new items into inventory
