@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemAdapter(private val itemList : ArrayList<ActiveListing>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val itemList : ArrayList<ActiveListing>,
+        private val listener : OnItemClickListener
+        ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
 
 
@@ -30,11 +32,28 @@ class ItemAdapter(private val itemList : ArrayList<ActiveListing>) : RecyclerVie
 
     }
 
-    class ItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val itemNum : TextView = itemView.findViewById(R.id.itemID)
         val itemDesc : TextView = itemView.findViewById(R.id.itemDesc)
         val category : TextView = itemView.findViewById(R.id.category)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position : Int = adapterPosition
+            if (position != RecyclerView.NO_POSITION){
+                listener.onItemClick(position)
+            }
+
+        }
+
+    }
+
+    interface OnItemClickListener {
+
+        fun onItemClick(position: Int)
     }
 }

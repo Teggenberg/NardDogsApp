@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
 
 
-class ViewInventory : AppCompatActivity() {
+class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
     private lateinit var db : FirebaseFirestore
     private lateinit var inventoryRecyclerView: RecyclerView
@@ -48,7 +48,7 @@ class ViewInventory : AppCompatActivity() {
 
         itemList = arrayListOf()
 
-        itemAdapter = ItemAdapter(itemList)
+        itemAdapter = ItemAdapter(itemList, this)
 
         inventoryRecyclerView.adapter = itemAdapter
 
@@ -143,6 +143,10 @@ class ViewInventory : AppCompatActivity() {
 
     }
 
+    override fun onItemClick(position: Int) {
+        Toast.makeText( this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        searchItem(itemList[position].itemID!!)
+    }
 
     private fun eventChangeListener() {
 
