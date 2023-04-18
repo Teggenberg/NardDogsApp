@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.google.android.material.navigation.NavigationBarView
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class Sales : AppCompatActivity() {
@@ -18,6 +17,8 @@ class Sales : AppCompatActivity() {
     private lateinit var invested : TextView
     private lateinit var bNav : NavigationBarView
     private var currentUser : EntryUser? = null
+
+    private lateinit var salesList : ArrayList<SoldListing>
     //@RequiresApi(Build.VERSION_CODES.O)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +27,9 @@ class Sales : AppCompatActivity() {
 
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
-        sales = findViewById(R.id.tvSales)
-        inventory = findViewById(R.id.tvInvnetory)
-        invested = findViewById(R.id.tvInvested)
+        sales = findViewById(R.id.tvCatOne)
+        inventory = findViewById(R.id.tvTotalRev)
+        invested = findViewById(R.id.tvCatTwo)
         bNav = findViewById(R.id.bottomNav)
 
         bNav.selectedItemId = R.id.Sales
@@ -42,7 +43,7 @@ class Sales : AppCompatActivity() {
 
         val days = Duration.between(origin,current).toDays().toString()
 
-        findViewById<TextView>(R.id.etDate).text = days
+        findViewById<TextView>(R.id.tvCatThree).text = days
 
         sales.text = "Total Sales: " + currentUser?.totSales.toString()
         invested.text =  "Total Invested: " + currentUser?.totInvested.toString()
