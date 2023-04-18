@@ -5,9 +5,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -102,6 +100,57 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                 }
             }
         }
+
+
+//      Inventory CATEGORIES
+        // get reference to the string array that we just created
+        val cat = resources.getStringArray(R.array.invCategories)
+        // create an array adapter and pass the required parameter
+        // pass the context, drop down layout , and array.
+        val adapter = ArrayAdapter(this, R.layout.dropdown_text, cat)
+        // get reference to the autocomplete text view
+        val auto = findViewById<AutoCompleteTextView>(R.id.itDropDownCat)
+        // set adapter to the autocomplete tv to the arrayAdapter
+        auto.setAdapter(adapter)
+
+
+        val activeSwitch = findViewById<Switch>(R.id.activeSwitch)
+        val soldSwitch = findViewById<Switch>(R.id.soldSwitch)
+
+        activeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            // @Tim you do not need to use this but just an idea going your way
+
+//            THE buttonView parameter it is not used in this specific implementation
+//            of the listener, but it is passed as a parameter
+//            to the listener method and can be used to access and interact with
+//            the Switch widget. The isChecked parameter is
+//            used to determine the state of the Switch widget and
+//            perform different operations based on that state.
+
+            if (isChecked) {
+
+            } else {
+
+
+            }
+
+        }
+
+        soldSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            // @Tim you do not need to use this but just an idea going your way
+
+            if (isChecked) {
+
+
+            }
+            else {
+
+
+            }
+
+        }
+
+
 
     }
 
