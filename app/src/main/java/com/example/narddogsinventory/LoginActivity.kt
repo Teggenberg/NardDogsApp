@@ -62,13 +62,13 @@ class LoginActivity : AppCompatActivity() {
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
 
-//        sales = findViewById(R.id.tvSales)
-//        listings = findViewById(R.id.tvInvnetory)
-//        invested = findViewById(R.id.tvInvested)
+        sales = findViewById(R.id.tvSales)
+        listings = findViewById(R.id.tvInvnetory)
+        invested = findViewById(R.id.tvInvested)
 
-//        listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"
-//        sales.text = "Total Sales : $" + currentUser?.totSales.toString()
-//        invested.text = "Current Investment : $" + currentUser?.totInvested.toString()
+        listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"
+       sales.text = "Total Sales : $" + currentUser?.totSales.toString()
+       invested.text = "Current Investment : $" + currentUser?.totInvested.toString()
 
 
 
@@ -97,8 +97,8 @@ class LoginActivity : AppCompatActivity() {
                 //activity to add new items into inventory
                 R.id.AddItem -> {
                     val mainIntent = Intent(this, ItemList::class.java)
-//                    mainIntent.putExtra("itemNum", itemID)
-//                    mainIntent.putExtra("userID", userID)
+   //                 mainIntent.putExtra("itemNum", itemID)
+  //                  mainIntent.putExtra("userID", userID)
                     mainIntent.putExtra("currentUser", currentUser)
                     startActivity(mainIntent)
                     return@setOnItemSelectedListener true
