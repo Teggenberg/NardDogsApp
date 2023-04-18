@@ -55,30 +55,32 @@
         app:layout_constraintStart_toEndOf="@+id/etItemNumber" />
 
     <Switch
-        android:id="@+id/activeSwitch"
+        android:id="@+id/switch_active_sold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="5dp"
-        android:padding="8dp"
+        android:layout_marginTop="20dp"
+        android:padding="14dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:textOff="Active"
+        android:textOn="Sold"
+        app:layout_constraintStart_toEndOf="@+id/text_view_active_sold"
+        app:layout_constraintTop_toBottomOf="@+id/inventoryList" />
+
+    <TextView
+        android:id="@+id/text_view_active_sold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:padding="14dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
         android:text="Active"
+        app:layout_constraintEnd_toStartOf="@+id/switch_active_sold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inventoryList" />
 
-    <Switch
-        android:id="@+id/soldSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="5dp"
-        android:padding="8dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="Sold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activeSwitch" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/invtextInputLayout"
@@ -86,7 +88,7 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
