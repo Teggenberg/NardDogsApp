@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.firestore.*
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -19,6 +21,8 @@ class Sales : AppCompatActivity() {
     private var currentUser : EntryUser? = null
 
     private lateinit var salesList : ArrayList<SoldListing>
+    private lateinit var catList : ArrayList<SalesCategory>
+
     //@RequiresApi(Build.VERSION_CODES.O)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +37,8 @@ class Sales : AppCompatActivity() {
         bNav = findViewById(R.id.bottomNav)
 
         bNav.selectedItemId = R.id.Sales
+
+        buildLists()
 
 
 
@@ -94,6 +100,63 @@ class Sales : AppCompatActivity() {
                     return@setOnItemSelectedListener false
                 }
             }
+        }
+    }
+
+    private fun buildLists() {
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("soldListings").whereEqualTo("user", currentUser?.userID).
+        addSnapshotListener(object : EventListener<QuerySnapshot> {
+            override fun onEvent(
+                value: QuerySnapshot?,
+                error: FirebaseFirestoreException?
+            ) {
+
+                if(error != null){
+                    Log.e("Firestore Error", error.message.toString() )
+                    return
+                }
+
+                for(dc : DocumentChange in value?.documentChanges!!){
+
+                    if(dc.type == DocumentChange.Type.ADDED){
+
+                        salesList.add(dc.document.toObject(SoldListing::class.java))
+
+                    }
+                }
+
+                //itemAdapter.notifyDataSetChanged()
+
+            }
+
+
+        })
+
+        buildCategories()
+    }
+
+    private fun buildCategories() {
+
+        catList.add(SalesCategory("Electronics"))
+        catList.add(SalesCategory("Apparel"))
+        catList.add(SalesCategory("Media"))
+        catList.add(SalesCategory("Furniture/Appliances"))
+        catList.add(SalesCategory("Collectibles"))
+        catList.add(SalesCategory("Other"))
+
+        for(item in salesList){
+
+            for(cat in catList){
+                
+                if(item.detail?.category == cat.category){
+                    cat.totDollars?.plus(item.finalPrice!!)
+                    cat.totItems?.plus(1)
+                    cat.totCost?.plus(item.detail?.cost!!)
+                }
+            }
+
         }
     }
 }
