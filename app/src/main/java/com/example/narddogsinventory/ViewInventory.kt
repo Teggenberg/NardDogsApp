@@ -124,46 +124,6 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
             }
         }
 
-
-
-//        val activeSwitch = findViewById<Switch>(R.id.activeSwitch)
-//        val soldSwitch = findViewById<Switch>(R.id.soldSwitch)
-//
-//        activeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-//            // @Tim you do not need to use this but just an idea going your way
-//
-////            THE buttonView parameter it is not used in this specific implementation
-////            of the listener, but it is passed as a parameter
-////            to the listener method and can be used to access and interact with
-////            the Switch widget. The isChecked parameter is
-////            used to determine the state of the Switch widget and
-////            perform different operations based on that state.
-//
-//            if (isChecked) {
-//
-//            } else {
-//
-//
-//            }
-//
-//        }
-
-//        soldSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-//            // @Tim you do not need to use this but just an idea going your way
-//
-//            if (isChecked) {
-//
-//
-//            }
-//            else {
-//
-//
-//            }
-//
-//        }
-
-
-
     }
 
     private fun searchItem(itemID : Long) {
