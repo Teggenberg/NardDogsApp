@@ -5,22 +5,27 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.DropBoxManager
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
+import com.example.narddogsinventory.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import java.io.*
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
@@ -37,12 +42,20 @@ private lateinit var itemCond : AutoCompleteTextView
 private lateinit var itemCat : AutoCompleteTextView
 private lateinit var itemNotes : EditText
 private var currentUser : EntryUser? = null
-
+val photoId = currentUser?.email + currentUser?.currentListing.toString()
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
     private val REQUEST_IMAGE_CAPTURE = 2
     private lateinit var captureButton: Button
+    private  lateinit var binding: ActivityMainBinding
+    private var currentFile: Uri? = null
+    var imageReference = Firebase.storage.reference
+    var imagevalURL = " "
+
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("MissingInflatedId")
@@ -87,10 +100,11 @@ class ItemList : AppCompatActivity() {
 //        imageView = findViewById(R.id.imageView)
 
         captureButton.setOnClickListener {
-//
             takePicture()
-//
         }
+
+
+
 
         //assign variable to textview to capture current item ID index
         itemNum = findViewById(R.id.etItemID)
@@ -187,14 +201,20 @@ class ItemList : AppCompatActivity() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "JPEG_${timeStamp}_"
         val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+
+
+
         val image = File.createTempFile(
             imageFileName,  /* prefix */
             ".jpg",         /* suffix */
             storageDir      /* directory */
         )
 
+        uploadImage(imageFileName)
         // Log the file path
         Log.d("createImageFile", "Created image file at: ${image.absolutePath}")
+        //Show user photo was saved
+        Toast.makeText(this, "Image saved to ${image.absolutePath}", Toast.LENGTH_SHORT).show()
 
         // Return the file
         return image
@@ -220,6 +240,56 @@ class ItemList : AppCompatActivity() {
             values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
             values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name.toLowerCase())
 
+        }
+
+
+/*  Firebase Code below   */
+
+        // Get the file path
+        val filePath = file.absolutePath
+
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageRef = storageRef.child("images/${file.name}")
+        val stream = FileInputStream(File(filePath))
+        val uploadTask = imageRef.putStream(stream)
+        uploadTask.addOnSuccessListener {
+            Log.d("saveImageToFile", "Image uploaded successfully to Firebase Storage")
+            // Get the download URL and store it in imagevalURL
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                imageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    val imageUrl = downloadUri.toString()
+                    imagevalURL = imageUrl
+                    Log.d("saveImageToFile", "Image URL: $imageUrl")
+
+                } else {
+                    Log.e("saveImageToFile", "Error getting download URL", task.exception)
+                }
+            }
+        }.addOnFailureListener {
+            Log.e("saveImageToFile", "Error uploading image to Firebase Storage", it)
+        }
+
+        /*   Firebase Code above   */
+    }
+
+
+    private fun uploadImage(filename:String){
+        try {
+            currentFile?.let {
+                imageReference.child("Pictures").putFile(it).addOnSuccessListener {
+                    Toast.makeText(this,"Uploaded Successfully", Toast.LENGTH_SHORT)
+                }.addOnFailureListener{
+                    Toast.makeText(this,"Failed to upload", Toast.LENGTH_SHORT)
+                }
+            }
+        }catch (e:java.lang.Exception){
+            Toast.makeText(this,e.toString(),Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -273,7 +343,7 @@ class ItemList : AppCompatActivity() {
         val condition = conditionRating()
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
-        val imageURL = "coming soon" //this will include the url for the photo when complete
+        val imageURL = "$imagevalURL" //this will include the url for the photo when complete
         val itemDesc = itemDesc.text.toString()
         val itemId = currentUser?.currentListing
         val notes = itemNotes.text.toString()
