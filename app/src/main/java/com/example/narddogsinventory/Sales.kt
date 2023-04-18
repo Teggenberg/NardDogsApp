@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.*
@@ -15,8 +16,15 @@ import java.time.LocalDateTime
 class Sales : AppCompatActivity() {
 
     private lateinit var sales : TextView
-    private lateinit var inventory : TextView
-    private lateinit var invested : TextView
+    private lateinit var catOne : TextView
+    private lateinit var catTwo : TextView
+    private lateinit var catThree : TextView
+    private lateinit var catFour : TextView
+    private lateinit var catFive : TextView
+    private lateinit var catSix : TextView
+
+    private var totalRev : Float = 0f
+
     private lateinit var bNav : NavigationBarView
     private var currentUser : EntryUser? = null
 
@@ -31,14 +39,39 @@ class Sales : AppCompatActivity() {
 
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
-        sales = findViewById(R.id.tvCatOne)
-        inventory = findViewById(R.id.tvTotalRev)
-        invested = findViewById(R.id.tvCatTwo)
+        catList = arrayListOf()
+        salesList = arrayListOf()
+
+        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
+        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
+
+
         bNav = findViewById(R.id.bottomNav)
 
         bNav.selectedItemId = R.id.Sales
 
+        sales = findViewById(R.id.tvTotalRev)
+        catOne = findViewById(R.id.tvCatOne)
+        catTwo = findViewById(R.id.tvCatTwo)
+        catThree = findViewById(R.id.tvCatThree)
+        catFour = findViewById(R.id.tvCatFour)
+        catFive = findViewById(R.id.tvCatFive)
+        catSix = findViewById(R.id.tvCatSix)
+
+
         buildLists()
+
+        sales.text = "Total Revenue : $totalRev"
+        catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
+        catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
+        catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
+        catFour.text = catList[3].category + " : " + catList[3].totDollars.toString()
+        catFive.text = catList[4].category + " : " + catList[4].totDollars.toString()
+        catSix.text = catList[5].category + " : " + catList[5].totDollars.toString()
 
 
 
@@ -49,11 +82,9 @@ class Sales : AppCompatActivity() {
 
         val days = Duration.between(origin,current).toDays().toString()
 
-        findViewById<TextView>(R.id.tvCatThree).text = days
 
-        sales.text = "Total Sales: " + currentUser?.totSales.toString()
-        invested.text =  "Total Invested: " + currentUser?.totInvested.toString()
-        inventory.text = "Total Inventory: " + currentUser?.totListings + " items"
+
+
 
 
         bNav.setOnItemSelectedListener {
@@ -115,6 +146,7 @@ class Sales : AppCompatActivity() {
 
                 if(error != null){
                     Log.e("Firestore Error", error.message.toString() )
+
                     return
                 }
 
@@ -123,6 +155,7 @@ class Sales : AppCompatActivity() {
                     if(dc.type == DocumentChange.Type.ADDED){
 
                         salesList.add(dc.document.toObject(SoldListing::class.java))
+
 
                     }
                 }
@@ -139,24 +172,39 @@ class Sales : AppCompatActivity() {
 
     private fun buildCategories() {
 
-        catList.add(SalesCategory("Electronics"))
-        catList.add(SalesCategory("Apparel"))
-        catList.add(SalesCategory("Media"))
-        catList.add(SalesCategory("Furniture/Appliances"))
-        catList.add(SalesCategory("Collectibles"))
-        catList.add(SalesCategory("Other"))
+//        catList.add(SalesCategory("Electronics"))
+//        catList.add(SalesCategory("Apparel"))
+//        catList.add(SalesCategory("Media"))
+//        catList.add(SalesCategory("Furniture/Appliances"))
+//        catList.add(SalesCategory("Collectibles"))
+//        catList.add(SalesCategory("Other"))
 
         for(item in salesList){
 
             for(cat in catList){
-                
+
                 if(item.detail?.category == cat.category){
-                    cat.totDollars?.plus(item.finalPrice!!)
+                    item?.finalPrice?.let { cat.totDollars?.plus(it) }
                     cat.totItems?.plus(1)
                     cat.totCost?.plus(item.detail?.cost!!)
                 }
             }
 
+            totalRev.plus(item.finalPrice!!)
+
+        }
+
+        calculateMarginAndAverageSale()
+
+
+    }
+
+    private fun calculateMarginAndAverageSale() {
+
+        for(cat in catList){
+
+            cat.averageSale = cat.totDollars!! / cat.totItems!!
+            cat.margin = 1 - (cat.totCost!! / cat.totDollars!!)
         }
     }
 }
