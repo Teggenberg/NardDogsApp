@@ -1,36 +1,16 @@
 package com.example.narddogsinventory
 
-import android.content.ClipData.Item
 import android.content.Intent
-import android.os.Binder
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-import android.provider.MediaStore
-import android.view.inputmethod.InputBinding
-
-import android.util.Log
-
 import android.widget.Button
 import android.widget.TextView
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
-import androidx.annotation.NonNull
-import androidx.fragment.app.Fragment
-import android.view.MenuItem
 import androidx.annotation.RequiresApi
 
-import com.google.android.material.navigation.NavigationBarMenu
 import com.google.android.material.navigation.NavigationBarView
-import androidx.appcompat.widget.ButtonBarLayout
-
-import com.google.android.material.bottomnavigation.BottomNavigationView
-
-import com.google.android.material.snackbar.BaseTransientBottomBar
-
-import java.nio.BufferUnderflowException
 
 //this activity is poorly named, it is the landing page upon logging in (retrospect is 20/20)
 class LoginActivity : AppCompatActivity() {
@@ -62,9 +42,9 @@ class LoginActivity : AppCompatActivity() {
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
 
-        sales = findViewById(R.id.tvSales)
-        listings = findViewById(R.id.tvInvnetory)
-        invested = findViewById(R.id.tvInvested)
+        sales = findViewById(R.id.tvCatOne)
+        listings = findViewById(R.id.tvTotalRev)
+        invested = findViewById(R.id.tvCatTwo)
 
         listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"
        sales.text = "Total Sales : $" + currentUser?.totSales.toString()
