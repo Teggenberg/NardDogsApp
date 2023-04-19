@@ -180,19 +180,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
 
             })
-//        db.collection("itemListings")
-//            .whereEqualTo("user", 1000000004)
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                for (document in documents) {
-//                    itemList.add(document.toObject(ActiveListing::class.java))
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.e("Firestore Error", exception.message.toString())
-//            }
-//            //itemAdapter.notifyDataSetChanged()
-//        }
+        Toast.makeText( this, "total items ${itemList.size}", Toast.LENGTH_LONG).show()
 
 
     }

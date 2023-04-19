@@ -22,6 +22,7 @@ class Sales : AppCompatActivity() {
     private lateinit var catFour : TextView
     private lateinit var catFive : TextView
     private lateinit var catSix : TextView
+    private lateinit var db : FirebaseFirestore
 
     private var totalRev : Float = 0f
 
@@ -30,6 +31,8 @@ class Sales : AppCompatActivity() {
 
     private lateinit var salesList : ArrayList<SoldListing>
     private lateinit var catList : ArrayList<SalesCategory>
+
+
 
     //@RequiresApi(Build.VERSION_CODES.O)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -49,6 +52,9 @@ class Sales : AppCompatActivity() {
         catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
         catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
 
+        buildLists()
+
+
 
         bNav = findViewById(R.id.bottomNav)
 
@@ -63,15 +69,15 @@ class Sales : AppCompatActivity() {
         catSix = findViewById(R.id.tvCatSix)
 
 
-        buildLists()
 
-        sales.text = "Total Revenue : $totalRev"
-        catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
-        catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
-        catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
-        catFour.text = catList[3].category + " : " + catList[3].totDollars.toString()
-        catFive.text = catList[4].category + " : " + catList[4].totDollars.toString()
-        catSix.text = catList[5].category + " : " + catList[5].totDollars.toString()
+
+//        sales.text = "Total Revenue : $totalRev"
+//        catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
+//        catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
+//        catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
+//        catFour.text = catList[3].category + " : " + catList[3].totDollars.toString()
+//        catFive.text = catList[4].category + " : " + catList[4].totDollars.toString()
+//        catSix.text = catList[5].category + " : " + catList[5].totDollars.toString()
 
 
 
@@ -136,9 +142,9 @@ class Sales : AppCompatActivity() {
 
     private fun buildLists() {
 
-        val db = FirebaseFirestore.getInstance()
+        db = FirebaseFirestore.getInstance()
         db.collection("soldListings").whereEqualTo("user", currentUser?.userID).
-        addSnapshotListener(object : EventListener<QuerySnapshot> {
+        addSnapshotListener(object : EventListener<QuerySnapshot>{
             override fun onEvent(
                 value: QuerySnapshot?,
                 error: FirebaseFirestoreException?
@@ -152,7 +158,9 @@ class Sales : AppCompatActivity() {
 
                 for(dc : DocumentChange in value?.documentChanges!!){
 
+
                     if(dc.type == DocumentChange.Type.ADDED){
+                        Log.e("Document :", dc.toString() )
 
                         salesList.add(dc.document.toObject(SoldListing::class.java))
 
@@ -160,37 +168,63 @@ class Sales : AppCompatActivity() {
                     }
                 }
 
-                //itemAdapter.notifyDataSetChanged()
+                buildCategories()
+                sales.text = "Total Revenue : $totalRev"
+//                catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
+//                catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
+//                catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
+//                catFour.text = catList[3].category + " : " + catList[3].totDollars.toString()
+//                catFive.text = catList[4].category + " : " + catList[4].totDollars.toString()
+//                catSix.text = catList[5].category + " : " + catList[5].totDollars.toString()
+                Log.e("Category :", catList[0].totDollars.toString() )
+
+
 
             }
 
 
         })
 
-        buildCategories()
+        Toast.makeText( this, "total items ${salesList.size}", Toast.LENGTH_LONG).show()
+
+        //buildCategories()
     }
 
     private fun buildCategories() {
 
-//        catList.add(SalesCategory("Electronics"))
-//        catList.add(SalesCategory("Apparel"))
-//        catList.add(SalesCategory("Media"))
-//        catList.add(SalesCategory("Furniture/Appliances"))
-//        catList.add(SalesCategory("Collectibles"))
-//        catList.add(SalesCategory("Other"))
+//        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
+//        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
 
-        for(item in salesList){
 
-            for(cat in catList){
+
+        for(item : SoldListing in salesList){
+            Log.e("Item :", item.toString() )
+
+            for(cat : SalesCategory in catList){
+
+                cat.totDollars!!.plus(1)
 
                 if(item.detail?.category == cat.category){
-                    item?.finalPrice?.let { cat.totDollars?.plus(it) }
-                    cat.totItems?.plus(1)
-                    cat.totCost?.plus(item.detail?.cost!!)
+                    Log.e("Cat :", item.detail?.category.toString() )
+                    Log.e("cost :", item.detail?.cost.toString() )
+
+                    val add = item.detail?.cost
+
+                    Log.e("var :", add.toString() )
+
+                    cat.totItems += 1
+                    cat.totCost += add!!
+                    cat.totDollars += item.finalPrice!!
+                    Log.e("cat cost :", cat.totCost.toString() )
+
                 }
             }
 
-            totalRev.plus(item.finalPrice!!)
+            totalRev += item.finalPrice!!
 
         }
 
@@ -201,10 +235,20 @@ class Sales : AppCompatActivity() {
 
     private fun calculateMarginAndAverageSale() {
 
-        for(cat in catList){
+        for(cat : SalesCategory in catList){
 
-            cat.averageSale = cat.totDollars!! / cat.totItems!!
-            cat.margin = 1 - (cat.totCost!! / cat.totDollars!!)
+            cat.averageSale = cat.totDollars!! / cat.totItems
+            cat.margin = 1 - (cat.totCost / cat.totDollars!!)
         }
+
+        var catListTwo = catList.sortedWith(compareBy{it.totDollars})
+
+        catSix.text = catListTwo[0].category + " : " + catListTwo[0].totDollars.toString()
+        catFive.text = catListTwo[1].category + " : " + catListTwo[1].totDollars.toString()
+        catFour.text = catListTwo[2].category + " : " + catListTwo[2].totDollars.toString()
+        catThree.text = catListTwo[3].category + " : " + catListTwo[3].totDollars.toString()
+        catTwo.text = catListTwo[4].category + " : " + catListTwo[4].totDollars.toString()
+        catOne.text = catListTwo[5].category + " : " + catListTwo[5].totDollars.toString()
+
     }
 }

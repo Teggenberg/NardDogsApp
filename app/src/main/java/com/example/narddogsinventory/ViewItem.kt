@@ -88,7 +88,7 @@ class ViewItem : AppCompatActivity() {
 
         val amount = price.text.toString().toFloatOrNull()
 
-        val soldItem = SoldListing(currentItem, date, amount)
+        val soldItem = SoldListing(currentItem, date, amount, currentUser?.userID)
 
         val docID = currentUser?.email + currentItem?.itemID
 
