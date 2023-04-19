@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:text="TextView"
-        android:textSize="32sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTotalRev" />
@@ -61,7 +61,7 @@
         android:id="@+id/tvCatTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:layout_marginTop="47dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="41dp"
         android:text="TextView"
-        android:textSize="22sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCatThree" />
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
         android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCatFour" />
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCatFive" />

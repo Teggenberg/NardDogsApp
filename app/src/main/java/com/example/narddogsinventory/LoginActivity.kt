@@ -107,6 +107,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.signOutButton).setOnClickListener{
+
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

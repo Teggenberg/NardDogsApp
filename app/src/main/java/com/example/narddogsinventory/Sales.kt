@@ -169,7 +169,7 @@ class Sales : AppCompatActivity() {
                 }
 
                 buildCategories()
-                sales.text = "Total Sales : $totalRev"
+                sales.text = "Total Sales : $" + "%.2f".format(totalRev)
 //                catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
 //                catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
 //                catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
@@ -243,12 +243,12 @@ class Sales : AppCompatActivity() {
 
         var catListTwo = catList.sortedWith(compareBy{it.totDollars})
 
-        catSix.text = catListTwo[0].category + " : " + catListTwo[0].totDollars.toString()
-        catFive.text = catListTwo[1].category + " : " + catListTwo[1].totDollars.toString()
-        catFour.text = catListTwo[2].category + " : " + catListTwo[2].totDollars.toString()
-        catThree.text = catListTwo[3].category + " : " + catListTwo[3].totDollars.toString()
-        catTwo.text = catListTwo[4].category + " : " + catListTwo[4].totDollars.toString()
-        catOne.text = catListTwo[5].category + " : " + catListTwo[5].totDollars.toString()
+        catSix.text = catListTwo[0].category + " : $" + "%.2f".format(catListTwo[0].totDollars)
+        catFive.text = catListTwo[1].category + " : $" + "%.2f".format(catListTwo[1].totDollars)
+        catFour.text = catListTwo[2].category + " : $" + "%.2f".format(catListTwo[2].totDollars)
+        catThree.text = catListTwo[3].category + " : $" + "%.2f".format(catListTwo[3].totDollars)
+        catTwo.text = catListTwo[4].category + " : $" + "%.2f".format(catListTwo[4].totDollars)
+        catOne.text = catListTwo[5].category + " : $" + "%.2f".format(catListTwo[5].totDollars)
 
     }
 }
