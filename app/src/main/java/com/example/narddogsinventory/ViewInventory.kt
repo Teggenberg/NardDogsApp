@@ -5,11 +5,13 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +26,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private lateinit var inventoryRecyclerView: RecyclerView
     private lateinit var itemAdapter : ItemAdapter
     private lateinit var itemList : ArrayList<ActiveListing>
+    private lateinit var filteredList : ArrayList<ActiveListing>
     private  var userID : Long = 0
     private var currentUser : EntryUser? = null
     private lateinit var searchitem : EditText
@@ -36,6 +39,17 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
 
+        //      CATEGORIES
+        // get reference to the string array that we just created
+        val category = resources.getStringArray(R.array.categories)
+        // create an array adapter and pass the required parameter
+        // in our case pass the context, drop down layout , and array.
+        val catAdapter = ArrayAdapter(this, R.layout.dropdown_text, category)
+        // get reference to the autocomplete text view
+        val catDropDown = findViewById<AutoCompleteTextView>(R.id.itDropDownCat)
+        // set adapter to the autocomplete tv to the arrayAdapter
+        catDropDown.setAdapter(catAdapter)
+
         //userID = intent.getLongExtra("userID", 0)
         currentUser = intent.getParcelableExtra("currentUser",EntryUser::class.java )
         Log.d("ViewInventory", userID.toString())
@@ -45,6 +59,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         inventoryRecyclerView.setHasFixedSize(true)
 
         itemList = arrayListOf()
+        filteredList = arrayListOf()
 
         itemAdapter = ItemAdapter(itemList, this)
 
@@ -57,6 +72,55 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         bNav.selectedItemId = R.id.Inventory
 
         searchitem = findViewById(R.id.etItemNumber)
+
+        catDropDown.onItemClickListener=
+            object :
+
+
+                AdapterView.OnItemClickListener {
+//                fun onNothingClicked(p0: AdapterView<*>?) {
+//                    TODO("Not yet implemented")
+//                }
+
+                override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val catFilter = catDropDown.text.toString()
+
+                    if(catFilter == "--ALL--"){
+                        itemAdapter = ItemAdapter(itemList, this@ViewInventory)
+
+                        inventoryRecyclerView.adapter = itemAdapter
+
+                    }
+                    else{
+                         filteredList.clear()
+                         Log.e("category :", catFilter)
+                         filterCategory(catFilter)
+                         itemAdapter = ItemAdapter(filteredList, this@ViewInventory)
+                         itemAdapter.notifyDataSetChanged()
+                         inventoryRecyclerView.adapter = itemAdapter
+                    }
+                }
+            }
+
+                catDropDown.onItemSelectedListener=
+            object :
+
+
+                AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    val catFilter = p2.toString()
+                    Log.e("category :", catFilter.toString())
+                    Toast.makeText(this@ViewInventory, "Unable to contact server", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+    }
+
+
 
         findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
             if(!searchitem.text.isNullOrEmpty()){
@@ -121,6 +185,17 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                 textViewActiveSold.text = "Sold"
             } else {
                 textViewActiveSold.text = "Active"
+            }
+        }
+
+    }
+
+    private fun filterCategory(catFilter: String) {
+
+        for(item in itemList){
+
+            if(item?.category == catFilter){
+                filteredList.add(item)
             }
         }
 

@@ -83,7 +83,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/invtextInputLayout"
+        android:id="@+id/invCatDropDown"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
