@@ -11,6 +11,16 @@
         <item>Roughed Up</item>
     </string-array>
 
+    <string-array name="invCategories">
+        <item>Electronics</item>
+        <item>Apparel</item>
+        <item>Media</item>
+        <item>Furniture/Appliances</item>
+        <item>Collectibles</item>
+        <item>Other</item>
+        <item>--ALL--</item>
+    </string-array>
+
     <string-array name="categories">
         <item>Electronics</item>
         <item>Apparel</item>

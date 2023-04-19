@@ -5,9 +5,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -100,6 +98,29 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                 else -> {
                     return@setOnItemSelectedListener false
                 }
+            }
+        }
+
+
+//      Inventory CATEGORIES
+        // get reference to the string array that we just created
+        val cat = resources.getStringArray(R.array.invCategories)
+        // create an array adapter and pass the required parameter
+        // pass the context, drop down layout , and array.
+        val adapter = ArrayAdapter(this, R.layout.dropdown_text, cat)
+        // get reference to the autocomplete text view
+        val auto = findViewById<AutoCompleteTextView>(R.id.itDropDownCat)
+        // set adapter to the autocomplete tv to the arrayAdapter
+        auto.setAdapter(adapter)
+
+        val switchActiveSold = findViewById<Switch>(R.id.switch_active_sold)
+        val textViewActiveSold = findViewById<TextView>(R.id.text_view_active_sold)
+
+        switchActiveSold.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                textViewActiveSold.text = "Sold"
+            } else {
+                textViewActiveSold.text = "Active"
             }
         }
 

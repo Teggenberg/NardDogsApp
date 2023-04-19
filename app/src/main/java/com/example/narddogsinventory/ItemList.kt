@@ -12,14 +12,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.narddogsinventory.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -72,7 +68,7 @@ class ItemList : AppCompatActivity() {
         // in our case pass the context, drop down layout , and array.
         val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_text, con)
         // get reference to the autocomplete text view
-        val autocompleteTV = findViewById<AutoCompleteTextView>(R.id.etDropDownCon)
+        val autocompleteTV = findViewById<AutoCompleteTextView>(R.id.itDropDownCat)
         // set adapter to the autocomplete tv to the arrayAdapter
         autocompleteTV.setAdapter(arrayAdapter)
 
@@ -122,7 +118,7 @@ class ItemList : AppCompatActivity() {
         itemBrand = findViewById(R.id.etBrand)
         itemDesc = findViewById<EditText>(R.id.etItemName)
         itemCat = findViewById(R.id.etDropDownBox)
-        itemCond = findViewById(R.id.etDropDownCon)
+        itemCond = findViewById(R.id.itDropDownCat)
         itemCost = findViewById<EditText>(R.id.etCost)
         itemRetail = findViewById(R.id.etRetail)
         itemNotes = findViewById(R.id.etItemNotes)

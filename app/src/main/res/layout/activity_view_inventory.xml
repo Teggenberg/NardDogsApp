@@ -11,7 +11,7 @@
         android:id="@+id/inventoryList"
         android:layout_width="409dp"
         android:layout_height="629dp"
-        android:layout_marginBottom="180dp"
+        android:layout_marginBottom="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="75dp"
         android:ems="10"
         android:hint="search item number"
         android:inputType="number"
@@ -48,10 +48,63 @@
         android:id="@+id/buttonItemSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:text="Search"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/etItemNumber" />
+
+    <Switch
+        android:id="@+id/switch_active_sold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="14dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:textOff="Active"
+        android:textOn="Sold"
+        app:layout_constraintStart_toEndOf="@+id/text_view_active_sold"
+        app:layout_constraintTop_toBottomOf="@+id/inventoryList" />
+
+    <TextView
+        android:id="@+id/text_view_active_sold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:padding="14dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:text="Active"
+        app:layout_constraintEnd_toStartOf="@+id/switch_active_sold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventoryList" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/invtextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventoryList">
+
+
+        <AutoCompleteTextView
+            android:id="@+id/itDropDownCat"
+            android:layout_width="229dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:height="48dp"
+            android:fontFamily="@font/latobold"
+            android:hint="Categories"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

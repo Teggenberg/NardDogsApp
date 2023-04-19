@@ -1,5 +1,6 @@
 package com.example.narddogsinventory
 
+
 data class SalesCategory(
     val category : String? = null,
     var totItems : Int = 0 ,
@@ -8,3 +9,4 @@ data class SalesCategory(
     var averageSale : Float? = null,
     var totCost : Float = 0f
 )
+

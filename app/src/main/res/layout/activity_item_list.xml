@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etItemID" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/invtextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etRetail">
 
         <AutoCompleteTextView
-            android:id="@+id/etDropDownCon"
+            android:id="@+id/itDropDownCat"
             android:layout_width="229dp"
             android:layout_height="54dp"
             android:layout_weight="1"
@@ -123,7 +123,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/invtextInputLayout">
 
         <AutoCompleteTextView
             android:id="@+id/etDropDownBox"
