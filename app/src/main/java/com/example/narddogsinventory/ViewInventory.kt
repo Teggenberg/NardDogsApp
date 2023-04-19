@@ -30,6 +30,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private  var userID : Long = 0
     private var currentUser : EntryUser? = null
     private lateinit var searchitem : EditText
+    var filtered = false
 
 
     private lateinit var bNav : NavigationBarView
@@ -51,7 +52,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         catDropDown.setAdapter(catAdapter)
 
         //userID = intent.getLongExtra("userID", 0)
-        currentUser = intent.getParcelableExtra("currentUser",EntryUser::class.java )
+        currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
         Log.d("ViewInventory", userID.toString())
 
         inventoryRecyclerView = findViewById(R.id.inventoryList)
@@ -60,6 +61,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
         itemList = arrayListOf()
         filteredList = arrayListOf()
+        filteredList.clear()
 
         itemAdapter = ItemAdapter(itemList, this)
 
@@ -73,53 +75,44 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
         searchitem = findViewById(R.id.etItemNumber)
 
-        catDropDown.onItemClickListener=
-            object :
+        catDropDown.onItemClickListener =
+            AdapterView.OnItemClickListener { p0, p1, p2, p3 ->
+                val catFilter = catDropDown.text.toString()
 
+                if (catFilter == "--ALL--") {
+                    filtered = false
+                    itemAdapter = ItemAdapter(itemList, this@ViewInventory)
 
-                AdapterView.OnItemClickListener {
-//                fun onNothingClicked(p0: AdapterView<*>?) {
-//                    TODO("Not yet implemented")
-//                }
+                    inventoryRecyclerView.adapter = itemAdapter
 
-                override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val catFilter = catDropDown.text.toString()
-
-                    if(catFilter == "--ALL--"){
-                        itemAdapter = ItemAdapter(itemList, this@ViewInventory)
-
-                        inventoryRecyclerView.adapter = itemAdapter
-
-                    }
-                    else{
-                         filteredList.clear()
-                         Log.e("category :", catFilter)
-                         filterCategory(catFilter)
-                         itemAdapter = ItemAdapter(filteredList, this@ViewInventory)
-                         itemAdapter.notifyDataSetChanged()
-                         inventoryRecyclerView.adapter = itemAdapter
-                    }
+                } else {
+                    filtered = true
+                    filteredList.clear()
+                    Log.e("category :", catFilter)
+                    filterCategory(catFilter)
+                    itemAdapter = ItemAdapter(filteredList, this@ViewInventory)
+                    itemAdapter.notifyDataSetChanged()
+                    inventoryRecyclerView.adapter = itemAdapter
                 }
             }
 
-                catDropDown.onItemSelectedListener=
-            object :
-
-
-                AdapterView.OnItemSelectedListener{
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val catFilter = p2.toString()
-                    Log.e("category :", catFilter.toString())
-                    Toast.makeText(this@ViewInventory, "Unable to contact server", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-    }
-
+        //            }
+//
+//                catDropDown.onItemSelectedListener=
+//            object :
+//
+//
+//                AdapterView.OnItemSelectedListener{
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                    val catFilter = p2.toString()
+//                    Log.e("category :", catFilter.toString())
+//                    Toast.makeText(this@ViewInventory, "Unable to contact server", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
 
 
         findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
@@ -235,13 +228,14 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
                 }
 
-            }
+        }
 
     }
 
     override fun onItemClick(position: Int) {
         Toast.makeText( this, "Item $position clicked", Toast.LENGTH_SHORT).show()
-        searchItem(itemList[position].itemID!!)
+        if(!filtered){searchItem(itemList[position].itemID!!)}
+        else{searchItem(filteredList[position].itemID!!)}
     }
 
     private fun eventChangeListener() {
@@ -249,21 +243,21 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         //whereEqualTo("user", 1000000000).
 
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").whereEqualTo("user", currentUser?.userID).
-            addSnapshotListener(object : EventListener<QuerySnapshot>{
+        db.collection("itemListings").whereEqualTo("user", currentUser?.userID)
+            .addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(
                     value: QuerySnapshot?,
                     error: FirebaseFirestoreException?
                 ) {
 
-                    if(error != null){
-                        Log.e("Firestore Error", error.message.toString() )
+                    if (error != null) {
+                        Log.e("Firestore Error", error.message.toString())
                         return
                     }
 
-                    for(dc : DocumentChange in value?.documentChanges!!){
+                    for (dc: DocumentChange in value?.documentChanges!!) {
 
-                        if(dc.type == DocumentChange.Type.ADDED){
+                        if (dc.type == DocumentChange.Type.ADDED) {
 
                             itemList.add(dc.document.toObject(ActiveListing::class.java))
 
@@ -276,6 +270,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
 
             })
+
         Toast.makeText( this, "total items ${itemList.size}", Toast.LENGTH_LONG).show()
 
 
