@@ -169,7 +169,7 @@ class Sales : AppCompatActivity() {
                 }
 
                 buildCategories()
-                sales.text = "Total Revenue : $totalRev"
+                sales.text = "Total Sales : $totalRev"
 //                catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
 //                catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
 //                catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
