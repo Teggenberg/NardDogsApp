@@ -198,17 +198,20 @@ class ItemList : AppCompatActivity() {
         }
     }
 
+    val imageID = currentUser?.email + currentUser?.currentListing.toString()
+
 
     private fun createImageFile(): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val imageFileName = "JPEG_${timeStamp}_"
+        val imageID = currentUser?.email + currentUser?.currentListing.toString()
+        val imageFileName = "JPEG_${imageID}_"
         val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 
 
 
         val image = File.createTempFile(
-            imageFileName,  /* prefix */
+            imageID,  /* prefix */
             ".jpg",         /* suffix */
             storageDir      /* directory */
         )
@@ -237,11 +240,13 @@ class ItemList : AppCompatActivity() {
 
             // Add the image to the device's gallery
             val values = ContentValues()
-            values.put(MediaStore.Images.Media.TITLE, file.name)
+            //values.put(MediaStore.Images.Media.TITLE, file.name)
+            values.put(MediaStore.Images.Media.TITLE, imageID)
             values.put(MediaStore.Images.Media.DESCRIPTION, "Image captured by camera")
             values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-            values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
-            values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name.toLowerCase())
+            //values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name)
 
         }
 
@@ -252,7 +257,7 @@ class ItemList : AppCompatActivity() {
         val filePath = file.absolutePath
 
         val storageRef = FirebaseStorage.getInstance().reference
-        val imageRef = storageRef.child("images/${file.name}")
+        val imageRef = storageRef.child("images/${imageID}")
         val stream = FileInputStream(File(filePath))
         val uploadTask = imageRef.putStream(stream)
         uploadTask.addOnSuccessListener {
@@ -267,6 +272,7 @@ class ItemList : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     val imageUrl = downloadUri.toString()
+
                     imagevalURL = imageUrl
                     Log.d("saveImageToFile", "Image URL: $imageUrl")
 
