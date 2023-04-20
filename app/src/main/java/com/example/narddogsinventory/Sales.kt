@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -138,6 +140,32 @@ class Sales : AppCompatActivity() {
                 }
             }
         }
+
+
+        // ALL Time, Month, and 90 days radio button code
+
+        val radioGroup = findViewById<RadioGroup>(R.id.radio_group)
+        val weekButton = findViewById<RadioButton>(R.id.All_Time_button)
+        val monthButton = findViewById<RadioButton>(R.id.month_button)
+        val yearButton = findViewById<RadioButton>(R.id.three_Months_button)
+
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.All_Time_button -> {
+
+
+                }
+                R.id.month_button -> {
+
+
+                }
+                R.id.three_Months_button -> {
+
+
+                }
+            }
+        }
+
     }
 
     private fun buildLists() {

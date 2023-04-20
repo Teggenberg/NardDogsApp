@@ -14,10 +14,10 @@
         android:layout_marginBottom="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.858"
         tools:listitem="@layout/inventory_item" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,23 +35,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="40dp"
         android:ems="10"
         android:hint="search item number"
         android:inputType="number"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inventoryList" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_active_sold"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonItemSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="4dp"
         android:text="Search"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toEndOf="@+id/etItemNumber" />
 
     <Switch
