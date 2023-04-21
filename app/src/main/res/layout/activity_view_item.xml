@@ -224,8 +224,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivItem"
-        android:layout_width="315dp"
-        android:layout_height="294dp"
+        android:layout_width="210dp"
+        android:layout_height="217dp"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"

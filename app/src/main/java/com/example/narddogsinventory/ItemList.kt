@@ -52,6 +52,8 @@ class ItemList : AppCompatActivity() {
     private lateinit var itemNotes : EditText
 
     var photoTaken = false
+    var imageID : String = " "
+
 
 
 
@@ -107,11 +109,16 @@ class ItemList : AppCompatActivity() {
 
 
 
+
+
         //assign variable to textview to capture current item ID index
         itemNum = findViewById(R.id.etItemID)
 
         //capture user data passed from previous activity for db access and updating
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+
+        imageID = currentUser?.email + currentUser?.currentListing.toString()
+        Toast.makeText(this, "$imageID", Toast.LENGTH_SHORT).show()
 
         //store currentListing (item ID) into variable to assign to textview
         var itemid = currentUser?.currentListing
@@ -226,7 +233,7 @@ class ItemList : AppCompatActivity() {
         }
     }
 
-    val imageID = currentUser?.email + currentUser?.currentListing.toString()
+
 
 
     private fun createImageFile(): File {
