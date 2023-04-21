@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import java.time.Duration
@@ -30,6 +31,8 @@ class ViewItem : AppCompatActivity() {
     private lateinit var sold : Button
     private lateinit var price : EditText
 
+    private lateinit var itemImage : ShapeableImageView
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,10 @@ class ViewItem : AppCompatActivity() {
         back = findViewById(R.id.buttonReturn)
         sold = findViewById(R.id.buttonSold)
         price = findViewById(R.id.etSoldAmount)
+
+        itemImage = findViewById(R.id.ivItem)
+
+        
 
 
 
