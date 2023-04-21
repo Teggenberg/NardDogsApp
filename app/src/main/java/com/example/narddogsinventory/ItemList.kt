@@ -27,16 +27,8 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
 
-//not sure why these are angry...
-private lateinit var itemNum : TextView
-private lateinit var itemCost : EditText
-private lateinit var itemDesc : EditText
-private lateinit var itemBrand : EditText
 
-private lateinit var itemRetail : EditText
-private lateinit var itemCond : AutoCompleteTextView
-private lateinit var itemCat : AutoCompleteTextView
-private lateinit var itemNotes : EditText
+
 private var currentUser : EntryUser? = null
 val photoId = currentUser?.email + currentUser?.currentListing.toString()
 class ItemList : AppCompatActivity() {
@@ -48,6 +40,18 @@ class ItemList : AppCompatActivity() {
     private var currentFile: Uri? = null
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
+
+    private lateinit var itemNum : TextView
+    private lateinit var itemCost : EditText
+    private lateinit var itemDesc : EditText
+    private lateinit var itemBrand : EditText
+
+    private lateinit var itemRetail : EditText
+    private lateinit var itemCond : AutoCompleteTextView
+    private lateinit var itemCat : AutoCompleteTextView
+    private lateinit var itemNotes : EditText
+
+    var photoTaken = false
 
 
 
@@ -97,6 +101,7 @@ class ItemList : AppCompatActivity() {
 
         captureButton.setOnClickListener {
             takePicture()
+            photoTaken = true
         }
 
 
@@ -134,13 +139,25 @@ class ItemList : AppCompatActivity() {
         //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
-            addItemToDb()
-            updateUserData(itemCost.text.toString().toFloat())
+            if(photoTaken){
 
-            val refresh = Intent(this, ItemList::class.java)
-            refresh.putExtra("currentUser", currentUser)
-            startActivity(refresh)
-            finish()
+                if(validEntryInput()) {
+                    addItemToDb()
+                    updateUserData(itemCost.text.toString().toFloat())
+
+                    val refresh = Intent(this, ItemList::class.java)
+                    refresh.putExtra("currentUser", currentUser)
+                    startActivity(refresh)
+                    finish()
+                }
+                else{
+                    Toast.makeText(this, "Please make sure all item info is entered", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else{
+                Toast.makeText(this, "please add photo", Toast.LENGTH_SHORT).show()
+            }
+
 
         }
 
@@ -185,6 +202,17 @@ class ItemList : AppCompatActivity() {
 
     }
 
+    private fun validEntryInput(): Boolean {
+
+        if(itemBrand.text == null) return false
+        if(itemDesc.text == null) return false
+        if(itemCond.text == null) return false
+        if(itemCat.text == null) return false
+        return true
+
+
+    }
+
     private fun takePicture() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
@@ -198,17 +226,20 @@ class ItemList : AppCompatActivity() {
         }
     }
 
+    val imageID = currentUser?.email + currentUser?.currentListing.toString()
+
 
     private fun createImageFile(): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val imageFileName = "JPEG_${timeStamp}_"
+        val imageID = currentUser?.email + currentUser?.currentListing.toString()
+        val imageFileName = "JPEG_${imageID}_"
         val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 
 
 
         val image = File.createTempFile(
-            imageFileName,  /* prefix */
+            imageID,  /* prefix */
             ".jpg",         /* suffix */
             storageDir      /* directory */
         )
@@ -237,11 +268,13 @@ class ItemList : AppCompatActivity() {
 
             // Add the image to the device's gallery
             val values = ContentValues()
-            values.put(MediaStore.Images.Media.TITLE, file.name)
+            //values.put(MediaStore.Images.Media.TITLE, file.name)
+            values.put(MediaStore.Images.Media.TITLE, imageID)
             values.put(MediaStore.Images.Media.DESCRIPTION, "Image captured by camera")
             values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-            values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
-            values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name.toLowerCase())
+            //values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString())
+            values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name)
 
         }
 
@@ -252,7 +285,7 @@ class ItemList : AppCompatActivity() {
         val filePath = file.absolutePath
 
         val storageRef = FirebaseStorage.getInstance().reference
-        val imageRef = storageRef.child("images/${file.name}")
+        val imageRef = storageRef.child("images/${imageID}")
         val stream = FileInputStream(File(filePath))
         val uploadTask = imageRef.putStream(stream)
         uploadTask.addOnSuccessListener {
@@ -267,6 +300,7 @@ class ItemList : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     val imageUrl = downloadUri.toString()
+
                     imagevalURL = imageUrl
                     Log.d("saveImageToFile", "Image URL: $imageUrl")
 

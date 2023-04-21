@@ -5,15 +5,22 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+
+import android.widget.*
+
 import androidx.annotation.RequiresApi
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
+
+import com.google.firebase.storage.StorageReference
+
 import java.io.File
 import java.io.IOException
 import java.time.Duration
@@ -36,7 +43,11 @@ class ViewItem : AppCompatActivity() {
     private lateinit var sold : Button
     private lateinit var price : EditText
 
+
     private lateinit var itemImage : ShapeableImageView
+
+    private lateinit var imageRef : StorageReference
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +60,7 @@ class ViewItem : AppCompatActivity() {
         back = findViewById(R.id.buttonReturn)
         sold = findViewById(R.id.buttonSold)
         price = findViewById(R.id.etSoldAmount)
+        itemImage = findViewById(R.id.ivItem)
 
         itemImage = findViewById(R.id.ivItem)
 
@@ -87,6 +99,38 @@ class ViewItem : AppCompatActivity() {
         sold.setOnClickListener{
 
             convertListing()
+        }
+    }
+
+    private fun displayImage() {
+
+        val imageTitle = currentUser?.email + currentItem?.itemID.toString()
+
+        imageRef = FirebaseStorage.getInstance().getReference("images/$imageTitle")
+
+
+
+        try {
+            val localFile : File = File.createTempFile("tempfile", ".jpg")
+            imageRef.getFile(localFile).addOnSuccessListener {
+
+
+
+                    val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+
+                    itemImage.setImageBitmap(bitmap)
+
+
+            }.addOnFailureListener {
+
+                Toast.makeText(this, "error getting image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "$imageTitle", Toast.LENGTH_SHORT).show()
+            }
+
+        }catch (e: IOException){
+            val error = e.toString()
+            Toast.makeText(this, "$error", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -162,37 +206,7 @@ class ViewItem : AppCompatActivity() {
         currentUser?.totSales = currentUser?.totSales?.plus(amount!!)
     }
 
-    private fun displayImage() {
 
-        val imageTitle = currentUser?.email + currentItem?.itemID.toString()
-
-        imageRef = FirebaseStorage.getInstance().getReference("images/$imageTitle")
-
-
-
-        try {
-            val localFile : File = File.createTempFile("tempfile", ".jpg")
-            imageRef.getFile(localFile).addOnSuccessListener {
-
-
-
-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-
-                itemImage.setImageBitmap(bitmap)
-
-
-            }.addOnFailureListener {
-
-                Toast.makeText(this, "error getting image", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "$imageTitle", Toast.LENGTH_SHORT).show()
-            }
-
-        }catch (e: IOException){
-            val error = e.toString()
-            Toast.makeText(this, "$error", Toast.LENGTH_SHORT).show()
-
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun calculateAge(age: Int?): CharSequence? {

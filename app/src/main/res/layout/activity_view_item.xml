@@ -23,128 +23,119 @@
         android:id="@+id/tvItemBrand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
+
+        android:layout_marginStart="60dp"
+
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemBrand"
         android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        tools:layout_editor_absoluteY="403dp" />
+        app:layout_constraintTop_toBottomOf="@+id/ivItem" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginStart="100dp"
+
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Brand:"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/tvItemBrand"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvItemBrand" />
+        app:layout_constraintTop_toBottomOf="@+id/ivItem" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Description:"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/tvItemDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemDescription"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/tvItemCat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView5" />
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemBrand" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Cost:"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/textView9"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <TextView
         android:id="@+id/tvItemNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemNotes"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.987"
         app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/tvItemCondition"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tvItemCondition" />
 
     <TextView
         android:id="@+id/tvAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemAge"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
         app:layout_constraintStart_toEndOf="@+id/textView9"
-        tools:layout_editor_absoluteY="572dp" />
+        app:layout_constraintTop_toBottomOf="@+id/tvItemCost" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Age:"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="572dp" />
+        app:layout_constraintEnd_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Condition:"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/textView16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.117" />
+        app:layout_constraintEnd_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/tvItemCondition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemCondition"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/tvAge" />
 
@@ -152,51 +143,47 @@
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginBottom="228dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Notes:"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
         android:id="@+id/tvItemCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="itemCost"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/tvAge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
-        app:layout_constraintStart_toEndOf="@+id/textView7" />
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemCat" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="72dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latobold"
         android:text="Category:"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/textView7"
-        app:layout_constraintEnd_toStartOf="@+id/tvItemCat" />
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/tvItemCat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/latoregular"
         android:text="TextView"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/tvItemCost"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemDesc" />
 
     <TextView
         android:id="@+id/tvItemID"
@@ -206,8 +193,9 @@
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="207dp"
-        tools:layout_editor_absoluteY="27dp" />
+        app:layout_constraintBottom_toTopOf="@+id/ivItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etSoldAmount"
@@ -233,6 +221,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/etSoldAmount" />
 
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivItem"
         android:layout_width="315dp"
@@ -247,5 +236,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.141"
         app:shapeAppearanceOverlay="@style/roundImageView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
