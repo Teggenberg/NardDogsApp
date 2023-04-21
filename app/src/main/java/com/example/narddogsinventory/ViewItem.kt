@@ -1,16 +1,21 @@
 package com.example.narddogsinventory
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import java.io.IOException
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -69,6 +74,8 @@ class ViewItem : AppCompatActivity() {
         itemAge.text = calculateAge(currentItem?.age)
         itemNotes.text = currentItem?.notes.toString()
         itemId.text = currentItem?.itemID.toString()
+
+        displayImage()
 
 
         back.setOnClickListener{
@@ -153,6 +160,38 @@ class ViewItem : AppCompatActivity() {
         currentUser?.totListings = currentUser?.totListings?.plus(-1)
         currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.cost!!)
         currentUser?.totSales = currentUser?.totSales?.plus(amount!!)
+    }
+
+    private fun displayImage() {
+
+        val imageTitle = currentUser?.email + currentItem?.itemID.toString()
+
+        imageRef = FirebaseStorage.getInstance().getReference("images/$imageTitle")
+
+
+
+        try {
+            val localFile : File = File.createTempFile("tempfile", ".jpg")
+            imageRef.getFile(localFile).addOnSuccessListener {
+
+
+
+                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+
+                itemImage.setImageBitmap(bitmap)
+
+
+            }.addOnFailureListener {
+
+                Toast.makeText(this, "error getting image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "$imageTitle", Toast.LENGTH_SHORT).show()
+            }
+
+        }catch (e: IOException){
+            val error = e.toString()
+            Toast.makeText(this, "$error", Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
