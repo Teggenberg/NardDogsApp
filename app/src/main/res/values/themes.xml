@@ -14,4 +14,9 @@
         <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">#015FC6</item>
     </style>
+    <style name="roundImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+        <item name="color">#A445FF</item>
+    </style>
 </resources>
