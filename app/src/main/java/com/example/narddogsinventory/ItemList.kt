@@ -27,16 +27,8 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
 
-//not sure why these are angry...
-private lateinit var itemNum : TextView
-private lateinit var itemCost : EditText
-private lateinit var itemDesc : EditText
-private lateinit var itemBrand : EditText
 
-private lateinit var itemRetail : EditText
-private lateinit var itemCond : AutoCompleteTextView
-private lateinit var itemCat : AutoCompleteTextView
-private lateinit var itemNotes : EditText
+
 private var currentUser : EntryUser? = null
 val photoId = currentUser?.email + currentUser?.currentListing.toString()
 class ItemList : AppCompatActivity() {
@@ -48,6 +40,18 @@ class ItemList : AppCompatActivity() {
     private var currentFile: Uri? = null
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
+
+    private lateinit var itemNum : TextView
+    private lateinit var itemCost : EditText
+    private lateinit var itemDesc : EditText
+    private lateinit var itemBrand : EditText
+
+    private lateinit var itemRetail : EditText
+    private lateinit var itemCond : AutoCompleteTextView
+    private lateinit var itemCat : AutoCompleteTextView
+    private lateinit var itemNotes : EditText
+
+    var photoTaken = false
 
 
 
@@ -97,6 +101,7 @@ class ItemList : AppCompatActivity() {
 
         captureButton.setOnClickListener {
             takePicture()
+            photoTaken = true
         }
 
 
@@ -134,13 +139,25 @@ class ItemList : AppCompatActivity() {
         //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addButton).setOnClickListener{
 
-            addItemToDb()
-            updateUserData(itemCost.text.toString().toFloat())
+            if(photoTaken){
 
-            val refresh = Intent(this, ItemList::class.java)
-            refresh.putExtra("currentUser", currentUser)
-            startActivity(refresh)
-            finish()
+                if(validEntryInput()) {
+                    addItemToDb()
+                    updateUserData(itemCost.text.toString().toFloat())
+
+                    val refresh = Intent(this, ItemList::class.java)
+                    refresh.putExtra("currentUser", currentUser)
+                    startActivity(refresh)
+                    finish()
+                }
+                else{
+                    Toast.makeText(this, "Please make sure all item info is entered", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else{
+                Toast.makeText(this, "please add photo", Toast.LENGTH_SHORT).show()
+            }
+
 
         }
 
@@ -182,6 +199,17 @@ class ItemList : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    private fun validEntryInput(): Boolean {
+
+        if(itemBrand.text == null) return false
+        if(itemDesc.text == null) return false
+        if(itemCond.text == null) return false
+        if(itemCat.text == null) return false
+        return true
+
 
     }
 
