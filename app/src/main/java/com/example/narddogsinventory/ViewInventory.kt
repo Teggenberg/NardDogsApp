@@ -1,26 +1,20 @@
 package com.example.narddogsinventory
 
 import android.app.AlertDialog
-import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
-import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
-import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 
 
@@ -42,23 +36,56 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
 
+        searchitem = findViewById(R.id.etItemNumber)
+
+        val etSearch = EditText(this)
+
+        etSearch.inputType = InputType.TYPE_CLASS_NUMBER
+
         dialogSearchButton = findViewById(R.id.buttonItemSearch)
+
         dialogSearchBuilder = AlertDialog.Builder(this)
+
+
+
+
         dialogSearchButton.setOnClickListener{
-            dialogSearchBuilder.setTitle("Search")
-                .setMessage("Search Item")
+
+
+
+            //dialogSearchBuilder.setView(etSearch)
+
+
+
+            dialogSearchBuilder.setTitle("Item Search")
+                .setView(etSearch)
+                .setMessage("search by item Number")
                 .setCancelable(true)
                 .setPositiveButton("search"){dialogInterface,it->
-                    finish()
+
+                    if(!etSearch.text.isNullOrEmpty()){
+
+                        searchItem(etSearch.text.toString().toLong())
+
+                    }
+
                 }
-                .setNegativeButton("nothing"){dialogInterface, it->
+                .setNegativeButton("cancel"){dialogInterface, it->
+
                     dialogInterface.cancel()
-                }
-                .setNeutralButton("Idk"){dialogInterface, it->
-                    Toast.makeText(this@ViewInventory,"clicked", Toast.LENGTH_SHORT).show()
+
                 }
                 .show()
         }
+
+        dialogSearchBuilder.setOnDismissListener(DialogInterface.OnDismissListener {
+            (etSearch.parent as ViewGroup).removeView(
+                etSearch
+            )
+        })
+
+
+
 
 
 
@@ -95,7 +122,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
         bNav.selectedItemId = R.id.Inventory
 
-        searchitem = findViewById(R.id.etItemNumber)
+
 
         catDropDown.onItemClickListener =
             AdapterView.OnItemClickListener { p0, p1, p2, p3 ->
@@ -137,12 +164,12 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 //                }
 
 
-        findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
+        /*findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
             if(!searchitem.text.isNullOrEmpty()){
 
                 searchItem(searchitem.text.toString().toLong())
             }
-        }
+        }*/
 
         bNav.setOnItemSelectedListener {
 
@@ -241,6 +268,9 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                         startActivity(intent)
 
 
+                    }
+                    else{
+                        Toast.makeText(this, "item not found", Toast.LENGTH_SHORT).show()
                     }
 
                 }
