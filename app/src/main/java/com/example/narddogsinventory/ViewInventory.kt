@@ -26,7 +26,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private lateinit var filteredList : ArrayList<ActiveListing>
     private  var userID : Long = 0
     private var currentUser : EntryUser? = null
-    private lateinit var searchitem : EditText
+
     var filtered = false
     private lateinit var bNav : NavigationBarView
     private lateinit var dialogSearchButton : Button
@@ -36,7 +36,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
 
-        searchitem = findViewById(R.id.etItemNumber)
+
 
         val etSearch = EditText(this)
 
