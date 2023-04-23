@@ -213,7 +213,7 @@ class Sales : AppCompatActivity() {
 
         })
 
-        Toast.makeText( this, "total items ${salesList.size}", Toast.LENGTH_LONG).show()
+        //Toast.makeText( this, "total items ${salesList.size}", Toast.LENGTH_LONG).show()
 
         //buildCategories()
     }

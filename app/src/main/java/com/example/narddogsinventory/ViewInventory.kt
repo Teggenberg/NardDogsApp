@@ -324,7 +324,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
             })
 
-        Toast.makeText( this, "total items ${itemList.size}", Toast.LENGTH_LONG).show()
+        //Toast.makeText( this, "total items ${itemList.size}", Toast.LENGTH_LONG).show()
 
 
     }

@@ -118,7 +118,7 @@ class ItemList : AppCompatActivity() {
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
         imageID = currentUser?.email + currentUser?.currentListing.toString()
-        Toast.makeText(this, "$imageID", Toast.LENGTH_SHORT).show()
+
 
         //store currentListing (item ID) into variable to assign to textview
         var itemid = currentUser?.currentListing
@@ -255,7 +255,7 @@ class ItemList : AppCompatActivity() {
         // Log the file path
         Log.d("createImageFile", "Created image file at: ${image.absolutePath}")
         //Show user photo was saved
-        Toast.makeText(this, "Image saved to ${image.absolutePath}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Image saved to ${image.absolutePath}", Toast.LENGTH_SHORT).show()
 
         // Return the file
         return image
