@@ -11,57 +11,57 @@
         android:id="@+id/etItemID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/latoheavy"
         android:text="Item ID"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/etBrand"
+        app:layout_constraintEnd_toEndOf="@+id/etBrand"
+        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintStart_toStartOf="@+id/etBrand" />
 
     <EditText
         android:id="@+id/etItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="25dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Item Name"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etBrand" />
+        app:layout_constraintBottom_toTopOf="@+id/etCost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="25dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Cost of Product"
         android:inputType="numberDecimal"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etItemName" />
+        app:layout_constraintBottom_toTopOf="@+id/etRetail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etRetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="25dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Estimated Retail"
         android:inputType="numberDecimal"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCost" />
+        app:layout_constraintBottom_toTopOf="@+id/invCatDropDown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -78,28 +78,26 @@
         android:id="@+id/etBrand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginBottom="25dp"
         android:ems="8"
         android:fontFamily="@font/latoregular"
         android:hint="Company/Brand"
         android:inputType="textPersonName"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etItemID" />
+        app:layout_constraintBottom_toTopOf="@+id/etItemName"
+        app:layout_constraintEnd_toEndOf="@+id/etItemName"
+        app:layout_constraintStart_toStartOf="@+id/etItemName" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/invCatDropDown"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="90dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/etRetail"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRetail">
+        app:layout_constraintStart_toStartOf="@+id/etRetail">
 
         <AutoCompleteTextView
             android:id="@+id/itDropDownCat"
@@ -117,13 +115,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="90dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/etItemNotes"
+        app:layout_constraintEnd_toEndOf="@+id/invCatDropDown"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invCatDropDown">
+        app:layout_constraintStart_toStartOf="@+id/invCatDropDown">
 
         <AutoCompleteTextView
             android:id="@+id/etDropDownBox"
@@ -142,36 +138,37 @@
         style="@style/Widget.Material3.Button.TextButton.Icon"
         android:layout_width="49dp"
         android:layout_height="49dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="15dp"
         android:text="."
         android:textSize="16sp"
         app:icon="@drawable/baseline_camera_alt_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout2" />
 
     <EditText
         android:id="@+id/etItemNotes"
         android:layout_width="351dp"
         android:layout_height="70dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:fontFamily="@font/latomedium"
         android:gravity="start|top"
         android:hint="Notes/Details"
         android:inputType="textMultiLine"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout2" />
 
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="15dp"
         android:text="Add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etItemNotes" />
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
