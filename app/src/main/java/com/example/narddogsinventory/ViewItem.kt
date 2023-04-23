@@ -82,7 +82,7 @@ class ViewItem : AppCompatActivity() {
         itemBrand.text = currentItem?.brand.toString()
         itemCategory.text = currentItem?.category.toString()
         itemCondition.text = decipherCondition(currentItem?.condition)
-        itemCost.text = currentItem?.cost.toString()
+        itemCost.text = "$" + "%.2f".format(currentItem?.cost)
         itemAge.text = calculateAge(currentItem?.age)
         itemNotes.text = currentItem?.notes.toString()
         itemId.text = currentItem?.itemID.toString()

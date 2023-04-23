@@ -47,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
         invested = findViewById(R.id.tvCatTwo)
 
         listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"
-        sales.text = "Total Sales : $" + currentUser?.totSales.toString()
-        invested.text = "Current Investment : $" + currentUser?.totInvested.toString()
+        sales.text = "Total Sales : $" + "%.2f".format(currentUser?.totSales)
+        invested.text = "Current Investment : $" + "%.2f".format(currentUser?.totInvested)
 
 
 
