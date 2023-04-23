@@ -1,6 +1,10 @@
 package com.example.narddogsinventory
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,7 +25,6 @@ import com.google.firebase.firestore.ktx.toObject
 
 
 class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
-
     private lateinit var db : FirebaseFirestore
     private lateinit var inventoryRecyclerView: RecyclerView
     private lateinit var itemAdapter : ItemAdapter
@@ -31,14 +34,33 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private var currentUser : EntryUser? = null
     private lateinit var searchitem : EditText
     var filtered = false
-
-
     private lateinit var bNav : NavigationBarView
-
+    private lateinit var dialogSearchButton : Button
+    private lateinit var dialogSearchBuilder : AlertDialog.Builder
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_inventory)
+
+        dialogSearchButton = findViewById(R.id.buttonItemSearch)
+        dialogSearchBuilder = AlertDialog.Builder(this)
+        dialogSearchButton.setOnClickListener{
+            dialogSearchBuilder.setTitle("Search")
+                .setMessage("Search Item")
+                .setCancelable(true)
+                .setPositiveButton("search"){dialogInterface,it->
+                    finish()
+                }
+                .setNegativeButton("nothing"){dialogInterface, it->
+                    dialogInterface.cancel()
+                }
+                .setNeutralButton("Idk"){dialogInterface, it->
+                    Toast.makeText(this@ViewInventory,"clicked", Toast.LENGTH_SHORT).show()
+                }
+                .show()
+        }
+
+
 
         //      CATEGORIES
         // get reference to the string array that we just created
@@ -117,6 +139,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
         findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
             if(!searchitem.text.isNullOrEmpty()){
+
                 searchItem(searchitem.text.toString().toLong())
             }
         }

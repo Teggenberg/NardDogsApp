@@ -10,8 +10,6 @@ class ItemAdapter(private val itemList : ArrayList<ActiveListing>,
         private val listener : OnItemClickListener
         ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.inventory_item,
             parent, false)
@@ -22,7 +20,6 @@ class ItemAdapter(private val itemList : ArrayList<ActiveListing>,
     override fun getItemCount(): Int {
         return itemList.size
     }
-
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
          val currentItem = itemList[position]
 
