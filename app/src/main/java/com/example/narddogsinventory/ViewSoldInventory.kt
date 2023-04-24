@@ -4,26 +4,26 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 
+class ViewSoldInventory : AppCompatActivity(), SoldItemAdapter.OnItemClickListener {
 
-class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private lateinit var db : FirebaseFirestore
     private lateinit var inventoryRecyclerView: RecyclerView
-    private lateinit var itemAdapter : ItemAdapter
-    private lateinit var itemList : ArrayList<ActiveListing>
-    private lateinit var filteredList : ArrayList<ActiveListing>
+    private lateinit var itemAdapter : SoldItemAdapter
+    private lateinit var itemList : ArrayList<SoldListing>
+    private lateinit var filteredList : ArrayList<SoldListing>
     private  var userID : Long = 0
     private var currentUser : EntryUser? = null
 
@@ -31,11 +31,11 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     private lateinit var bNav : NavigationBarView
     private lateinit var dialogSearchButton : Button
     private lateinit var dialogSearchBuilder : AlertDialog.Builder
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_inventory)
-
+        setContentView(R.layout.activity_view_sold_inventory)
 
         //search editText for dialog box
         val etSearch = EditText(this)
@@ -107,7 +107,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         filteredList.clear()
 
         //set adapter for the list and recyclerview
-        itemAdapter = ItemAdapter(itemList, this)
+        itemAdapter = SoldItemAdapter(itemList, this)
         inventoryRecyclerView.adapter = itemAdapter
         eventChangeListener()
 
@@ -128,7 +128,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                     //boolean for recyclerview onClick
                     filtered = false
                     //refactor recyclerView with no filter
-                    itemAdapter = ItemAdapter(itemList, this@ViewInventory)
+                    itemAdapter = SoldItemAdapter(itemList, this@ViewSoldInventory)
                     inventoryRecyclerView.adapter = itemAdapter
 
                 } else {
@@ -139,7 +139,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                     //apply filter to current list
                     filterCategory(catFilter)
                     //refactor recyclerView using filtered list
-                    itemAdapter = ItemAdapter(filteredList, this@ViewInventory)
+                    itemAdapter = SoldItemAdapter(filteredList, this)
                     itemAdapter.notifyDataSetChanged()
                     inventoryRecyclerView.adapter = itemAdapter
                 }
@@ -197,21 +197,26 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
         val switchActiveSold = findViewById<Switch>(R.id.switch_active_sold)
         val textViewActiveSold = findViewById<TextView>(R.id.text_view_active_sold)
+        switchActiveSold.isChecked = true
+        textViewActiveSold.text = "Sold"
 
         switchActiveSold.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 textViewActiveSold.text = "Sold"
-                val intent = Intent(this, ViewSoldInventory::class.java)
+            } else {
+                textViewActiveSold.text = "Active"
+                val intent = Intent(this, ViewInventory::class.java)
                 intent.putExtra("currentUser", currentUser)
                 startActivity(intent)
                 finish()
                 overridePendingTransition(0, 0)
-            } else {
-                textViewActiveSold.text = "Active"
             }
         }
 
     }
+
+
+
 
     //function to apply filter to item list
     private fun filterCategory(catFilter: String) {
@@ -220,7 +225,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         for(item in itemList){
 
             //add to filter list if category matches string passed
-            if(item?.category == catFilter){
+            if(item.detail?.category == catFilter){
                 filteredList.add(item)
             }
         }
@@ -238,57 +243,57 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         db.collection("itemListings").document(docID).get().addOnCompleteListener(){
                 task ->
 
-                //access to db successful
-                if(task.isSuccessful){
+            //access to db successful
+            if(task.isSuccessful){
 
-                    //reference for task result (item)
-                    val userItem = task.result
+                //reference for task result (item)
+                val userItem = task.result
 
-                    //check to make sure item is contained in collection
-                    if(userItem.exists()){
+                //check to make sure item is contained in collection
+                if(userItem.exists()){
 
-                        //cast document into custom object
-                        val viewItem = userItem.toObject<ActiveListing>()
+                    //cast document into custom object
+                    val viewItem = userItem.toObject<ActiveListing>()
 
-                        //switch to view item activity, transfer item and user data
-                        val intent = Intent(this, ViewItem::class.java)
-                        intent.putExtra("currentItem", viewItem)
-                        intent.putExtra("currentUser", currentUser)
-                        startActivity(intent)
-
-                    }
-                    //item not found in db
-                    else{
-                        Toast.makeText(this, "item not found",
-                            Toast.LENGTH_SHORT).show()
-                    }
+                    //switch to view item activity, transfer item and user data
+                    val intent = Intent(this, ViewItem::class.java)
+                    intent.putExtra("currentItem", viewItem)
+                    intent.putExtra("currentUser", currentUser)
+                    startActivity(intent)
 
                 }
-                //unable to access db
+                //item not found in db
                 else{
-
-                    Toast.makeText(this, "Unable to contact server",
-                        Toast.LENGTH_SHORT)
-                        .show()
-
+                    Toast.makeText(this, "item not found",
+                        Toast.LENGTH_SHORT).show()
                 }
+
+            }
+            //unable to access db
+            else{
+
+                Toast.makeText(this, "Unable to contact server",
+                    Toast.LENGTH_SHORT)
+                    .show()
+
+            }
         }
     }
 
     //onClick for recyclerView
-    override fun onItemClick(position: Int) {
-
-        //check to see if filter is applied to make sure proper position selected
-        if(!filtered){searchItem(itemList[position].itemID!!)}
-        else{searchItem(filteredList[position].itemID!!)}
-    }
+//    override fun onItemClickSold(position: Int) {
+//
+//        //check to see if filter is applied to make sure proper position selected
+//        if(!filtered){searchItem(itemList[position].detail?.itemID!!)}
+//        else{searchItem(filteredList[position].detail?.itemID!!)}
+//    }
 
     //function to populate itemList with db data
     private fun eventChangeListener() {
 
         //reference and access to db
         db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").whereEqualTo("user", currentUser?.userID)
+        db.collection("soldListings").whereEqualTo("user", currentUser?.userID)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(
                     //list of items in db
@@ -308,7 +313,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
                         if (dc.type == DocumentChange.Type.ADDED) {
                             //cast documents to custom object and add to itemList
-                            itemList.add(dc.document.toObject(ActiveListing::class.java))
+                            itemList.add(dc.document.toObject(SoldListing::class.java))
                         }
                     }
                     //update adapter with changes to list
@@ -319,5 +324,10 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
     }
 
-
+    override fun onItemClick(position: Int) {
+        //check to see if filter is applied to make sure proper position selected
+//        if(!filtered){searchItem(itemList[position].detail?.itemID!!)}
+//        else{searchItem(filteredList[position].detail?.itemID!!)}
+        Toast.makeText(this, "view soldlisting coming soon", Toast.LENGTH_SHORT).show()
+    }
 }
