@@ -37,56 +37,49 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         setContentView(R.layout.activity_view_inventory)
 
 
-
+        //search editText for dialog box
         val etSearch = EditText(this)
-
+        //set to numeric entry
         etSearch.inputType = InputType.TYPE_CLASS_NUMBER
 
+        //assign button to open dialog
         dialogSearchButton = findViewById(R.id.buttonItemSearch)
-
+        //initialize reference for dialog window
         dialogSearchBuilder = AlertDialog.Builder(this)
 
 
 
-
+        //listener for search button that launches dialog
         dialogSearchButton.setOnClickListener{
 
-
-
-            //dialogSearchBuilder.setView(etSearch)
-
-
-
+            //launch dialog and set views
             dialogSearchBuilder.setTitle("Item Search")
                 .setView(etSearch)
                 .setMessage("search by item Number")
                 .setCancelable(true)
                 .setPositiveButton("search"){dialogInterface,it->
-
+                    //search button
+                    //check edit text to make sure user input exists
                     if(!etSearch.text.isNullOrEmpty()){
-
+                        //search database with item number entered by user
                         searchItem(etSearch.text.toString().toLong())
-
                     }
 
                 }
                 .setNegativeButton("cancel"){dialogInterface, it->
-
+                    //cancel button
+                    //close dialog
                     dialogInterface.cancel()
-
                 }
                 .show()
         }
 
+        //decouple editText from dialog otherwise app will crash if dialog is opened more that once
         dialogSearchBuilder.setOnDismissListener(DialogInterface.OnDismissListener {
             (etSearch.parent as ViewGroup).removeView(
                 etSearch
             )
         })
-
-
-
-
 
 
         //      CATEGORIES
@@ -100,77 +93,59 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
         // set adapter to the autocomplete tv to the arrayAdapter
         catDropDown.setAdapter(catAdapter)
 
-        //userID = intent.getLongExtra("userID", 0)
+        //initialize current user from previous activity
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
-        Log.d("ViewInventory", userID.toString())
 
+        //initialize recycler view and set attributes
         inventoryRecyclerView = findViewById(R.id.inventoryList)
         inventoryRecyclerView.layoutManager = LinearLayoutManager(this)
         inventoryRecyclerView.setHasFixedSize(true)
 
+        //initialize lists to populate recyclerview
         itemList = arrayListOf()
         filteredList = arrayListOf()
         filteredList.clear()
 
+        //set adapter for the list and recyclerview
         itemAdapter = ItemAdapter(itemList, this)
-
         inventoryRecyclerView.adapter = itemAdapter
-
         eventChangeListener()
 
+        //initialize and assign navBar
         bNav = findViewById(R.id.bottomNav)
-
         bNav.selectedItemId = R.id.Inventory
 
 
-
+        //listener for category filter
         catDropDown.onItemClickListener =
             AdapterView.OnItemClickListener { p0, p1, p2, p3 ->
+
+                //capture current selection in dropdown as string
                 val catFilter = catDropDown.text.toString()
 
+                //no filter is 'all' is selected
                 if (catFilter == "--ALL--") {
+                    //boolean for recyclerview onClick
                     filtered = false
+                    //refactor recyclerView with no filter
                     itemAdapter = ItemAdapter(itemList, this@ViewInventory)
-
                     inventoryRecyclerView.adapter = itemAdapter
 
                 } else {
+                    //boolean for recyclerView onClick
                     filtered = true
+                    //clear current filtered list
                     filteredList.clear()
-                    Log.e("category :", catFilter)
+                    //apply filter to current list
                     filterCategory(catFilter)
+                    //refactor recyclerView using filtered list
                     itemAdapter = ItemAdapter(filteredList, this@ViewInventory)
                     itemAdapter.notifyDataSetChanged()
                     inventoryRecyclerView.adapter = itemAdapter
                 }
             }
 
-        //            }
-//
-//                catDropDown.onItemSelectedListener=
-//            object :
-//
-//
-//                AdapterView.OnItemSelectedListener{
-//                override fun onNothingSelected(p0: AdapterView<*>?) {
-//                    TODO("Not yet implemented")
-//                }
-//
-//                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                    val catFilter = p2.toString()
-//                    Log.e("category :", catFilter.toString())
-//                    Toast.makeText(this@ViewInventory, "Unable to contact server", Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-
-
-        /*findViewById<Button>(R.id.buttonItemSearch).setOnClickListener{
-            if(!searchitem.text.isNullOrEmpty()){
-
-                searchItem(searchitem.text.toString().toLong())
-            }
-        }*/
-
+        //navBar listener for app navigation
         bNav.setOnItemSelectedListener {
 
             when(it.itemId) {
@@ -286,7 +261,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText( this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+
         if(!filtered){searchItem(itemList[position].itemID!!)}
         else{searchItem(filteredList[position].itemID!!)}
     }
