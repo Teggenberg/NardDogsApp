@@ -30,6 +30,8 @@ class ViewSoldItem : AppCompatActivity() {
     private lateinit var itemAge : TextView
     private lateinit var itemNotes : TextView
     private lateinit var itemId : TextView
+    private lateinit var soldOn : TextView
+    private lateinit var soldFor : TextView
 
     private  var currentItem : SoldListing? = null
     private var currentUser : EntryUser? = null
@@ -71,6 +73,8 @@ class ViewSoldItem : AppCompatActivity() {
         itemAge = findViewById(R.id.tvAge)
         itemNotes = findViewById(R.id.tvItemNotes)
         itemId = findViewById(R.id.tvItemID)
+        soldOn = findViewById(R.id.tvSoldDate)
+        soldFor = findViewById(R.id.tvItemPrice)
 
         itemDesc.text = currentItem?.detail?.itemDesc.toString()
         itemBrand.text = currentItem?.detail?.brand.toString()
@@ -80,6 +84,8 @@ class ViewSoldItem : AppCompatActivity() {
         itemAge.text = calculateAge(currentItem?.detail?.age)
         itemNotes.text = currentItem?.detail?.notes.toString()
         itemId.text = currentItem?.detail?.itemID.toString()
+        soldOn.text = formatDate(currentItem?.saleDate)
+        soldFor.text = "$" + "%.2f".format(currentItem?.finalPrice)
 
         displayImage()
 
@@ -96,6 +102,16 @@ class ViewSoldItem : AppCompatActivity() {
         }
     }
 
+    private fun formatDate(s: String?): CharSequence? {
+        val month = s!!.subSequence(5,7)
+        val day = s!!.subSequence(8,10)
+        val year = s!!.subSequence(2,4)
+
+        val date : String = "$month / $day / $year"
+
+        return date
+
+    }
     private fun displayImage() {
 
         val imageTitle = currentUser?.email + currentItem?.detail?.itemID.toString()
@@ -209,7 +225,7 @@ class ViewSoldItem : AppCompatActivity() {
         val origin = LocalDateTime.parse("2023-01-01T20:00:00.0000")
 
         //current date captured when item is added
-        val current = LocalDateTime.now()
+        val current = LocalDateTime.parse(currentItem?.saleDate)
 
         //return the number of days between origin and current date
         val compare = Duration.between(origin,current).toDays().toInt()
