@@ -208,7 +208,7 @@ class Sales : AppCompatActivity() {
 
                     //add new item to sales list while looping through query
                     if(dc.type == DocumentChange.Type.ADDED){
-                        Log.e("Document :", dc.toString() )
+
                         salesList.add(dc.document.toObject(SoldListing::class.java))
                     }
                 }
@@ -223,90 +223,97 @@ class Sales : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun buildCategories() {
 
-
-
-
-
-
+        //loop through each item to build category data
         for(item : SoldListing in salesList){
-            Log.e("Item :", item.toString() )
 
+            //loop through each category to check for match with item
             for(cat : SalesCategory in catList){
 
+                //check to see if previous 30 day button is selected
                 if(pastThirty){
 
+                    //excludes items that were sold more than 30 days ago (currently set to 3 days
+                    //for testing
                     if(calculateAge(item?.saleDate) > 3){
                         break
                     }
-
                 }
 
+                //check to see if previous 90 day button is selected
                 if(pastNinety){
 
+                    //excludes items that were sold more than 90 days ago (currently set to 7 days
+                    //for testing
                     if(calculateAge(item?.saleDate) > 7){
                         break
                     }
-
-
                 }
 
 
-                cat.totDollars!!.plus(1)
+                //cat.totDollars!!.plus(1)
 
+                //check to see items category against current category
                 if(item.detail?.category == cat.category){
-                    Log.e("Cat :", item.detail?.category.toString() )
-                    Log.e("cost :", item.detail?.cost.toString() )
 
+                    //capture the cost of the current item
                     val add = item.detail?.cost
 
-                    Log.e("var :", add.toString() )
-
+                    //increment category data with data from item
                     cat.totItems += 1
                     cat.totCost += add!!
                     cat.totDollars += item.finalPrice!!
-                    Log.e("cat cost :", cat.totCost.toString() )
 
+                    //exit loop
+                    break
                 }
-
             }
 
-
+            //check if  90 day filter is selected
             if(pastNinety){
 
+                //check to see if item sold more than 90 days ago
+                //(7 days for testing)
                 if(calculateAge(item?.saleDate) > 7){
+                    //continue to next loop iteration without incrementing totRev
                     continue
                 }
-
-
             }
 
+            //check if 30 day filter is selected
             if(pastThirty){
 
+                //check to see if item sold more than 30 days ago
+                //(3 days for testing)
                 if(calculateAge(item?.saleDate) > 3){
+                    //continue to next loop iteration without incrementing totRev
                     continue
                 }
-                
             }
 
+            //increment totRev by item's sold price
             totalRev += item.finalPrice!!
 
         }
 
+        //populate sub metrics for category
         calculateMarginAndAverageSale()
-
 
     }
 
     private fun calculateMarginAndAverageSale() {
 
+        //loop through each category in catList
         for(cat : SalesCategory in catList){
 
+            //calculate the avg sale price and margin percentage for category
             cat.averageSale = cat.totDollars!! / cat.totItems
             cat.margin = 1 - (cat.totCost / cat.totDollars!!)
         }
 
-        var catListTwo = catList.sortedWith(compareBy{it.totDollars})
+        //sort list so that categories are arranged in order of sales amount
+        val catListTwo = catList.sortedWith(compareBy{it.totDollars})
 
+        //populate textViews with data from sorted category list
         catSix.text = catListTwo[0].category + " : $" + "%.2f".format(catListTwo[0].totDollars)
         catFive.text = catListTwo[1].category + " : $" + "%.2f".format(catListTwo[1].totDollars)
         catFour.text = catListTwo[2].category + " : $" + "%.2f".format(catListTwo[2].totDollars)
@@ -320,16 +327,14 @@ class Sales : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun calculateAge(date: String?): Int {
 
-        //use 01-01-23 as constant origin point
+        //use the string passed as the date sold
         val soldOn = LocalDateTime.parse(date)
 
-        //current date captured when item is added
+        //current date
         val current = LocalDateTime.now()
 
-        //return the number of days between origin and current date
+        //return the number of days between sales date and current date
         return Duration.between(soldOn,current).toDays().toInt()
-
-
 
     }
 }
