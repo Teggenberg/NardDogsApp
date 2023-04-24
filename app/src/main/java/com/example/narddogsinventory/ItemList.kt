@@ -405,6 +405,9 @@ class ItemList : AppCompatActivity() {
         //add document into itemListings collection using custom class object
         db.collection("itemListings").document(docId).set(newItem)
 
+        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
+            .show()
+
     }
 
     private fun conditionRating(): Int? {
@@ -440,8 +443,7 @@ class ItemList : AppCompatActivity() {
         //return the number of days between origin and current date
         return Duration.between(origin,current).toDays().toInt()
 
-        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
-            .show()
+
 
     }
 
