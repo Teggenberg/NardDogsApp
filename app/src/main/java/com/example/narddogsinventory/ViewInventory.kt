@@ -208,10 +208,13 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
     }
 
+    //function to apply filter to item list
     private fun filterCategory(catFilter: String) {
 
+        //loop through each item in itemList
         for(item in itemList){
 
+            //add to filter list if category matches string passed
             if(item?.category == catFilter){
                 filteredList.add(item)
             }
@@ -219,89 +222,96 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
 
     }
 
+    //function to search db for user-provided item number
     private fun searchItem(itemID : Long) {
 
+        //document id is user + item number
         val docID = currentUser?.email + itemID.toString()
 
+        //reference and access to database
         val db = FirebaseFirestore.getInstance()
-        //val docRef = db.collection("itemListings").document(docID)
-
         db.collection("itemListings").document(docID).get().addOnCompleteListener(){
                 task ->
 
+                //access to db successful
                 if(task.isSuccessful){
 
+                    //reference for task result (item)
                     val userItem = task.result
 
+                    //check to make sure item is contained in collection
                     if(userItem.exists()){
 
+                        //cast document into custom object
                         val viewItem = userItem.toObject<ActiveListing>()
 
+                        //switch to view item activity, transfer item and user data
                         val intent = Intent(this, ViewItem::class.java)
                         intent.putExtra("currentItem", viewItem)
                         intent.putExtra("currentUser", currentUser)
                         startActivity(intent)
 
-
                     }
+                    //item not found in db
                     else{
-                        Toast.makeText(this, "item not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "item not found",
+                            Toast.LENGTH_SHORT).show()
                     }
 
                 }
+                //unable to access db
                 else{
 
-                    Toast.makeText(this, "Unable to contact server", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "Unable to contact server",
+                        Toast.LENGTH_SHORT)
                         .show()
 
                 }
-
         }
-
     }
 
+    //onClick for recyclerView
     override fun onItemClick(position: Int) {
 
+        //check to see if filter is applied to make sure proper position selected
         if(!filtered){searchItem(itemList[position].itemID!!)}
         else{searchItem(filteredList[position].itemID!!)}
     }
 
+    //function to populate itemList with db data
     private fun eventChangeListener() {
 
-        //whereEqualTo("user", 1000000000).
-
+        //reference and access to db
         db = FirebaseFirestore.getInstance()
         db.collection("itemListings").whereEqualTo("user", currentUser?.userID)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(
+                    //list of items in db
                     value: QuerySnapshot?,
+                    //ref to error for unsuccessful access
                     error: FirebaseFirestoreException?
                 ) {
 
+                    //check to see if error occurred when contacting db
                     if (error != null) {
                         Log.e("Firestore Error", error.message.toString())
                         return
                     }
 
+                    //if contact to db successful, loop through documents in snapshot
                     for (dc: DocumentChange in value?.documentChanges!!) {
 
                         if (dc.type == DocumentChange.Type.ADDED) {
-
+                            //cast documents to custom object and add to itemList
                             itemList.add(dc.document.toObject(ActiveListing::class.java))
-
                         }
                     }
-
+                    //update adapter with changes to list
                     itemAdapter.notifyDataSetChanged()
-
                 }
 
-
             })
-
-        //Toast.makeText( this, "total items ${itemList.size}", Toast.LENGTH_LONG).show()
-
-
+        
     }
 
 
