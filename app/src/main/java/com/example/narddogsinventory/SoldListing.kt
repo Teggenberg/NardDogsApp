@@ -1,7 +1,11 @@
 package com.example.narddogsinventory
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
+import java.time.Duration
+import java.time.LocalDateTime
 
 data class SoldListing (
 
@@ -38,4 +42,6 @@ val user : Long? = null
             return arrayOfNulls(size)
         }
     }
+
+
 }

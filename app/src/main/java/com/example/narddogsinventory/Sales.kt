@@ -34,6 +34,10 @@ class Sales : AppCompatActivity() {
     private lateinit var salesList : ArrayList<SoldListing>
     private lateinit var catList : ArrayList<SalesCategory>
 
+    private var allTime = true
+    private var pastThirty = false
+    private var pastNinety = false
+
 
 
     //@RequiresApi(Build.VERSION_CODES.O)
@@ -42,17 +46,19 @@ class Sales : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sales)
 
+
+
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
 
         catList = arrayListOf()
         salesList = arrayListOf()
 
-        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
-        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
-        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
-        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
-        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
-        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
+//        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
+//        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
 
         buildLists()
 
@@ -73,13 +79,6 @@ class Sales : AppCompatActivity() {
 
 
 
-//        sales.text = "Total Revenue : $totalRev"
-//        catOne.text = catList[0].category + " : " + catList[0].totDollars.toString()
-//        catTwo.text = catList[1].category + " : " + catList[1].totDollars.toString()
-//        catThree.text = catList[2].category + " : " + catList[2].totDollars.toString()
-//        catFour.text = catList[3].category + " : " + catList[3].totDollars.toString()
-//        catFive.text = catList[4].category + " : " + catList[4].totDollars.toString()
-//        catSix.text = catList[5].category + " : " + catList[5].totDollars.toString()
 
 
 
@@ -149,17 +148,45 @@ class Sales : AppCompatActivity() {
         val monthButton = findViewById<RadioButton>(R.id.month_button)
         val yearButton = findViewById<RadioButton>(R.id.three_Months_button)
 
+
+
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.All_Time_button -> {
+                    allTime = true
+                    pastNinety = false
+                    pastThirty = false
+                    catList.clear()
+                    salesList.clear()
+                    totalRev = 0f
+                    buildLists()
+                    Toast.makeText(this, "all time", Toast.LENGTH_SHORT).show()
 
 
                 }
                 R.id.month_button -> {
+                    allTime = false
+                    pastNinety = false
+                    pastThirty = true
+                    catList.clear()
+                    salesList.clear()
+                    totalRev = 0f
+                    buildLists()
+                    Toast.makeText(this, "past 3 days", Toast.LENGTH_SHORT).show()
 
 
                 }
                 R.id.three_Months_button -> {
+
+                    allTime = false
+                    pastNinety = true
+                    pastThirty = false
+                    catList.clear()
+                    salesList.clear()
+                    totalRev = 0f
+                    buildLists()
+
+                    Toast.makeText(this, pastThirty.toString(), Toast.LENGTH_SHORT).show()
 
 
                 }
@@ -170,9 +197,17 @@ class Sales : AppCompatActivity() {
 
     private fun buildLists() {
 
+        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
+        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
+        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
+
         db = FirebaseFirestore.getInstance()
         db.collection("soldListings").whereEqualTo("user", currentUser?.userID).
         addSnapshotListener(object : EventListener<QuerySnapshot>{
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onEvent(
                 value: QuerySnapshot?,
                 error: FirebaseFirestoreException?
@@ -218,14 +253,11 @@ class Sales : AppCompatActivity() {
         //buildCategories()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun buildCategories() {
 
-//        catList.add(SalesCategory("Electronics", 0, 0f, 0f, 0f, 0f))
-//        catList.add(SalesCategory("Apparel",0,0f,0f,0f,0f))
-//        catList.add(SalesCategory("Media",0,0f,0f,0f,0f))
-//        catList.add(SalesCategory("Furniture/Appliances",0,0f,0f,0f,0f))
-//        catList.add(SalesCategory("Collectibles",0,0f,0f,0f,0f))
-//        catList.add(SalesCategory("Other",0,0f,0f,0f,0f))
+
+
 
 
 
@@ -233,6 +265,24 @@ class Sales : AppCompatActivity() {
             Log.e("Item :", item.toString() )
 
             for(cat : SalesCategory in catList){
+
+                if(pastThirty){
+
+                    if(calculateAge(item?.saleDate) > 3){
+                        break
+                    }
+                    Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+                }
+
+                if(pastNinety){
+
+                    if(calculateAge(item?.saleDate) > 7){
+                        break
+                    }
+                    Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+
+                }
+
 
                 cat.totDollars!!.plus(1)
 
@@ -250,6 +300,25 @@ class Sales : AppCompatActivity() {
                     Log.e("cat cost :", cat.totCost.toString() )
 
                 }
+
+            }
+
+
+            if(pastNinety){
+
+                if(calculateAge(item?.saleDate) > 7){
+                    continue
+                }
+                Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+
+            }
+
+            if(pastThirty){
+
+                if(calculateAge(item?.saleDate) > 3){
+                    continue
+                }
+                Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
             }
 
             totalRev += item.finalPrice!!
@@ -277,6 +346,22 @@ class Sales : AppCompatActivity() {
         catThree.text = catListTwo[3].category + " : $" + "%.2f".format(catListTwo[3].totDollars)
         catTwo.text = catListTwo[4].category + " : $" + "%.2f".format(catListTwo[4].totDollars)
         catOne.text = catListTwo[5].category + " : $" + "%.2f".format(catListTwo[5].totDollars)
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calculateAge(date: String?): Int {
+
+        //use 01-01-23 as constant origin point
+        val soldOn = LocalDateTime.parse(date)
+
+        //current date captured when item is added
+        val current = LocalDateTime.now()
+
+        //return the number of days between origin and current date
+        return Duration.between(soldOn,current).toDays().toInt()
+
+
 
     }
 }
