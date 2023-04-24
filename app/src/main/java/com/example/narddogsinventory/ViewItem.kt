@@ -123,8 +123,8 @@ class ViewItem : AppCompatActivity() {
 
             }.addOnFailureListener {
 
-                Toast.makeText(this, "error getting image", Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "$imageTitle", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "no image on file", Toast.LENGTH_SHORT).show()
+
             }
 
         }catch (e: IOException){

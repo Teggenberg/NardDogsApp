@@ -311,7 +311,7 @@ class ViewInventory : AppCompatActivity(), ItemAdapter.OnItemClickListener {
                 }
 
             })
-        
+
     }
 
 
