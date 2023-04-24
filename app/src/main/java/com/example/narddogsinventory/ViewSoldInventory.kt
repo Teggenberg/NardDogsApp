@@ -240,7 +240,7 @@ class ViewSoldInventory : AppCompatActivity(), SoldItemAdapter.OnItemClickListen
 
         //reference and access to database
         val db = FirebaseFirestore.getInstance()
-        db.collection("itemListings").document(docID).get().addOnCompleteListener(){
+        db.collection("soldListings").document(docID).get().addOnCompleteListener(){
                 task ->
 
             //access to db successful
@@ -253,10 +253,10 @@ class ViewSoldInventory : AppCompatActivity(), SoldItemAdapter.OnItemClickListen
                 if(userItem.exists()){
 
                     //cast document into custom object
-                    val viewItem = userItem.toObject<ActiveListing>()
+                    val viewItem = userItem.toObject<SoldListing>()
 
                     //switch to view item activity, transfer item and user data
-                    val intent = Intent(this, ViewItem::class.java)
+                    val intent = Intent(this, ViewSoldItem::class.java)
                     intent.putExtra("currentItem", viewItem)
                     intent.putExtra("currentUser", currentUser)
                     startActivity(intent)
@@ -326,8 +326,8 @@ class ViewSoldInventory : AppCompatActivity(), SoldItemAdapter.OnItemClickListen
 
     override fun onItemClick(position: Int) {
         //check to see if filter is applied to make sure proper position selected
-//        if(!filtered){searchItem(itemList[position].detail?.itemID!!)}
-//        else{searchItem(filteredList[position].detail?.itemID!!)}
+        if(!filtered){searchItem(itemList[position].detail?.itemID!!)}
+        else{searchItem(filteredList[position].detail?.itemID!!)}
         Toast.makeText(this, "view soldlisting coming soon", Toast.LENGTH_SHORT).show()
     }
 }
