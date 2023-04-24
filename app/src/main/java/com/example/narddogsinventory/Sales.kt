@@ -199,7 +199,7 @@ class Sales : AppCompatActivity() {
                 //if no connection to db is established
                 if(error != null){
                     Log.e("Firestore Error", error.message.toString() )
-                    Toast.makeText(this, "cannot contact server", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Sales, "cannot contact server", Toast.LENGTH_SHORT).show()
                     return
                 }
 
@@ -215,8 +215,7 @@ class Sales : AppCompatActivity() {
 
                 //use the items in sales list to populate data in category list
                 buildCategories()
-                sales.text = "Total Sales : $" + "%.2f".format(totalRev)
-
+                //sales.text = "Total Sales : $" + "%.2f".format(totalRev)
             }
         })
     }
@@ -239,7 +238,7 @@ class Sales : AppCompatActivity() {
                     if(calculateAge(item?.saleDate) > 3){
                         break
                     }
-                    Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+
                 }
 
                 if(pastNinety){
@@ -247,7 +246,7 @@ class Sales : AppCompatActivity() {
                     if(calculateAge(item?.saleDate) > 7){
                         break
                     }
-                    Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+
 
                 }
 
@@ -277,7 +276,7 @@ class Sales : AppCompatActivity() {
                 if(calculateAge(item?.saleDate) > 7){
                     continue
                 }
-                Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+
 
             }
 
@@ -286,7 +285,7 @@ class Sales : AppCompatActivity() {
                 if(calculateAge(item?.saleDate) > 3){
                     continue
                 }
-                Toast.makeText(this, calculateAge(item.saleDate).toString(), Toast.LENGTH_SHORT).show()
+                
             }
 
             totalRev += item.finalPrice!!
@@ -314,6 +313,7 @@ class Sales : AppCompatActivity() {
         catThree.text = catListTwo[3].category + " : $" + "%.2f".format(catListTwo[3].totDollars)
         catTwo.text = catListTwo[4].category + " : $" + "%.2f".format(catListTwo[4].totDollars)
         catOne.text = catListTwo[5].category + " : $" + "%.2f".format(catListTwo[5].totDollars)
+        sales.text = "Total Sales : $" + "%.2f".format(totalRev)
 
     }
 
