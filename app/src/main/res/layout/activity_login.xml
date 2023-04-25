@@ -102,9 +102,11 @@
 
     <View
         android:id="@+id/inv"
-        android:layout_width="393dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/itembg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,9 +114,11 @@
 
     <View
         android:id="@+id/salez"
-        android:layout_width="393dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/itembg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,17 +126,20 @@
 
     <View
         android:id="@+id/invest"
-        android:layout_width="393dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/itembg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/salez" />
 
     <TextView
         android:id="@+id/tvCatOne"
-        android:layout_width="290dp"
+        android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:fontFamily="@font/latobold"
         android:text="TextView"
@@ -148,7 +155,7 @@
 
     <TextView
         android:id="@+id/tvCatTwo"
-        android:layout_width="293dp"
+        android:layout_width="wrap_content"
         android:layout_height="37dp"
         android:fontFamily="@font/latobold"
         android:text="TextView"
@@ -164,7 +171,7 @@
 
     <TextView
         android:id="@+id/tvTotalRev"
-        android:layout_width="291dp"
+        android:layout_width="wrap_content"
         android:layout_height="39dp"
         android:fontFamily="@font/latobold"
         android:text="TextView"
