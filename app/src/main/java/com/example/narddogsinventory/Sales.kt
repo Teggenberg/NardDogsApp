@@ -173,6 +173,8 @@ class Sales : AppCompatActivity() {
         val monthButton = findViewById<RadioButton>(R.id.month_button)
         val yearButton = findViewById<RadioButton>(R.id.three_Months_button)
 
+        allButton.isChecked = true
+
 
         //listener for date filter buttons
         radioGroup.setOnCheckedChangeListener { _, checkedId ->

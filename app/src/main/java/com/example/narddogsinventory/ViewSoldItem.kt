@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -36,8 +37,9 @@ class ViewSoldItem : AppCompatActivity() {
     private  var currentItem : SoldListing? = null
     private var currentUser : EntryUser? = null
     private lateinit var back : Button
-    private lateinit var sold : Button
+    private lateinit var returnSale : Button
     private lateinit var price : EditText
+    private lateinit var relistDialog : AlertDialog.Builder
 
 
     private lateinit var itemImage : ShapeableImageView
@@ -54,8 +56,8 @@ class ViewSoldItem : AppCompatActivity() {
         currentItem = intent.getParcelableExtra("currentItem", SoldListing::class.java)
 
         back = findViewById(R.id.buttonReturn)
-        sold = findViewById(R.id.buttonSold)
-        price = findViewById(R.id.etSoldAmount)
+        returnSale = findViewById(R.id.buttonRelist)
+        price = EditText(this)
         itemImage = findViewById(R.id.ivItem)
 
         itemImage = findViewById(R.id.ivItem)
@@ -96,9 +98,27 @@ class ViewSoldItem : AppCompatActivity() {
             intent.putExtra("currentUser", currentUser)
             startActivity(intent)
         }
-        sold.setOnClickListener{
+        returnSale.setOnClickListener{
 
-            //convertListing()
+            relistDialog = AlertDialog.Builder(this)
+
+            //launch dialog and set views
+            relistDialog.setTitle("Return Item to Active Listings")
+                .setMessage("Are you sure?")
+                .setCancelable(true)
+                .setPositiveButton("Relist Item"){dialogInterface,it->
+
+                    convertListing()
+
+                }
+                .setNegativeButton("cancel"){dialogInterface, it->
+                    //cancel button
+                    //close dialog
+                    dialogInterface.cancel()
+                }
+                .show()
+
+
         }
     }
 
@@ -146,27 +166,33 @@ class ViewSoldItem : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun convertListing() {
+
+        //reference to firestore
         val db = FirebaseFirestore.getInstance()
 
-        val soldDoc = db.collection("soldListings")
+        //access to active listings collection in db
+        val listDoc = db.collection("itemListings")
 
-        val removeItem = db.collection("itemListings")
+        //access to sold listings collection in db
+        val removeItem = db.collection("soldListings")
 
-        val date = LocalDateTime.now().toString()
-
-        val amount = price.text.toString().toFloatOrNull()
-
-        //val soldItem = SoldListing(currentItem, date, amount, currentUser?.userID)
-
+        //reference to document ID
         val docID = currentUser?.email + currentItem?.detail?.itemID
 
-        //soldDoc.document(docID).set(soldItem)
+        //object reference to item that will be re-added to active listings
+        val relistItem = currentItem?.detail!!
 
+        //add item back into active listings collection in db
+        listDoc.document(docID).set(relistItem)
+
+        //delete item from soldListings collection in db
         removeItem.document(docID).delete()
 
+        //update user data to reflect current inv, sales, investment
         updateUser()
 
-        val intent = Intent(this, ViewInventory::class.java)
+        //return to viewSoldListings activity
+        val intent = Intent(this, ViewSoldInventory::class.java)
         intent.putExtra("currentUser", currentUser)
         startActivity(intent)
     }
@@ -188,18 +214,17 @@ class ViewSoldItem : AppCompatActivity() {
             //check to make sure document is not null
             if (updateCurrentListing != null) {
 
-
-
-
+                //increment current inventory
                 updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
-                plus(-1)
+                plus(1)
 
+                //increment current investment
                 updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
-                minus(currentItem?.detail?.cost!!)
+                plus(currentItem?.detail?.cost!!)
 
+                //reduce sales
                 updateCurrentListing?.totSales = updateCurrentListing?.totSales?.
-                plus(amount!!)
-
+                minus(currentItem?.finalPrice!!)
 
                 //overwrite the fields in the database with updated values
                 db.collection("Users").document(currentUser?.email.toString()).
@@ -210,10 +235,9 @@ class ViewSoldItem : AppCompatActivity() {
         }
 
         //update currentListing for locally accessible user data to match database
-
-        currentUser?.totListings = currentUser?.totListings?.plus(-1)
-        currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.detail?.cost!!)
-        currentUser?.totSales = currentUser?.totSales?.plus(amount!!)
+        currentUser?.totListings = currentUser?.totListings?.plus(1)
+        currentUser?.totInvested = currentUser?.totInvested?.plus(currentItem?.detail?.cost!!)
+        currentUser?.totSales = currentUser?.totSales?.minus(currentItem?.finalPrice!!)
     }
 
 
