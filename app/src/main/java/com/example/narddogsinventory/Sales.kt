@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
+import android.webkit.WebSettings.TextSize
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -17,6 +18,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.*
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.format.TextStyle
 
 class Sales : AppCompatActivity() {
 
@@ -225,6 +227,8 @@ class Sales : AppCompatActivity() {
         val subs = TextView(this)
         subs.text = submetricsInfo(s)
 
+        subs.setTextSize(20F)
+
         //initialize dialog
         subdialog = AlertDialog.Builder(this)
 
@@ -256,12 +260,12 @@ class Sales : AppCompatActivity() {
 
         val sales = "$" + "%.2f".format(s.averageSale)
         val marg = s.margin?.times(100)
-        val margString = "$" + "%.2f".format(marg)
+        val margString = "%.2f".format(marg)
 
 
-        return "\t\t   Total sales:   ${s.totItems} \n\n" +
+        return "\t\t   Total sales:       ${s.totItems} \n\n" +
                 "\t\t   Average Sale:   $sales \n\n" +
-                "\t\t   Margin Rate:  $marg%"
+                "\t\t   Margin Rate:     $margString%"
 
 
     }
