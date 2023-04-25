@@ -228,10 +228,14 @@ class ViewSoldItem : AppCompatActivity() {
         val current = LocalDateTime.parse(currentItem?.saleDate)
 
         //return the number of days between origin and current date
-        val compare = Duration.between(origin,current).toDays().toInt()
+        var compare = Duration.between(origin,current).toDays().toInt()
 
-        if(compare - age!! != 1) return (compare - age!!).toString() + " days"
-        else return (compare - age!!).toString() + " day"
+        val days = compare - age!!
+
+        if(days < 1) days.plus(1)
+
+        if(days != 1) return (days).toString() + " days"
+        else return (days).toString() + " day"
 
     }
 

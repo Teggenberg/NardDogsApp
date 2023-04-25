@@ -211,6 +211,8 @@ class ItemList : AppCompatActivity() {
 
     private fun validEntryInput(): Boolean {
 
+
+        //james, this is the function
         if(itemBrand.text == null) return false
         if(itemDesc.text == null) return false
         if(itemCond.text == null) return false
