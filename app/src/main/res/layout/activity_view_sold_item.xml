@@ -5,7 +5,7 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A445FF"
+    android:background="#FF9F56"
     tools:context=".ViewSoldItem">
 
     <TextView
