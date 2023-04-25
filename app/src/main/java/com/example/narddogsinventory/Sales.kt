@@ -1,15 +1,18 @@
 package com.example.narddogsinventory
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.*
 import java.time.Duration
@@ -26,6 +29,7 @@ class Sales : AppCompatActivity() {
     private lateinit var catFive : TextView
     private lateinit var catSix : TextView
     private lateinit var db : FirebaseFirestore
+    private lateinit var subdialog : AlertDialog.Builder
 
     private var totalRev : Float = 0f
 
@@ -35,6 +39,7 @@ class Sales : AppCompatActivity() {
     //lists to capture the display data
     private lateinit var salesList : ArrayList<SoldListing>
     private lateinit var catList : ArrayList<SalesCategory>
+    private lateinit var catListTwo : List<SalesCategory>
 
     //to toggle filters for dates. 'all time' default as true for no date filtering
     private var allTime = true
@@ -56,9 +61,11 @@ class Sales : AppCompatActivity() {
         //initialize lists
         catList = arrayListOf()
         salesList = arrayListOf()
+        catListTwo = arrayListOf()
 
         //populate lists defaults to all time, no filters
         buildLists()
+
 
 
         //assign bottom nav, set item to current activity
@@ -73,6 +80,42 @@ class Sales : AppCompatActivity() {
         catFour = findViewById(R.id.tvCatFour)
         catFive = findViewById(R.id.tvCatFive)
         catSix = findViewById(R.id.tvCatSix)
+
+        catOne.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[5])
+        }
+
+        catTwo.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[4])
+        }
+
+        catThree.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[3])
+        }
+
+        catFour.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[2])
+        }
+
+        catFive.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[1])
+        }
+
+        catSix.setOnClickListener{
+
+            //dialog that dsiplays sub metrics for category in textview
+            createDialog(catListTwo[0])
+        }
 
         //listener for user click on nav bar
         bNav.setOnItemSelectedListener {
@@ -173,6 +216,53 @@ class Sales : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    private fun createDialog(s: SalesCategory) {
+
+        //initialize and populate submetrics in formatted textview to include in dialog
+        val subs = TextView(this)
+        subs.text = submetricsInfo(s)
+
+        //initialize dialog
+        subdialog = AlertDialog.Builder(this)
+
+        //declare title for dialog
+        val title = s.category
+
+        //launch dialog and set views
+        subdialog.setTitle(title)
+            .setView(subs)
+            .setMessage("Submetric Data for $title \n")
+            .setCancelable(true)
+            .setNegativeButton("close"){dialogInterface, it->
+                //cancel button
+                //close dialog
+                dialogInterface.cancel()
+            }
+            .show()
+
+        //decouple textView from dialog otherwise app will crash if dialog is opened more that once
+        subdialog.setOnDismissListener(DialogInterface.OnDismissListener {
+            (subs.parent as ViewGroup).removeView(
+                subs
+            )
+        })
+
+    }
+
+    private fun submetricsInfo(s: SalesCategory): CharSequence? {
+
+        val sales = "$" + "%.2f".format(s.averageSale)
+        val marg = s.margin?.times(100)
+        val margString = "$" + "%.2f".format(marg)
+
+
+        return "\t\t   Total sales:   ${s.totItems} \n\n" +
+                "\t\t   Average Sale:   $sales \n\n" +
+                "\t\t   Margin Rate:  $marg%"
+
 
     }
 
@@ -311,7 +401,7 @@ class Sales : AppCompatActivity() {
         }
 
         //sort list so that categories are arranged in order of sales amount
-        val catListTwo = catList.sortedWith(compareBy{it.totDollars})
+        catListTwo = catList.sortedWith(compareBy{it.totDollars})
 
         //populate textViews with data from sorted category list
         catSix.text = catListTwo[0].category + " : $" + "%.2f".format(catListTwo[0].totDollars)
