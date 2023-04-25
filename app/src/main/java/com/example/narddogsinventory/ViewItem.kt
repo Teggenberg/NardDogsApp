@@ -34,8 +34,10 @@ class ViewItem : AppCompatActivity() {
     private var currentUser : EntryUser? = null
     private lateinit var back : Button
     private lateinit var sold : Button
+    private lateinit var deleteItem : Button
     private lateinit var soldPrice : EditText
     private lateinit var soldDialog : AlertDialog.Builder
+    private lateinit var deleteDialog : AlertDialog.Builder
 
 
     private lateinit var itemImage : ShapeableImageView
@@ -53,6 +55,7 @@ class ViewItem : AppCompatActivity() {
 
         back = findViewById(R.id.buttonReturn)
         sold = findViewById(R.id.buttonSold)
+        deleteItem = findViewById(R.id.buttonDelete)
 
         itemImage = findViewById(R.id.ivItem)
 
@@ -82,6 +85,33 @@ class ViewItem : AppCompatActivity() {
         itemId.text = currentItem?.itemID.toString()
 
         displayImage()
+
+        deleteItem.setOnClickListener{
+
+            deleteDialog = AlertDialog.Builder(this)
+
+            //launch dialog and set views
+            deleteDialog.setTitle("Remove item from inventory")
+                .setMessage("Are you sure?")
+                .setCancelable(true)
+                .setPositiveButton("Delete"){dialogInterface,it->
+                    //remove item button
+
+                    removeListing()
+
+
+                }
+                .setNegativeButton("cancel"){dialogInterface, it->
+                    //cancel button
+                    //close dialog
+                    dialogInterface.cancel()
+                }
+                .show()
+
+
+
+
+        }
 
 
         back.setOnClickListener{
@@ -123,6 +153,64 @@ class ViewItem : AppCompatActivity() {
                 .show()
         }
     }
+
+    private fun removeListing() {
+
+        val db = FirebaseFirestore.getInstance()
+
+        val docID = currentUser?.email + currentItem?.itemID
+
+        db.collection("itemListings").document(docID).delete()
+
+        updateUserData()
+
+        val intent = Intent(this, ViewInventory::class.java)
+        intent.putExtra("currentUser",currentUser)
+        startActivity(intent)
+        finish()
+
+
+    }
+
+    private fun updateUserData() {
+        //access to users database, reference document assigned to current user
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("Users").document(currentUser?.email.toString())
+
+        //val amount = soldPrice.text.toString().toFloatOrNull()
+
+        //access the document for the current user in database
+        docRef.get().addOnSuccessListener { documentsnapshot ->
+
+            //assign document to object for data access
+            var updateCurrentListing = documentsnapshot.toObject<EntryUser>()
+
+            //check to make sure document is not null
+            if (updateCurrentListing != null) {
+
+
+                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
+                plus(-1)
+
+                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+                minus(currentItem?.cost!!)
+
+
+                //overwrite the fields in the database with updated values
+                db.collection("Users").document(currentUser?.email.toString()).
+                set(updateCurrentListing)
+
+            }
+
+        }
+
+        //update currentListing for locally accessible user data to match database
+
+        currentUser?.totListings = currentUser?.totListings?.plus(-1)
+        currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.cost!!)
+
+    }
+
 
     private fun displayImage() {
 
@@ -199,8 +287,6 @@ class ViewItem : AppCompatActivity() {
 
             //check to make sure document is not null
             if (updateCurrentListing != null) {
-
-
 
 
                 updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
