@@ -3,24 +3,17 @@ package com.example.narddogsinventory
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-
+import android.text.InputType
 import android.widget.*
-
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
-
 import com.google.firebase.storage.StorageReference
-
 import java.io.File
 import java.io.IOException
 import java.time.Duration
@@ -41,7 +34,8 @@ class ViewItem : AppCompatActivity() {
     private var currentUser : EntryUser? = null
     private lateinit var back : Button
     private lateinit var sold : Button
-    private lateinit var price : EditText
+    private lateinit var soldPrice : EditText
+    private lateinit var soldDialog : AlertDialog.Builder
 
 
     private lateinit var itemImage : ShapeableImageView
@@ -59,7 +53,7 @@ class ViewItem : AppCompatActivity() {
 
         back = findViewById(R.id.buttonReturn)
         sold = findViewById(R.id.buttonSold)
-        price = findViewById(R.id.etSoldAmount)
+
         itemImage = findViewById(R.id.ivItem)
 
         itemImage = findViewById(R.id.ivItem)
@@ -98,7 +92,35 @@ class ViewItem : AppCompatActivity() {
         }
         sold.setOnClickListener{
 
-            convertListing()
+            soldDialog = AlertDialog.Builder(this)
+
+            soldPrice = EditText(this)
+//            soldPrice.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+//            soldPrice.inputType = InputType.TYPE_CLASS_NUMBER
+
+            soldPrice.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+
+            //launch dialog and set views
+            soldDialog.setTitle("Convert item to Sold Listing")
+                .setView(soldPrice)
+                .setMessage("Enter final sale amount")
+                .setCancelable(true)
+                .setPositiveButton("Sold!"){dialogInterface,it->
+                    //search button
+                    //check edit text to make sure user input exists
+                    if(!soldPrice.text.isNullOrEmpty()){
+                        //search database with item number entered by user
+                        convertListing()
+                    }
+
+                }
+                .setNegativeButton("cancel"){dialogInterface, it->
+                    //cancel button
+                    //close dialog
+                    dialogInterface.cancel()
+                }
+                .show()
         }
     }
 
@@ -144,7 +166,7 @@ class ViewItem : AppCompatActivity() {
 
         val date = LocalDateTime.now().toString()
 
-        val amount = price.text.toString().toFloatOrNull()
+        val amount = soldPrice.text.toString().toFloatOrNull()
 
         val soldItem = SoldListing(currentItem, date, amount, currentUser?.userID)
 
@@ -167,7 +189,7 @@ class ViewItem : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("Users").document(currentUser?.email.toString())
 
-        val amount = price.text.toString().toFloatOrNull()
+        val amount = soldPrice.text.toString().toFloatOrNull()
 
         //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
