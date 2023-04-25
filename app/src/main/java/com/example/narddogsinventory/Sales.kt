@@ -85,37 +85,37 @@ class Sales : AppCompatActivity() {
 
         catOne.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[5])
         }
 
         catTwo.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[4])
         }
 
         catThree.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[3])
         }
 
         catFour.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[2])
         }
 
         catFive.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[1])
         }
 
         catSix.setOnClickListener{
 
-            //dialog that dsiplays sub metrics for category in textview
+            //dialog that displays sub metrics for category in textview
             createDialog(catListTwo[0])
         }
 
