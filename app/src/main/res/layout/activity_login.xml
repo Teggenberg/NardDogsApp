@@ -104,9 +104,8 @@
         android:id="@+id/inv"
         android:layout_width="393dp"
         android:layout_height="100dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/itembg"
-        app:layout_constraintBottom_toTopOf="@+id/salez"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_view" />
@@ -115,22 +114,21 @@
         android:id="@+id/salez"
         android:layout_width="393dp"
         android:layout_height="100dp"
-        android:layout_marginTop="324dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/itembg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inv" />
 
     <View
         android:id="@+id/invest"
         android:layout_width="393dp"
         android:layout_height="100dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/itembg"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/salez"
-        app:layout_constraintVertical_bias="0.117" />
+        app:layout_constraintTop_toBottomOf="@+id/salez" />
 
     <TextView
         android:id="@+id/tvCatOne"
