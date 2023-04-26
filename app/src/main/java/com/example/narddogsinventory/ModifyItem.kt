@@ -1,19 +1,18 @@
 package com.example.narddogsinventory
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import com.example.narddogsinventory.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,17 +20,19 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
 
-
-
 private var currentUser : EntryUser? = null
 val photoId = currentUser?.email + currentUser?.currentListing.toString()
-class ItemList : AppCompatActivity() {
+
+class ModifyItem : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
     private val REQUEST_IMAGE_CAPTURE = 2
@@ -54,20 +55,12 @@ class ItemList : AppCompatActivity() {
     var photoTaken = false
     var imageID : String = " "
 
-
-
-
-
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @SuppressLint("MissingInflatedId")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_list)
+        setContentView(R.layout.activity_modify_item)
 
-
-
-//      CONDITIONS
+        //      CONDITIONS
         // get reference to the string array that we just created
         val con = resources.getStringArray(R.array.conditions)
         // create an array adapter and pass the required parameter
@@ -201,8 +194,8 @@ class ItemList : AppCompatActivity() {
             }
         }
 
-    }
 
+    }
     private fun validEntryInput(): Boolean {
 
 
@@ -394,7 +387,7 @@ class ItemList : AppCompatActivity() {
 
         //store all values into custom class object
         val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
-             itemId, notes, user)
+            itemId, notes, user)
 
         val docId = currentUser?.email + currentUser?.currentListing.toString()
 
@@ -442,6 +435,4 @@ class ItemList : AppCompatActivity() {
 
 
     }
-
-
 }

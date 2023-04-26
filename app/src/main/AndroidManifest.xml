@@ -12,6 +12,9 @@
         android:theme="@style/Theme.NardDogsInventory"
         tools:targetApi="31">
         <activity
+            android:name=".ModifyItem"
+            android:exported="false" />
+        <activity
             android:name=".ViewSoldItem"
             android:exported="false" />
         <activity
