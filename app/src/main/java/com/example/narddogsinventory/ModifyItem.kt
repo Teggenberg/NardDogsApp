@@ -355,7 +355,7 @@ class ModifyItem : AppCompatActivity() {
 
         val diff = currentItem?.cost!! - modifiedItem?.cost!!
 
-        Toast.makeText(this, "$diff", Toast.LENGTH_SHORT).show()
+        
 
         //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
