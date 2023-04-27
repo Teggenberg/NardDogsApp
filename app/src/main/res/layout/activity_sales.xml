@@ -43,6 +43,7 @@
         android:layout_marginTop="44dp"
         android:text="TextView"
         android:textSize="24sp"
+        android:fontFamily="@font/latoregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCatTwo" />
@@ -52,10 +53,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:fontFamily="@font/latobold"
         android:text="TextView"
+        android:textColor="@color/white"
         android:textSize="35sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
+        android:fontFamily="@font/latoregular"
         android:text="TextView"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +82,7 @@
         android:textSize="26sp"
         android:layout_marginTop="47dp"
         android:text="TextView"
+        android:fontFamily="@font/latoregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCatOne" />
@@ -100,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="38dp"
         android:text="TextView"
+        android:fontFamily="@font/latoregular"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:text="TextView"
+        android:fontFamily="@font/latoregular"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,6 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="17dp"
+            android:fontFamily="@font/latoregular"
             android:text="All Time" />
 
         <RadioButton
@@ -138,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="17dp"
+            android:fontFamily="@font/latoregular"
             android:text="Past 30 days" />
 
         <RadioButton
@@ -145,6 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="17dp"
+            android:fontFamily="@font/latoregular"
             android:text="Past 90 days" />
 
     </RadioGroup>

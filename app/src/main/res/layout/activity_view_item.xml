@@ -233,7 +233,9 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
+        android:fontFamily="@font/latobold"
         android:text="Delete Listing"
+        android:textColor="@color/design_default_color_error"
         app:layout_constraintBottom_toTopOf="@+id/buttonSold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -244,7 +246,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/latobold"
         android:text="Modify"
+        android:textColor="@android:color/holo_orange_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

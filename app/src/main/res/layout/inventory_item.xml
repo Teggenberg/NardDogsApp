@@ -24,10 +24,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/latobold"
                 android:text="Item : "
                 android:textColor="@color/black"
                 android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
 
@@ -35,8 +36,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontFamily="@font/latoregular"
                 android:text="100561"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
 
 
@@ -51,10 +53,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/latobold"
                 android:text="Desc: "
                 android:textColor="@color/black"
                 android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
 
@@ -62,8 +65,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontFamily="@font/latoregular"
                 android:text="1959 Gibson Les Paul"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
 
 
@@ -78,10 +82,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/latobold"
                 android:text="Category: "
                 android:textColor="@color/black"
                 android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
 
@@ -89,8 +94,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontFamily="@font/latoregular"
                 android:text="Musical Inst"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
 
 
