@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.ButtonBarLayout
@@ -25,11 +26,12 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     //variables for quick reference to  widgets
-    private lateinit var register : Button
+    private lateinit var register : TextView
     private lateinit var login : Button
     private lateinit var auth : FirebaseAuth
     private lateinit var googleSignInClient : GoogleSignInClient
     private lateinit var db : FirebaseFirestore
+
 
 
 
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //assign button refs to xml widgets
-        register = findViewById(R.id.registerButton)
+        register = findViewById(R.id.tvRegister)
         login = findViewById(R.id.loginButton)
 
         //establish db access, and google SSO access
