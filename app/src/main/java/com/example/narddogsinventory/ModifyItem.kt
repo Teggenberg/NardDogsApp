@@ -41,6 +41,7 @@ class ModifyItem : AppCompatActivity() {
     private var currentFile: Uri? = null
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
+    private var currentItem : ActiveListing? = null
 
     private lateinit var itemNum : TextView
     private lateinit var itemCost : EditText
@@ -55,7 +56,7 @@ class ModifyItem : AppCompatActivity() {
     var photoTaken = false
     var imageID : String = " "
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modify_item)
@@ -103,12 +104,13 @@ class ModifyItem : AppCompatActivity() {
 
         //capture user data passed from previous activity for db access and updating
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+        currentItem = intent.getParcelableExtra("currentItem", ActiveListing::class.java)
 
-        imageID = currentUser?.email + currentUser?.currentListing.toString()
+        imageID = currentUser?.email + currentItem?.itemID.toString()
 
 
         //store currentListing (item ID) into variable to assign to textview
-        var itemid = currentUser?.currentListing
+        var itemid = currentItem?.itemID
 
         //set textview to display the current item ID to be assigned to new listing
         itemNum.setText("$itemid")
@@ -121,6 +123,14 @@ class ModifyItem : AppCompatActivity() {
         itemCost = findViewById<EditText>(R.id.etCost)
         itemRetail = findViewById(R.id.etRetail)
         itemNotes = findViewById(R.id.etItemNotes)
+
+        itemBrand.setText(currentItem?.brand)
+        itemDesc.setText(currentItem?.itemDesc)
+        itemCond.setText(autocompleteTV.adapter.getItem(5 - currentItem?.condition!!).toString(), false)
+        //itemCond.setSelection(0,3)
+        itemCost.setText(currentItem?.cost.toString())
+        itemRetail.setText(currentItem?.estRetail.toString())
+        itemNotes.setText(currentItem?.notes)
 
         //assign bottom navigation bar to variable
         bNav = findViewById(R.id.bottomNav)
@@ -196,6 +206,21 @@ class ModifyItem : AppCompatActivity() {
 
 
     }
+
+    private fun categoryToInt(category: String?): Int {
+
+        when(category){
+            "Electronics" -> return 0
+            "Apparel" -> return 1
+            "Media" -> return 2
+            "Furniture/Appliances" -> return 3
+            "Collectibles" -> return 4
+            else -> return 5
+
+        }
+
+    }
+
     private fun validEntryInput(): Boolean {
 
 
@@ -373,7 +398,7 @@ class ModifyItem : AppCompatActivity() {
         val age = calculateAge()
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
-        val condition = conditionRating()
+        val condition = conditionRating(itemCond.text.toString())
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "$imagevalURL" //this will include the url for the photo when complete
@@ -399,12 +424,12 @@ class ModifyItem : AppCompatActivity() {
 
     }
 
-    private fun conditionRating(): Int? {
+    private fun conditionRating(rating : String?): Int? {
 
         //variable for switch to assign value
         val condition : Int?
         //reads text in the 'condition' drop down
-        val rating = itemCond.text.toString()
+        //val rating = itemCond.text.toString()
 
         //switch to convert string to Int
         when(rating){

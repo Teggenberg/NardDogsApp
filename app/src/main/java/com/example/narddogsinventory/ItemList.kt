@@ -29,8 +29,7 @@ import java.util.*
 
 
 
-private var currentUser : EntryUser? = null
-val photoId = currentUser?.email + currentUser?.currentListing.toString()
+
 class ItemList : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
@@ -40,6 +39,8 @@ class ItemList : AppCompatActivity() {
     private var currentFile: Uri? = null
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
+    private var currentUser : EntryUser? = null
+    val photoId = currentUser?.email + currentUser?.currentListing.toString()
 
     private lateinit var itemNum : TextView
     private lateinit var itemCost : EditText

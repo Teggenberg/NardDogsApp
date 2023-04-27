@@ -34,6 +34,7 @@ class ViewItem : AppCompatActivity() {
     private var currentUser : EntryUser? = null
     private lateinit var back : Button
     private lateinit var sold : Button
+    private lateinit var modify : Button
     private lateinit var deleteItem : Button
     private lateinit var soldPrice : EditText
     private lateinit var soldDialog : AlertDialog.Builder
@@ -56,6 +57,8 @@ class ViewItem : AppCompatActivity() {
         back = findViewById(R.id.buttonReturn)
         sold = findViewById(R.id.buttonSold)
         deleteItem = findViewById(R.id.buttonDelete)
+        modify = findViewById(R.id.buttonModify)
+
 
         itemImage = findViewById(R.id.ivItem)
 
@@ -151,6 +154,15 @@ class ViewItem : AppCompatActivity() {
                     dialogInterface.cancel()
                 }
                 .show()
+        }
+
+        modify.setOnClickListener{
+
+            val intent = Intent(this, ModifyItem::class.java)
+            intent.putExtra("currentUser", currentUser)
+            intent.putExtra("currentItem", currentItem)
+            startActivity(intent)
+            finish()
         }
     }
 
