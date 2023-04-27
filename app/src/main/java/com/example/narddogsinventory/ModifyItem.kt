@@ -1,6 +1,7 @@
 package com.example.narddogsinventory
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
@@ -95,6 +96,16 @@ class ModifyItem : AppCompatActivity() {
             photoTaken = true
         }
 
+        val cancelMod = findViewById<Button>(R.id.buttonCancelMod)
+
+        cancelMod.setOnClickListener{
+            val intent = Intent(this, ViewItem::class.java)
+            intent.putExtra("currentItem", currentItem)
+            intent.putExtra("currentUser", currentUser)
+            startActivity(intent)
+            finish()
+        }
+
 
 
 
@@ -144,17 +155,39 @@ class ModifyItem : AppCompatActivity() {
         //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addModItem).setOnClickListener{
 
+            val confirmDialog = AlertDialog.Builder(this)
 
-            addItemToDb()
-            updateUserData(itemCost.text.toString().toFloat())
+            confirmDialog.setTitle("Modify Item Details").setMessage("Accept changes?")
+                .setCancelable(true).setPositiveButton("Accept"){dialogInterface, it->
 
-            currentItem = modifiedItem
+                    addItemToDb()
+                    updateUserData(itemCost.text.toString().toFloat())
 
-            val rtnViewItem = Intent(this, ViewItem::class.java)
-            rtnViewItem.putExtra("currentUser", currentUser)
-            rtnViewItem.putExtra("currentItem", currentItem)
-            startActivity(rtnViewItem)
-            finish()
+                    currentItem = modifiedItem
+
+                    val rtnViewItem = Intent(this, ViewItem::class.java)
+                    rtnViewItem.putExtra("currentUser", currentUser)
+                    rtnViewItem.putExtra("currentItem", currentItem)
+                    startActivity(rtnViewItem)
+                    finish()
+
+                }.setNegativeButton("Cancel"){dialogInterface, it->
+
+                    dialogInterface.cancel()
+
+                }.show()
+
+
+//            addItemToDb()
+//            updateUserData(itemCost.text.toString().toFloat())
+//
+//            currentItem = modifiedItem
+//
+//            val rtnViewItem = Intent(this, ViewItem::class.java)
+//            rtnViewItem.putExtra("currentUser", currentUser)
+//            rtnViewItem.putExtra("currentItem", currentItem)
+//            startActivity(rtnViewItem)
+//            finish()
 
 
 
@@ -355,7 +388,7 @@ class ModifyItem : AppCompatActivity() {
 
         val diff = currentItem?.cost!! - modifiedItem?.cost!!
 
-        
+
 
         //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
