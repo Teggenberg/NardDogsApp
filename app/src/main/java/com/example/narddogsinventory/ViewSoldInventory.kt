@@ -328,6 +328,6 @@ class ViewSoldInventory : AppCompatActivity(), SoldItemAdapter.OnItemClickListen
         //check to see if filter is applied to make sure proper position selected
         if(!filtered){searchItem(itemList[position].detail?.itemID!!)}
         else{searchItem(filteredList[position].detail?.itemID!!)}
-        Toast.makeText(this, "view soldlisting coming soon", Toast.LENGTH_SHORT).show()
+
     }
 }

@@ -42,8 +42,8 @@ class LoginActivity : AppCompatActivity() {
         val userID = intent.getLongExtra("userNum", 0)
         val itemID = intent.getLongExtra("itemNum", 0)
 
-        sales = findViewById(R.id.tvCatOne)
-        listings = findViewById(R.id.tvTotalRev)
+        sales = findViewById(R.id.tvTotalRev)
+        listings = findViewById(R.id.tvCatOne)
         invested = findViewById(R.id.tvCatTwo)
 
         listings.text = "Current Inventory : " + currentUser?.totListings.toString() + " items"

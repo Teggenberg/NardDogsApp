@@ -1,19 +1,19 @@
 package com.example.narddogsinventory
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import com.example.narddogsinventory.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,16 +21,19 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
 
+private var currentUser : EntryUser? = null
+val photoId = currentUser?.email + currentUser?.currentListing.toString()
 
-
-
-class ItemList : AppCompatActivity() {
+class ModifyItem : AppCompatActivity() {
 
     private lateinit var bNav : NavigationBarView
     private val REQUEST_IMAGE_CAPTURE = 2
@@ -39,8 +42,8 @@ class ItemList : AppCompatActivity() {
     private var currentFile: Uri? = null
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
-    private var currentUser : EntryUser? = null
-    val photoId = currentUser?.email + currentUser?.currentListing.toString()
+    private var currentItem : ActiveListing? = null
+    private var modifiedItem : ActiveListing? = null
 
     private lateinit var itemNum : TextView
     private lateinit var itemCost : EditText
@@ -55,20 +58,12 @@ class ItemList : AppCompatActivity() {
     var photoTaken = false
     var imageID : String = " "
 
-
-
-
-
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_list)
+        setContentView(R.layout.activity_modify_item)
 
-
-
-//      CONDITIONS
+        //      CONDITIONS
         // get reference to the string array that we just created
         val con = resources.getStringArray(R.array.conditions)
         // create an array adapter and pass the required parameter
@@ -101,6 +96,16 @@ class ItemList : AppCompatActivity() {
             photoTaken = true
         }
 
+        val cancelMod = findViewById<Button>(R.id.buttonCancelMod)
+
+        cancelMod.setOnClickListener{
+            val intent = Intent(this, ViewItem::class.java)
+            intent.putExtra("currentItem", currentItem)
+            intent.putExtra("currentUser", currentUser)
+            startActivity(intent)
+            finish()
+        }
+
 
 
 
@@ -111,12 +116,13 @@ class ItemList : AppCompatActivity() {
 
         //capture user data passed from previous activity for db access and updating
         currentUser = intent.getParcelableExtra("currentUser", EntryUser::class.java)
+        currentItem = intent.getParcelableExtra("currentItem", ActiveListing::class.java)
 
-        imageID = currentUser?.email + currentUser?.currentListing.toString()
+        imageID = currentUser?.email + currentItem?.itemID.toString()
 
 
         //store currentListing (item ID) into variable to assign to textview
-        var itemid = currentUser?.currentListing
+        var itemid = currentItem?.itemID
 
         //set textview to display the current item ID to be assigned to new listing
         itemNum.setText("$itemid")
@@ -130,6 +136,14 @@ class ItemList : AppCompatActivity() {
         itemRetail = findViewById(R.id.etRetail)
         itemNotes = findViewById(R.id.etItemNotes)
 
+        itemBrand.setText(currentItem?.brand)
+        itemDesc.setText(currentItem?.itemDesc)
+        itemCond.setText(autocompleteTV.adapter.getItem(5 - currentItem?.condition!!).toString(), false)
+        itemCat.setText(auto.adapter.getItem(categoryToInt(currentItem?.category)).toString(), false)
+        itemCost.setText(currentItem?.cost.toString())
+        itemRetail.setText(currentItem?.estRetail.toString())
+        itemNotes.setText(currentItem?.notes)
+
         //assign bottom navigation bar to variable
         bNav = findViewById(R.id.bottomNav)
 
@@ -141,24 +155,41 @@ class ItemList : AppCompatActivity() {
         //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addModItem).setOnClickListener{
 
-            if(photoTaken){
+            val confirmDialog = AlertDialog.Builder(this)
 
-                if(validEntryInput()) {
+            confirmDialog.setTitle("Modify Item Details").setMessage("Accept changes?")
+                .setCancelable(true).setPositiveButton("Accept"){dialogInterface, it->
+
                     addItemToDb()
                     updateUserData(itemCost.text.toString().toFloat())
 
-                    val refresh = Intent(this, ItemList::class.java)
-                    refresh.putExtra("currentUser", currentUser)
-                    startActivity(refresh)
+                    currentItem = modifiedItem
+
+                    val rtnViewItem = Intent(this, ViewItem::class.java)
+                    rtnViewItem.putExtra("currentUser", currentUser)
+                    rtnViewItem.putExtra("currentItem", currentItem)
+                    startActivity(rtnViewItem)
                     finish()
-                }
-                else{
-                    Toast.makeText(this, "Please make sure all item info is entered", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else{
-                Toast.makeText(this, "please add photo", Toast.LENGTH_SHORT).show()
-            }
+
+                }.setNegativeButton("Cancel"){dialogInterface, it->
+
+                    dialogInterface.cancel()
+
+                }.show()
+
+
+//            addItemToDb()
+//            updateUserData(itemCost.text.toString().toFloat())
+//
+//            currentItem = modifiedItem
+//
+//            val rtnViewItem = Intent(this, ViewItem::class.java)
+//            rtnViewItem.putExtra("currentUser", currentUser)
+//            rtnViewItem.putExtra("currentItem", currentItem)
+//            startActivity(rtnViewItem)
+//            finish()
+
+
 
 
         }
@@ -200,6 +231,21 @@ class ItemList : AppCompatActivity() {
                     return@setOnItemSelectedListener false
                 }
             }
+        }
+
+
+    }
+
+    private fun categoryToInt(category: String?): Int {
+
+        when(category){
+            "Electronics" -> return 0
+            "Apparel" -> return 1
+            "Media" -> return 2
+            "Furniture/Appliances" -> return 3
+            "Collectibles" -> return 4
+            else -> return 5
+
         }
 
     }
@@ -340,6 +386,10 @@ class ItemList : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("Users").document(currentUser?.email.toString())
 
+        val diff = currentItem?.cost!! - modifiedItem?.cost!!
+
+
+
         //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
 
@@ -349,15 +399,13 @@ class ItemList : AppCompatActivity() {
             //check to make sure document is not null
             if (updateCurrentListing != null) {
 
-                //increment currentListing for next item addition
-                updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
-                plus(1)
 
-                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
-                plus(1)
+
+//                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+//                minus(currentItem?.cost!!)
 
                 updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
-                plus(cost)
+                minus(diff)
 
 
                 //overwrite the fields in the database with updated values
@@ -369,24 +417,24 @@ class ItemList : AppCompatActivity() {
         }
 
         //update currentListing for locally accessible user data to match database
-        currentUser?.currentListing = currentUser?.currentListing?.plus(1)
-        currentUser?.totListings = currentUser?.totListings?.plus(1)
-        currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
+        //currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.cost!!)
+        //currentUser?.totListings = currentUser?.totListings?.plus(1)
+        currentUser?.totInvested = currentUser?.totInvested?.minus(diff)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addItemToDb() {
 
         //capture all values from widgets to update data members for ActiveListing object
-        val age = calculateAge()
+        val age = currentItem?.age
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
-        val condition = conditionRating()
+        val condition = conditionRating(itemCond.text.toString())
         val cost  = itemCost.text.toString().toFloatOrNull()
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "$imagevalURL" //this will include the url for the photo when complete
         val itemDesc = itemDesc.text.toString()
-        val itemId = currentUser?.currentListing
+        val itemId = currentItem?.itemID
         val notes = itemNotes.text.toString()
         val user = currentUser?.userID
 
@@ -394,25 +442,25 @@ class ItemList : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //store all values into custom class object
-        val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
-             itemId, notes, user)
+        modifiedItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
+            itemId, notes, user)
 
-        val docId = currentUser?.email + currentUser?.currentListing.toString()
+        val docId = currentUser?.email + currentItem?.itemID.toString()
 
         //add document into itemListings collection using custom class object
-        db.collection("itemListings").document(docId).set(newItem)
+        db.collection("itemListings").document(docId).set(modifiedItem!!)
 
-        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
+        Toast.makeText(this,"Item successfully updated", Toast.LENGTH_LONG)
             .show()
 
     }
 
-    private fun conditionRating(): Int? {
+    private fun conditionRating(rating : String?): Int? {
 
         //variable for switch to assign value
         val condition : Int?
         //reads text in the 'condition' drop down
-        val rating = itemCond.text.toString()
+        //val rating = itemCond.text.toString()
 
         //switch to convert string to Int
         when(rating){
@@ -443,6 +491,4 @@ class ItemList : AppCompatActivity() {
 
 
     }
-
-
 }
