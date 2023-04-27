@@ -235,7 +235,7 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/latobold"
         android:text="Delete Listing"
-        android:textColor="@color/design_default_color_error"
+        android:textColor="@android:color/holo_red_light"
         app:layout_constraintBottom_toTopOf="@+id/buttonSold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
