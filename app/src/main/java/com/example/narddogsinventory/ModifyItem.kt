@@ -42,6 +42,7 @@ class ModifyItem : AppCompatActivity() {
     var imageReference = Firebase.storage.reference
     var imagevalURL = " "
     private var currentItem : ActiveListing? = null
+    private var modifiedItem : ActiveListing? = null
 
     private lateinit var itemNum : TextView
     private lateinit var itemCost : EditText
@@ -127,7 +128,7 @@ class ModifyItem : AppCompatActivity() {
         itemBrand.setText(currentItem?.brand)
         itemDesc.setText(currentItem?.itemDesc)
         itemCond.setText(autocompleteTV.adapter.getItem(5 - currentItem?.condition!!).toString(), false)
-        //itemCond.setSelection(0,3)
+        itemCat.setText(auto.adapter.getItem(categoryToInt(currentItem?.category)).toString(), false)
         itemCost.setText(currentItem?.cost.toString())
         itemRetail.setText(currentItem?.estRetail.toString())
         itemNotes.setText(currentItem?.notes)
@@ -143,24 +144,19 @@ class ModifyItem : AppCompatActivity() {
         //clear fields in widgets,and update textview with new item ID assignment
         findViewById<Button>(R.id.addModItem).setOnClickListener{
 
-            if(photoTaken){
 
-                if(validEntryInput()) {
-                    addItemToDb()
-                    updateUserData(itemCost.text.toString().toFloat())
+            addItemToDb()
+            updateUserData(itemCost.text.toString().toFloat())
 
-                    val refresh = Intent(this, ItemList::class.java)
-                    refresh.putExtra("currentUser", currentUser)
-                    startActivity(refresh)
-                    finish()
-                }
-                else{
-                    Toast.makeText(this, "Please make sure all item info is entered", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else{
-                Toast.makeText(this, "please add photo", Toast.LENGTH_SHORT).show()
-            }
+            currentItem = modifiedItem
+
+            val rtnViewItem = Intent(this, ViewItem::class.java)
+            rtnViewItem.putExtra("currentUser", currentUser)
+            rtnViewItem.putExtra("currentItem", currentItem)
+            startActivity(rtnViewItem)
+            finish()
+
+
 
 
         }
@@ -357,6 +353,10 @@ class ModifyItem : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("Users").document(currentUser?.email.toString())
 
+        val diff = currentItem?.cost!! - modifiedItem?.cost!!
+
+        Toast.makeText(this, "$diff", Toast.LENGTH_SHORT).show()
+
         //access the document for the current user in database
         docRef.get().addOnSuccessListener { documentsnapshot ->
 
@@ -366,15 +366,13 @@ class ModifyItem : AppCompatActivity() {
             //check to make sure document is not null
             if (updateCurrentListing != null) {
 
-                //increment currentListing for next item addition
-                updateCurrentListing?.currentListing = updateCurrentListing?.currentListing?.
-                plus(1)
 
-                updateCurrentListing?.totListings = updateCurrentListing?.totListings?.
-                plus(1)
+
+//                updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
+//                minus(currentItem?.cost!!)
 
                 updateCurrentListing?.totInvested = updateCurrentListing?.totInvested?.
-                plus(cost)
+                minus(diff)
 
 
                 //overwrite the fields in the database with updated values
@@ -386,16 +384,16 @@ class ModifyItem : AppCompatActivity() {
         }
 
         //update currentListing for locally accessible user data to match database
-        currentUser?.currentListing = currentUser?.currentListing?.plus(1)
-        currentUser?.totListings = currentUser?.totListings?.plus(1)
-        currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
+        //currentUser?.totInvested = currentUser?.totInvested?.minus(currentItem?.cost!!)
+        //currentUser?.totListings = currentUser?.totListings?.plus(1)
+        currentUser?.totInvested = currentUser?.totInvested?.minus(diff)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addItemToDb() {
 
         //capture all values from widgets to update data members for ActiveListing object
-        val age = calculateAge()
+        val age = currentItem?.age
         val brand = itemBrand.text.toString()
         val category = itemCat.text.toString()
         val condition = conditionRating(itemCond.text.toString())
@@ -403,7 +401,7 @@ class ModifyItem : AppCompatActivity() {
         val estRetail = itemRetail.text.toString().toFloatOrNull()
         val imageURL = "$imagevalURL" //this will include the url for the photo when complete
         val itemDesc = itemDesc.text.toString()
-        val itemId = currentUser?.currentListing
+        val itemId = currentItem?.itemID
         val notes = itemNotes.text.toString()
         val user = currentUser?.userID
 
@@ -411,15 +409,15 @@ class ModifyItem : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //store all values into custom class object
-        val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
+        modifiedItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
             itemId, notes, user)
 
-        val docId = currentUser?.email + currentUser?.currentListing.toString()
+        val docId = currentUser?.email + currentItem?.itemID.toString()
 
         //add document into itemListings collection using custom class object
-        db.collection("itemListings").document(docId).set(newItem)
+        db.collection("itemListings").document(docId).set(modifiedItem!!)
 
-        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
+        Toast.makeText(this,"Item successfully updated", Toast.LENGTH_LONG)
             .show()
 
     }
