@@ -52,6 +52,7 @@ class ItemList : AppCompatActivity() {
     private lateinit var itemCat : AutoCompleteTextView
     private lateinit var itemNotes : EditText
 
+    var check = false
     var photoTaken = false
     var imageID : String = " "
 
@@ -364,15 +365,19 @@ class ItemList : AppCompatActivity() {
                 //overwrite the fields in the database with updated values
                 db.collection("Users").document(currentUser?.email.toString()).
                 set(updateCurrentListing)
-
+                check = true
+            }
+            else {
+                check = false
             }
 
         }
-
-        //update currentListing for locally accessible user data to match database
-        currentUser?.currentListing = currentUser?.currentListing?.plus(1)
-        currentUser?.totListings = currentUser?.totListings?.plus(1)
-        currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
+        if (check == true) {
+            //update currentListing for locally accessible user data to match database
+            currentUser?.currentListing = currentUser?.currentListing?.plus(1)
+            currentUser?.totListings = currentUser?.totListings?.plus(1)
+            currentUser?.totInvested = currentUser?.totInvested?.plus(cost)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -391,21 +396,27 @@ class ItemList : AppCompatActivity() {
         val notes = itemNotes.text.toString()
         val user = currentUser?.userID
 
-        //access to database
-        val db = FirebaseFirestore.getInstance()
+        if(brand.isNullOrEmpty() || category.isNullOrEmpty()|| cost == null || estRetail == null || itemDesc.isNullOrEmpty() || itemId == null){
+            Toast.makeText(this,"Please fill in all fields", Toast.LENGTH_LONG).show()
+        }
+        else {
+            //access to database
+            val db = FirebaseFirestore.getInstance()
 
-        //store all values into custom class object
-        val newItem = ActiveListing(age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
-             itemId, notes, user)
+            //store all values into custom class object
+            val newItem = ActiveListing(
+                age, brand, category, condition, cost, estRetail, imageURL, itemDesc,
+                itemId, notes, user
+            )
 
-        val docId = currentUser?.email + currentUser?.currentListing.toString()
+            val docId = currentUser?.email + currentUser?.currentListing.toString()
 
-        //add document into itemListings collection using custom class object
-        db.collection("itemListings").document(docId).set(newItem)
+            //add document into itemListings collection using custom class object
+            db.collection("itemListings").document(docId).set(newItem)
 
-        Toast.makeText(this,"Item successfully added to inventory", Toast.LENGTH_LONG)
-            .show()
-
+            Toast.makeText(this, "Item successfully added to inventory", Toast.LENGTH_LONG)
+                .show()
+        }
     }
 
     private fun conditionRating(): Int? {
