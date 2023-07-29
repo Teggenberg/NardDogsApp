@@ -235,10 +235,12 @@ class ItemList : AppCompatActivity() {
 
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+            .format(Date())
         val imageID = currentUser?.email + currentUser?.currentListing.toString()
         val imageFileName = "JPEG_${imageID}_"
-        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val storageDir = Environment
+            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 
 
 
@@ -276,7 +278,6 @@ class ItemList : AppCompatActivity() {
             values.put(MediaStore.Images.Media.TITLE, imageID)
             values.put(MediaStore.Images.Media.DESCRIPTION, "Image captured by camera")
             values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-            //values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString().toLowerCase().hashCode())
             values.put(MediaStore.Images.ImageColumns.BUCKET_ID, file.toString())
             values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, file.name)
 

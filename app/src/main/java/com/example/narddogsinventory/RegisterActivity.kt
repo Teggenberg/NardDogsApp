@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -23,9 +24,25 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        val returnMain = findViewById<Button>(R.id.button_reg_return)
+
+        returnMain.setOnClickListener{
+
+            val rtnMain = Intent(this, MainActivity::class.java)
+            startActivity(rtnMain)
+        }
+
+
         email = findViewById(R.id.etRegEmail)              //variables linked to xml objects
         //password = findViewById(R.id.etRegPassword)
         create = findViewById(R.id.createAccountButton)
+
+        findViewById<TextView>(R.id.tvBack).setOnClickListener{
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         findViewById<Button>(R.id.createAccountButton).setOnClickListener{
 

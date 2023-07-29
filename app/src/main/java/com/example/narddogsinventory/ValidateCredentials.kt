@@ -23,6 +23,14 @@ class ValidateCredentials : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_validate_credentials)
 
+        val goBack = findViewById<Button>(R.id.button_return)
+
+        goBack.setOnClickListener{
+
+            val mainActivity = Intent(this, MainActivity::class.java)
+            startActivity(mainActivity)
+        }
+
 
         //login button reference
         val logger = findViewById<Button>(R.id.LoginButton)
