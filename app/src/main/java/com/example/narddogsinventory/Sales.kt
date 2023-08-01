@@ -330,7 +330,7 @@ class Sales : AppCompatActivity() {
 
                     //excludes items that were sold more than 30 days ago (currently set to 3 days
                     //for testing
-                    if(calculateAge(item?.saleDate) > 3){
+                    if(calculateAge(item?.saleDate) > 30){
                         break
                     }
                 }
@@ -340,7 +340,7 @@ class Sales : AppCompatActivity() {
 
                     //excludes items that were sold more than 90 days ago (currently set to 7 days
                     //for testing
-                    if(calculateAge(item?.saleDate) > 7){
+                    if(calculateAge(item?.saleDate) > 90){
                         break
                     }
                 }
@@ -369,7 +369,7 @@ class Sales : AppCompatActivity() {
 
                 //check to see if item sold more than 90 days ago
                 //(7 days for testing)
-                if(calculateAge(item?.saleDate) > 7){
+                if(calculateAge(item?.saleDate) > 90){
                     //continue to next loop iteration without incrementing totRev
                     continue
                 }
@@ -380,7 +380,7 @@ class Sales : AppCompatActivity() {
 
                 //check to see if item sold more than 30 days ago
                 //(3 days for testing)
-                if(calculateAge(item?.saleDate) > 3){
+                if(calculateAge(item?.saleDate) > 30){
                     //continue to next loop iteration without incrementing totRev
                     continue
                 }
