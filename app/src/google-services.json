@@ -1,0 +1,116 @@
+{
+  "project_info": {
+    "project_number": "890851707023",
+    "project_id": "nard-dogs-inventory",
+    "storage_bucket": "nard-dogs-inventory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890851707023:android:f14bdedd17b23a232648fa",
+        "android_client_info": {
+          "package_name": "com.example.narddogsinventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890851707023-0km29b0th7dvim5p12lo6dt1silmpnsf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "172d0a01ad5ce0e4ad4db771e86658b1df83e620"
+          }
+        },
+        {
+          "client_id": "890851707023-65ocnkl77ho9e1j19vgmd7lnf0vpbf5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "a7e0029ca84a70eb6ee52cac460f6ff27fd16dfc"
+          }
+        },
+        {
+          "client_id": "890851707023-73kk46mopd49cumo40bena119t1d3q8c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "983786097f47e2c351f6ce041e81a63e925389b1"
+          }
+        },
+        {
+          "client_id": "890851707023-te2vcuf0g46k94psmamtpif4i5rl7mse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "9b3d8dd961d378dccae4be8af5133fd9471421e2"
+          }
+        },
+        {
+          "client_id": "890851707023-tvjfv027i0416v2gi109m430tkfivf2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.narddogsinventory",
+            "certificate_hash": "7b9d9dd805c6b3c2ab748e50157ece4989c26346"
+          }
+        },
+        {
+          "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb21TGg4smp9bzJpT_SJ42_9LMNRPyfqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890851707023:android:f4dd04696af201072648fa",
+        "android_client_info": {
+          "package_name": "com.izaiko.narddogsinventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890851707023-lf8r3v5nse0g5ino0j6od703tng3d3eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.izaiko.narddogsinventory",
+            "certificate_hash": "7b9d9dd805c6b3c2ab748e50157ece4989c26346"
+          }
+        },
+        {
+          "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb21TGg4smp9bzJpT_SJ42_9LMNRPyfqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890851707023-8olrib65tv0qstiae0b6sjr63suv5c8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

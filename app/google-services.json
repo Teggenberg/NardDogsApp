@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:890851707023:android:f14bdedd17b23a232648fa",
         "android_client_info": {
-          "package_name": "com.example.narddogsinventory"
+          "package_name": "com.izaiko.narddogsinventory"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "890851707023-73kk46mopd49cumo40bena119t1d3q8c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.narddogsinventory",
+            "package_name": "com.izaiko.narddogsinventory",
             "certificate_hash": "983786097f47e2c351f6ce041e81a63e925389b1"
           }
         },
@@ -25,7 +25,7 @@
           "client_id": "890851707023-tvjfv027i0416v2gi109m430tkfivf2c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.narddogsinventory",
+            "package_name": "com.izaiko.narddogsinventory",
             "certificate_hash": "7b9d9dd805c6b3c2ab748e50157ece4989c26346"
           }
         },
